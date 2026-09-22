@@ -193,8 +193,11 @@ func play_animation(duration: float) -> float:
 	return SkillFx.play(player.model, skill.animation, duration)
 
 
+## Treffer-Effekt (Einschlag, Landung). Den Effekt beim Einsatz startet Vfx (AP1) selbst über
+## EventBus.skill_cast; hier kommt der Schlüssel <vfx_key>_hit, zum Beispiel skill_leap_hit.
 func spawn_fx(position: Vector3, radius: float, color: Color) -> void:
-	SkillFx.spawn(player.get_parent(), skill.vfx_key, position, radius, color)
+	var key := StringName("%s_hit" % skill.vfx_key) if skill.vfx_key != &"" else &""
+	SkillFx.spawn(player.get_parent(), key, position, radius, color)
 
 
 func _apply_on_hit(entity: Node3D) -> void:

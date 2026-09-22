@@ -97,6 +97,9 @@ Alles läuft über `EventBus`. `SkillUser` sendet den ganzen Stand einmal direkt
 | `player_level_up(level)` | je Stufenaufstieg einmal | |
 | `skill_tree_changed(state)` | Ränge, Punkte oder Freischaltung ändern sich | `SkillTreeState`; `lock_reasons` z. B. „Ab 6 verteilten Punkten“ |
 
+`GameUI.bind_player()` ruft `broadcast_state()` selbst auf (kleine Ergänzung in
+`ui/game_ui.gd`), die Leiste füllt sich also auch, wenn die UI nach dem Spieler entsteht.
+
 Die UI schickt Wünsche, `SkillUser` prüft sie:
 
 | Wunsch | Antwort |
@@ -121,10 +124,11 @@ Für Anzeigen ohne Signal: `get_cooldown_left(skill)`, `fury.current`, `progress
   `attack_3` (Wirbelsturm, wird wiederholt), `attack_4` (Sprung), `cast` (Kriegsschrei, Ahnen).
   Ansturm nutzt die Laufanimation. Die Dauer passt sich dem Skill an; der Treffermoment kommt aus
   der Methodenspur (`hit_frame` oder `get_event_time`), ohne Modell aus `hit_ratio`.
-- **AP1 (Grafik):** `SkillFx.shake()` nutzt `CameraRig.shake()`. Effekte: `SkillFx.spawn()` ruft
-  `Vfx.spawn(key, position)` mit `SkillDef.vfx_key` auf (`strike`, `cleave`, `whirlwind`,
-  `war_cry`, `leap`, `charge`, `ancients`, dazu `fire_ring`). Liefert `Vfx` null (noch kein
-  Effekt für den Schlüssel), leuchtet stattdessen ein Kreis am Boden auf. Außerdem hört AP1 auf `EventBus.skill_cast`.
+- **AP1 (Grafik):** `SkillDef.vfx_key` ist `skill_<id>` (`skill_strike` … `skill_ancients`);
+  diesen Effekt startet `Vfx` selbst auf `EventBus.skill_cast`. Für Treffermomente (Einschlag,
+  Landung, Wirbelsturm-Takt, Rundum-Hieb) ruft `SkillFx.spawn()` `Vfx.spawn("<vfx_key>_hit",
+  position)` auf, für den Feuerring `skill_fire_ring`. Liefert `Vfx` dafür null, leuchtet ein
+  Kreis am Boden auf. Kamerawackeln über `CameraRig.shake()`.
 - **AP9 (Speichern, Balancing):** `SkillUser.to_dict()` / `from_dict()` (Stufe, Erfahrung, Punkte,
   Ränge, Leiste). Balancing in `data/skills/*.tres` und `data/skills/warrior.tres`.
 
@@ -138,8 +142,9 @@ SpielJBR.exe --scene=skills_test         # im Windows-Build
 ```
 
 Testszene: alle sieben Skills sind gelernt, die Wut ist voll, vor dem Krieger stehen drei
-Gruppen Trainingspuppen (400 Leben, stehen nach 3 s wieder auf, je 40 Erfahrung). Oben links
-stehen Stufe, Erfahrung, Punkte, Leben, Wut, die Leiste mit Abklingzeiten und die Aspekte.
+Gruppen Trainingspuppen (400 Leben, stehen nach 3 s wieder auf, je 40 Erfahrung). Unten liegt
+die Oberfläche aus AP7 (Skillleiste mit Abklingzeiten, Wut-Kugel, Erfahrungsbalken), K öffnet den
+Skillbaum. Oben links stehen Stufe, Erfahrung, Punkte, Leben, Wut, die Leiste und die Aspekte.
 
 | Taste | Wirkung |
 |---|---|

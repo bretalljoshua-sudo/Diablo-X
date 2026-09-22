@@ -15,7 +15,7 @@ radius = 3.0
 damage_multiplier = 1.6
 tags = Array[StringName]([&"leap", &"mobility", &"movement", &"physical", &"aoe"])
 animation = &"attack_4"
-vfx_key = &"leap"
+vfx_key = &"skill_leap"
 behavior = &"leap"
 params = Dictionary[StringName, float]({
 &"air_time": 0.6,

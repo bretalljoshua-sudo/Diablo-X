@@ -13,7 +13,7 @@ targeting = 4
 attack_range = 8.0
 damage_multiplier = 1.2
 tags = Array[StringName]([&"charge", &"mobility", &"movement", &"physical"])
-vfx_key = &"charge"
+vfx_key = &"skill_charge"
 behavior = &"charge"
 params = Dictionary[StringName, float]({
 &"hit_radius": 1.2,

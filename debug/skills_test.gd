@@ -3,7 +3,8 @@ extends Node3D
 ##
 ## Alle sieben Skills sind gelernt (Rang 1) und liegen auf der Leiste, die Wut ist voll.
 ## Vor dem Krieger stehen Gruppen von Trainingspuppen (400 Leben, stehen nach 3 s wieder auf).
-## Jede besiegte Puppe gibt 40 Erfahrung.
+## Jede besiegte Puppe gibt 40 Erfahrung. Unten liegt die Oberfläche aus AP7 (Skillleiste, Wut,
+## Erfahrung), K öffnet den Skillbaum.
 ##
 ## Tasten:
 ##   Linksklick  Hieb (Laufen und Angreifen)     Rechtsklick  Spaltschlag
@@ -31,7 +32,11 @@ const ASPECT_BASES: Array[StringName] = [
 	&"iron_helm", &"chainmail", &"gauntlets", &"chain_leggings", &"iron_boots", &"bone_amulet"
 ]
 
+const GAME_UI := preload("res://ui/game_ui.tscn")
+
 var aspect_set_index: int = 0
+## Oberfläche aus AP7 (HUD mit Skillleiste, Wut und Erfahrung, Skillbaum auf K).
+var game_ui: GameUI
 
 @onready var player: Player = $Player
 @onready var nav_region: NavigationRegion3D = $NavRegion
@@ -45,6 +50,8 @@ func _ready() -> void:
 	rig.target = player
 	rig.global_position = player.global_position
 	EventBus.entity_died.connect(_on_entity_died)
+	game_ui = GAME_UI.instantiate() as GameUI
+	add_child(game_ui)
 	if skills == null:
 		push_warning("skills_test: Spieler hat kein Skill-System.")
 		return

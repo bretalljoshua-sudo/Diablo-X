@@ -11,7 +11,7 @@ generate = 10.0
 attack_range = 1.8
 tags = Array[StringName]([&"strike", &"basic", &"physical"])
 animation = &"attack_1"
-vfx_key = &"strike"
+vfx_key = &"skill_strike"
 behavior = &"melee"
 params = Dictionary[StringName, float]({
 &"arc_degrees": 120.0,

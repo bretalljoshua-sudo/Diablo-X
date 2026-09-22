@@ -13,7 +13,7 @@ attack_range = 2.6
 damage_multiplier = 1.8
 tags = Array[StringName]([&"cleave", &"core", &"physical", &"aoe"])
 animation = &"attack_2"
-vfx_key = &"cleave"
+vfx_key = &"skill_cleave"
 behavior = &"melee"
 params = Dictionary[StringName, float]({
 &"arc_degrees": 180.0,

@@ -26,6 +26,8 @@ func physics(delta: float) -> void:
 			0.0,
 			Enums.DamageType.FIRE
 		)
-		SkillFx.spawn(player.get_parent(), &"fire_ring", center, radius, Color(1, 0.4, 0.1, 0.35))
+		SkillFx.spawn(
+			player.get_parent(), &"skill_fire_ring", center, radius, Color(1, 0.4, 0.1, 0.35)
+		)
 	if elapsed >= mods.fire_ring_duration:
 		finish()

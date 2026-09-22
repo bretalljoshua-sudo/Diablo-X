@@ -14,7 +14,7 @@ radius = 2.6
 damage_multiplier = 1.4
 tags = Array[StringName]([&"whirlwind", &"core", &"channeled", &"physical", &"aoe"])
 animation = &"attack_3"
-vfx_key = &"whirlwind"
+vfx_key = &"skill_whirlwind"
 behavior = &"whirlwind"
 params = Dictionary[StringName, float]({
 &"move_factor": 0.6,

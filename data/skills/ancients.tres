@@ -15,7 +15,7 @@ radius = 3.5
 damage_multiplier = 2.0
 tags = Array[StringName]([&"ancients", &"ultimate", &"physical", &"aoe"])
 animation = &"cast"
-vfx_key = &"ancients"
+vfx_key = &"skill_ancients"
 behavior = &"ancients"
 params = Dictionary[StringName, float]({
 &"cast_time": 0.6,

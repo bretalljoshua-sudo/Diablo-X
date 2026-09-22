@@ -176,3 +176,13 @@ func test_save_and_load_skill_state() -> void:
 	assert_eq(_skills.progression.get_rank(_skill(&"leap")), 3)
 	assert_eq(_skills.bar.get_skill(2).id, &"charge")
 	assert_eq(_skills.bar.get_skill(0).id, &"strike")
+
+
+func test_hud_skill_bar_shows_the_warrior_skills() -> void:
+	await wait_physics_frames(3)
+	var bar: SkillBar = _scene.game_ui.hud.skill_bar
+	for slot in SkillLoadout.SLOT_COUNT:
+		var expected := _skills.bar.get_skill(slot)
+		assert_eq(bar.slots[slot].skill, expected, "HUD-Platz %d" % slot)
+	assert_true(_skills.try_cast(_skill(&"war_cry"), Vector3.INF))
+	assert_gt(bar.slots[3].cooldown_left, 0.0, "HUD zeigt die Abklingzeit")

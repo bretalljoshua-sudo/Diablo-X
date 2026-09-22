@@ -15,7 +15,7 @@ radius = 4.0
 damage_multiplier = 0.0
 tags = Array[StringName]([&"war_cry", &"shout", &"defensive"])
 animation = &"cast"
-vfx_key = &"war_cry"
+vfx_key = &"skill_war_cry"
 behavior = &"shout"
 params = Dictionary[StringName, float]({
 &"armor_bonus": 0.3,
