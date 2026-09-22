@@ -1,0 +1,25 @@
+# Assets von AP8 liegen als normale Git-Dateien im Repo, nicht über Git LFS:
+# - Die Cloud-Sessions können keine LFS-Objekte hochladen (lfs.github.com ist dort gesperrt).
+# - Normale Dateien kosten kein LFS-Bandbreitenkontingent (GitHub frei: 1 GB pro Monat), jeder
+#   Clone und jeder CI-Lauf bekommt sie ohne git-lfs.
+# - Die Assets für Version 0.1 sind klein (unter 20 MB, einzelne Dateien unter 3 MB).
+# Diese Datei hebt die LFS-Regeln aus der .gitattributes im Hauptordner nur für assets/ auf.
+*.glb -filter -diff -merge binary
+*.gltf.bin -filter -diff -merge binary
+*.bin -filter -diff -merge binary
+*.fbx -filter -diff -merge binary
+*.obj -filter -diff -merge binary
+*.png -filter -diff -merge binary
+*.jpg -filter -diff -merge binary
+*.jpeg -filter -diff -merge binary
+*.tga -filter -diff -merge binary
+*.webp -filter -diff -merge binary
+*.exr -filter -diff -merge binary
+*.hdr -filter -diff -merge binary
+*.ktx2 -filter -diff -merge binary
+*.wav -filter -diff -merge binary
+*.ogg -filter -diff -merge binary
+*.mp3 -filter -diff -merge binary
+*.ttf -filter -diff -merge binary
+*.otf -filter -diff -merge binary
+*.res binary

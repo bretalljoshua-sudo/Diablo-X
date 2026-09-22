@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/characters/character_model.gd" id="1_characte"]
+[ext_resource type="PackedScene" path="res://assets/characters/kaykit/skeleton_minion.glb" id="2_skeleton"]
+[ext_resource type="AnimationLibrary" path="res://assets/animations/libraries/skeleton_swarm.tres" id="3_skeleton"]
+[ext_resource type="AnimationNodeStateMachine" path="res://assets/animations/character_state_machine.tres" id="4_characte"]
+[ext_resource type="PackedScene" path="res://assets/weapons/skeleton_blade.glb" id="5_skeleton"]
+
+[node name="SkeletonSwarm" type="Node3D"]
+script = ExtResource("1_characte")
+walk_speed = 0.29
+run_speed = 2.4
+weapon_right = ExtResource("5_skeleton")
+
+[node name="Model" parent="." instance=ExtResource("2_skeleton")]
+transform = Transform3D(-0.95, 0, 0, 0, 0.95, 0, 0, 0, -0.95, 0, 0, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model")
+libraries = {
+&"": ExtResource("3_skeleton")
+}
+callback_mode_method = 1
+tree_root = ExtResource("4_characte")

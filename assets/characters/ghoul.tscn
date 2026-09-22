@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/characters/character_model.gd" id="1_characte"]
+[ext_resource type="PackedScene" path="res://assets/characters/kaykit/skeleton_warrior.glb" id="2_skeleton"]
+[ext_resource type="AnimationLibrary" path="res://assets/animations/libraries/ghoul.tres" id="3_ghoul"]
+[ext_resource type="AnimationNodeStateMachine" path="res://assets/animations/character_state_machine.tres" id="4_characte"]
+[ext_resource type="PackedScene" path="res://assets/weapons/skeleton_axe.glb" id="5_skeleton"]
+
+[node name="Ghoul" type="Node3D"]
+script = ExtResource("1_characte")
+walk_speed = 0.46
+run_speed = 1.75
+weapon_right = ExtResource("5_skeleton")
+hidden_parts = PackedStringArray("Skeleton_Warrior_Helmet")
+tint = Color(0.72, 0.85, 0.62, 1)
+
+[node name="Model" parent="." instance=ExtResource("2_skeleton")]
+transform = Transform3D(-1.35, 0, 0, 0, 1.35, 0, 0, 0, -1.35, 0, 0, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model")
+libraries = {
+&"": ExtResource("3_ghoul")
+}
+callback_mode_method = 1
+tree_root = ExtResource("4_characte")

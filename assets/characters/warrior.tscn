@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/characters/character_model.gd" id="1_characte"]
+[ext_resource type="PackedScene" path="res://assets/characters/kaykit/barbarian.glb" id="2_barbaria"]
+[ext_resource type="AnimationLibrary" path="res://assets/animations/libraries/warrior.tres" id="3_warrior"]
+[ext_resource type="AnimationNodeStateMachine" path="res://assets/animations/character_state_machine.tres" id="4_characte"]
+
+[node name="Warrior" type="Node3D"]
+script = ExtResource("1_characte")
+walk_speed = 0.6
+run_speed = 2.45
+hidden_parts = PackedStringArray("1H_Axe", "1H_Axe_Offhand", "Barbarian_Round_Shield")
+
+[node name="Model" parent="." instance=ExtResource("2_barbaria")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model")
+libraries = {
+&"": ExtResource("3_warrior")
+}
+callback_mode_method = 1
+tree_root = ExtResource("4_characte")

@@ -1,0 +1,34 @@
+[gd_resource type="AnimationLibrary" format=3]
+
+[ext_resource type="Animation" path="res://assets/animations/clips/spellcast_shoot.res" id="1_2m1r6"]
+[ext_resource type="Animation" path="res://assets/animations/clips/1h_melee_attack_stab.res" id="2_q5c06"]
+[ext_resource type="Animation" path="res://assets/animations/clips/spellcast_long.res" id="3_grvmd"]
+[ext_resource type="Animation" path="res://assets/animations/clips/spellcast_raise.res" id="4_fp0xv"]
+[ext_resource type="Animation" path="res://assets/animations/clips/block.res" id="5_tc2jm"]
+[ext_resource type="Animation" path="res://assets/animations/clips/spellcast_summon.res" id="6_rl5s3"]
+[ext_resource type="Animation" path="res://assets/animations/clips/death_a.res" id="7_h01yi"]
+[ext_resource type="Animation" path="res://assets/animations/clips/dodge_right.res" id="8_jfih5"]
+[ext_resource type="Animation" path="res://assets/animations/clips/hit_a.res" id="9_nvhun"]
+[ext_resource type="Animation" path="res://assets/animations/clips/idle.res" id="10_bctt2"]
+[ext_resource type="Animation" path="res://assets/animations/clips/interact.res" id="11_2yyu2"]
+[ext_resource type="Animation" path="res://assets/animations/clips/running_b.res" id="12_th2p8"]
+[ext_resource type="Animation" path="res://assets/animations/clips/spawn_air.res" id="13_t6sbg"]
+[ext_resource type="Animation" path="res://assets/animations/clips/walking_b.res" id="14_asswu"]
+
+[resource]
+_data = {
+&"attack_1": ExtResource("1_2m1r6"),
+&"attack_2": ExtResource("2_q5c06"),
+&"attack_3": ExtResource("3_grvmd"),
+&"attack_4": ExtResource("4_fp0xv"),
+&"block": ExtResource("5_tc2jm"),
+&"cast": ExtResource("6_rl5s3"),
+&"death": ExtResource("7_h01yi"),
+&"dodge": ExtResource("8_jfih5"),
+&"hit": ExtResource("9_nvhun"),
+&"idle": ExtResource("10_bctt2"),
+&"interact": ExtResource("11_2yyu2"),
+&"run": ExtResource("12_th2p8"),
+&"spawn": ExtResource("13_t6sbg"),
+&"walk": ExtResource("14_asswu")
+}
