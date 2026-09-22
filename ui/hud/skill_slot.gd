@@ -18,6 +18,7 @@ var affordable: bool = true:
 			queue_redraw()
 
 var _flash: float = 0.0
+var _flash_color: Color = Color(1.0, 0.9, 0.6)
 
 
 func _init(p_index: int = 0) -> void:
@@ -49,8 +50,9 @@ func is_on_cooldown() -> bool:
 	return cooldown_left > 0.0
 
 
-func flash() -> void:
+func flash(color: Color = Color(1.0, 0.9, 0.6)) -> void:
 	_flash = 1.0
+	_flash_color = color
 	queue_redraw()
 
 
@@ -58,6 +60,7 @@ func _process(delta: float) -> void:
 	if cooldown_left > 0.0:
 		cooldown_left = maxf(cooldown_left - delta, 0.0)
 		if cooldown_left == 0.0:
+			flash()
 			_flash = 0.6
 		queue_redraw()
 	if _flash > 0.0:
@@ -108,7 +111,7 @@ func _draw() -> void:
 			_draw_cooldown(inner)
 	draw_rect(rect, UiTheme.BORDER, false, 2.0)
 	if _flash > 0.0:
-		draw_rect(rect.grow(-1.0), Color(1.0, 0.9, 0.6, _flash * 0.8), false, 3.0)
+		draw_rect(rect.grow(-1.0), Color(_flash_color, _flash * 0.8), false, 3.0)
 	var key := SkillBar.key_label(index)
 	var font := get_theme_default_font()
 	draw_rect(Rect2(Vector2(2, size.y - 17), Vector2(22, 15)), Color(0, 0, 0, 0.75))

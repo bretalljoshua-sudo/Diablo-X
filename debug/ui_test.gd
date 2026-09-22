@@ -189,6 +189,14 @@ static func make_sample_layout() -> LevelLayout:
 				walls.append(cell + dir)
 	for wall in walls:
 		result.cells[wall] = 3
+	var low := Vector2i(1 << 20, 1 << 20)
+	var high := -low
+	for cell: Vector3i in result.cells:
+		low = Vector2i(mini(low.x, cell.x), mini(low.y, cell.z))
+		high = Vector2i(maxi(high.x, cell.x + 1), maxi(high.y, cell.z + 1))
+	result.bounds = AABB(
+		Vector3(low.x * 4, 0, low.y * 4), Vector3((high.x - low.x) * 4, 4, (high.y - low.y) * 4)
+	)
 	result.exits = [Vector3(38, 0, 0)]
 	result.entrance = Vector3(-38, 0, 6)
 	result.markers = {&"portal": Vector3(2, 0, 38), &"merchant": Vector3(-6, 0, -6)}

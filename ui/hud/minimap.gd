@@ -1,7 +1,8 @@
 class_name Minimap
 extends Control
 ## Minikarte oben rechts; Taste M schaltet auf die große Karte über dem ganzen Bild.
-## Daten: EventBus.level_loaded(layout) (AP6) mit cells, cell_size, exits, entrance, markers.
+## Daten: EventBus.level_loaded(layout) (AP6), Bild über MinimapData.build_image(), dazu exits,
+## entrance und markers aus dem Layout.
 ## Aufgedeckt wird, was der Spieler (Game.player) gesehen hat. Die Karte ist so gedreht, dass oben
 ## dort ist, wohin die Kamera schaut.
 
@@ -11,10 +12,8 @@ const SMALL_SCALE := 2.4
 ## Sichtweite in Metern: so weit deckt der Spieler die Karte auf.
 const REVEAL_RADIUS := 14.0
 const REVEAL_INTERVAL := 0.2
-## Zellen, die als Wand oder Hindernis gezeichnet werden (Namen siehe docs/pakete/AP6.md).
-const SOLID_IDS: Array[int] = [3, 4, 5, 6, 7, 9, 43, 44, 45, 46, 47, 48, 53]
-const FLOOR_COLOR := Color(0.55, 0.5, 0.42, 0.85)
-const WALL_COLOR := Color(0.85, 0.75, 0.55, 1.0)
+## Wände heller als in MinimapData, damit Raumumrisse auf dunklem Grund gut zu sehen sind.
+const WALL_COLOR := Color(0.8, 0.7, 0.52, 1.0)
 const MARKER_COLORS: Dictionary[StringName, Color] = {
 	&"merchant": Color(1.0, 0.8, 0.3),
 	&"stash": Color(0.7, 0.55, 0.35),
@@ -33,8 +32,6 @@ var full_image: Image
 var shown_image: Image
 var texture: ImageTexture
 var revealed_count: int = 0
-## Linke obere Zelle des Bildes (x, z).
-var cell_origin: Vector2i = Vector2i.ZERO
 
 var _reveal_timer: float = 0.0
 var _dirty: bool = false
@@ -64,18 +61,15 @@ func set_layout(p_layout: LevelLayout) -> void:
 	if layout == null or layout.cells.is_empty():
 		queue_redraw()
 		return
-	var min_cell := Vector2i(1 << 30, 1 << 30)
-	var max_cell := Vector2i(-(1 << 30), -(1 << 30))
-	for cell: Vector3i in layout.cells:
-		min_cell = Vector2i(mini(min_cell.x, cell.x), mini(min_cell.y, cell.z))
-		max_cell = Vector2i(maxi(max_cell.x, cell.x), maxi(max_cell.y, cell.z))
-	cell_origin = min_cell
-	var image_size := max_cell - min_cell + Vector2i.ONE
-	full_image = Image.create_empty(image_size.x, image_size.y, false, Image.FORMAT_RGBA8)
-	shown_image = Image.create_empty(image_size.x, image_size.y, false, Image.FORMAT_RGBA8)
-	for cell: Vector3i in layout.cells:
-		var color := WALL_COLOR if layout.cells[cell] in SOLID_IDS else FLOOR_COLOR
-		full_image.set_pixel(cell.x - min_cell.x, cell.z - min_cell.y, color)
+	# Bild und Farben liefert AP6 (world/minimap_data.gd); Wände hellen wir für die Lesbarkeit auf.
+	full_image = MinimapData.build_image(layout)
+	for x in full_image.get_width():
+		for y in full_image.get_height():
+			if full_image.get_pixel(x, y) == MinimapData.COLOR_WALL:
+				full_image.set_pixel(x, y, WALL_COLOR)
+	shown_image = Image.create_empty(
+		full_image.get_width(), full_image.get_height(), false, Image.FORMAT_RGBA8
+	)
 	if Game.player != null and is_instance_valid(Game.player) and Game.player.is_inside_tree():
 		reveal_around(Game.player.global_position)
 	texture = ImageTexture.create_from_image(shown_image)
@@ -109,15 +103,18 @@ func reveal_all() -> void:
 		return
 	shown_image.copy_from(full_image)
 	revealed_count = 0
-	for cell: Vector3i in layout.cells:
-		revealed_count += 1
+	for x in full_image.get_width():
+		for y in full_image.get_height():
+			if full_image.get_pixel(x, y).a > 0.0:
+				revealed_count += 1
 	_dirty = true
 
 
-## Weltpunkt → Bildkoordinate (Pixel, eine Zelle = ein Pixel).
+## Weltpunkt → Bildkoordinate (Pixel, eine Zelle = ein Pixel), wie MinimapData (AP6).
 func world_to_pixel(world: Vector3) -> Vector2:
-	var cell_size := layout.cell_size if layout != null else Vector3.ONE
-	return Vector2(world.x / cell_size.x, world.z / cell_size.z) - Vector2(cell_origin)
+	if layout == null:
+		return Vector2.ZERO
+	return MinimapData.world_to_pixel(layout, world)
 
 
 func _process(delta: float) -> void:
