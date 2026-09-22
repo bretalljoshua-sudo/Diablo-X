@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SkillDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/skill_def.gd" id="1_o4piq"]
+
+[resource]
+script = ExtResource("1_o4piq")
+id = &"cleave"
+display_name = "Spaltschlag"
+description = "Ein weiter Schwung im Halbkreis. Verursacht 180 % Waffenschaden an allen Gegnern vor dir und stößt sie zurück."
+category = 1
+cost = 25.0
+attack_range = 2.6
+damage_multiplier = 1.8
+tags = Array[StringName]([&"cleave", &"core", &"physical", &"aoe"])
+animation = &"attack_2"
+vfx_key = &"cleave"
+behavior = &"melee"
+params = Dictionary[StringName, float]({
+&"arc_degrees": 180.0,
+&"cast_time": 0.9,
+&"hit_ratio": 0.45,
+&"knockback": 1.0,
+&"upgrade_slow": 0.3,
+&"upgrade_slow_duration": 2.0
+})
+upgrade_name = "Verbesserter Spaltschlag"
+upgrade_description = "Getroffene Gegner sind 2 s lang um 30 % verlangsamt."

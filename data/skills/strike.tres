@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="SkillDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/skill_def.gd" id="1_uf8xg"]
+
+[resource]
+script = ExtResource("1_uf8xg")
+id = &"strike"
+display_name = "Hieb"
+description = "Ein schneller Schlag mit der Waffe gegen die Gegner vor dir. Verursacht 100 % Waffenschaden und erzeugt 10 Wut, wenn er trifft."
+generate = 10.0
+attack_range = 1.8
+tags = Array[StringName]([&"strike", &"basic", &"physical"])
+animation = &"attack_1"
+vfx_key = &"strike"
+behavior = &"melee"
+params = Dictionary[StringName, float]({
+&"arc_degrees": 120.0,
+&"cast_time": 1.0,
+&"hit_ratio": 0.4,
+&"knockback": 0.5,
+&"upgrade_combo_damage": 1.5,
+&"upgrade_combo_every": 3.0
+})
+upgrade_name = "Verbesserter Hieb"
+upgrade_description = "Jeder dritte Hieb trifft alle Gegner um dich herum und verursacht 50 % mehr Schaden."

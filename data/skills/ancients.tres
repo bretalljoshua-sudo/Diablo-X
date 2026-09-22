@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="SkillDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/skill_def.gd" id="1_gxerh"]
+
+[resource]
+script = ExtResource("1_gxerh")
+id = &"ancients"
+display_name = "Zorn der Ahnen"
+description = "Rufe die Ahnen: Sie schlagen dreimal an der Zielstelle ein, jeder Einschlag verursacht 200 % Waffenschaden im Umkreis von 3,5 m."
+category = 4
+cooldown = 45.0
+targeting = 2
+attack_range = 10.0
+radius = 3.5
+damage_multiplier = 2.0
+tags = Array[StringName]([&"ancients", &"ultimate", &"physical", &"aoe"])
+animation = &"cast"
+vfx_key = &"ancients"
+behavior = &"ancients"
+params = Dictionary[StringName, float]({
+&"cast_time": 0.6,
+&"first_delay": 0.3,
+&"knockback": 0.6,
+&"strike_interval": 0.45,
+&"strikes": 3.0,
+&"upgrade_armor_bonus": 0.5,
+&"upgrade_armor_duration": 6.0
+})
+upgrade_name = "Verbesserter Zorn der Ahnen"
+upgrade_description = "Nach dem Ruf hast du 6 s lang 50 % mehr Rüstung."

@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://skills/skill_user.gd" id="1_user"]
+[ext_resource type="Resource" path="res://data/skills/warrior.tres" id="2_class"]
+
+[node name="Skills" type="Node"]
+script = ExtResource("1_user")
+class_def = ExtResource("2_class")

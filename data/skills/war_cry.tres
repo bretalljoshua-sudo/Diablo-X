@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="SkillDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/skill_def.gd" id="1_p6gch"]
+
+[resource]
+script = ExtResource("1_p6gch")
+id = &"war_cry"
+display_name = "Kriegsschrei"
+description = "Ein Schrei, der dich 8 s lang stärkt: 20 % mehr Schaden und 30 % mehr Rüstung. Erzeugt 20 Wut."
+category = 2
+generate = 20.0
+cooldown = 20.0
+targeting = 1
+radius = 4.0
+damage_multiplier = 0.0
+tags = Array[StringName]([&"war_cry", &"shout", &"defensive"])
+animation = &"cast"
+vfx_key = &"war_cry"
+behavior = &"shout"
+params = Dictionary[StringName, float]({
+&"armor_bonus": 0.3,
+&"buff_per_rank": 0.1,
+&"cast_time": 0.45,
+&"damage_bonus": 0.2,
+&"duration": 8.0,
+&"fire_ring_radius": 3.5,
+&"upgrade_heal_percent": 20.0
+})
+upgrade_name = "Verbesserter Kriegsschrei"
+upgrade_description = "Der Schrei heilt dich sofort um 20 % deines maximalen Lebens."

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="SkillDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/skill_def.gd" id="1_w58cm"]
+
+[resource]
+script = ExtResource("1_w58cm")
+id = &"leap"
+display_name = "Sprung"
+description = "Springe bis zu 8 m weit zur Maus, über Gegner hinweg. Die Landung verursacht 160 % Waffenschaden im Umkreis von 3 m."
+category = 3
+cooldown = 12.0
+targeting = 2
+attack_range = 8.0
+radius = 3.0
+damage_multiplier = 1.6
+tags = Array[StringName]([&"leap", &"mobility", &"movement", &"physical", &"aoe"])
+animation = &"attack_4"
+vfx_key = &"leap"
+behavior = &"leap"
+params = Dictionary[StringName, float]({
+&"air_time": 0.6,
+&"knockback": 1.0,
+&"land_time": 0.25,
+&"leap_height": 1.6,
+&"shake": 0.35,
+&"upgrade_cooldown_on_hit": 4.0
+})
+upgrade_name = "Verbesserter Sprung"
+upgrade_description = "Trifft die Landung mindestens einen Gegner, sinkt die Abklingzeit um 4 s."

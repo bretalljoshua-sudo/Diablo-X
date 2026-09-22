@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="SkillDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/skill_def.gd" id="1_bnd1l"]
+
+[resource]
+script = ExtResource("1_bnd1l")
+id = &"charge"
+display_name = "Ansturm"
+description = "Stürme bis zu 8 m nach vorn, durch Gegner hindurch. Jeder Gegner auf dem Weg erleidet 120 % Waffenschaden und wird weggestoßen."
+category = 3
+cooldown = 10.0
+targeting = 4
+attack_range = 8.0
+damage_multiplier = 1.2
+tags = Array[StringName]([&"charge", &"mobility", &"movement", &"physical"])
+vfx_key = &"charge"
+behavior = &"charge"
+params = Dictionary[StringName, float]({
+&"hit_radius": 1.2,
+&"knockback": 2.0,
+&"speed": 18.0,
+&"upgrade_resource_max_targets": 5.0,
+&"upgrade_resource_per_hit": 8.0
+})
+upgrade_name = "Verbesserter Ansturm"
+upgrade_description = "Jeder getroffene Gegner gibt 8 Wut (höchstens 5 Gegner)."
