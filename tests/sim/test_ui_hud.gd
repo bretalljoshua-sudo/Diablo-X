@@ -63,6 +63,8 @@ func test_merchant_buy_and_sell_with_mouse() -> void:
 	assert_true(ui.inventory_window.is_open(), "Inventar öffnet mit")
 	var item: ItemInstance = ui.merchant_window.stock[0]
 	var price := ItemValue.buy_price(item)
+	# Das Angebot ist zufällig: genug Gold, damit auch teure Stücke bezahlbar sind.
+	inventory.add_gold(price)
 	var gold := inventory.gold
 	await click_control(ui.merchant_window.get_tile(item))
 	assert_true(inventory.has_item(item), "gekauft")
