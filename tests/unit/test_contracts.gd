@@ -80,6 +80,19 @@ func test_event_bus_has_all_contract_signals() -> void:
 		"potion_charges_changed",
 		"status_effect_changed",
 		"hovered_target_changed",
+		"entity_health_changed",
+		"experience_changed",
+		"skill_tree_changed",
+		"skill_slot_changed",
+		"skill_cooldown_started",
+		"skill_rank_up_requested",
+		"skill_slot_assign_requested",
+		"boss_encounter_started",
+		"boss_encounter_ended",
+		"merchant_opened",
+		"merchant_item_bought",
+		"merchant_item_sold",
+		"ui_window_toggled",
 	]
 	for signal_name: String in expected:
 		assert_true(EventBus.has_signal(signal_name), "EventBus.%s fehlt" % signal_name)
@@ -110,3 +123,30 @@ func test_level_layout_ap6_fields_survive_save_and_load() -> void:
 	assert_eq(loaded.room_links[0], Vector2i(0, 1))
 	assert_eq(loaded.markers[&"boss_spawn"], Vector3(8, 0, 8))
 	assert_eq(loaded.entrance, Vector3.INF, "Standard: kein Rückweg")
+
+
+func test_skill_tree_state_rules() -> void:
+	var skill := SkillDef.new()
+	skill.id = &"strike"
+	var state := SkillTreeState.new()
+	state.skills.append(skill)
+	assert_eq(state.get_rank(skill), 0)
+	assert_eq(state.get_max_rank(skill), SkillTreeState.DEFAULT_MAX_RANK)
+	assert_false(state.can_rank_up(skill), "ohne Punkte und gesperrt")
+	state.points = 1
+	assert_false(state.can_rank_up(skill), "gesperrt")
+	state.unlocked.append(&"strike")
+	assert_true(state.can_rank_up(skill))
+	state.max_ranks[&"strike"] = 1
+	state.ranks[&"strike"] = 1
+	assert_false(state.can_rank_up(skill), "höchster Rang erreicht")
+	assert_eq(state.find_skill(&"strike"), skill)
+
+
+func test_settings_key_binding_roundtrip() -> void:
+	var before := Settings.get_key_binding(&"open_inventory")
+	Settings.set_key_binding(&"open_inventory", KEY_B)
+	assert_eq(Settings.get_key_binding(&"open_inventory"), KEY_B)
+	Settings.reset_key_bindings()
+	assert_eq(Settings.get_key_binding(&"open_inventory"), before)
+	assert_eq(before, KEY_I)
