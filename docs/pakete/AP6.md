@@ -17,7 +17,7 @@ Stand: 22.09.2026 · fertig bis auf die Prüfung am PC
 | Spielwelt-Szene: baut Ebenen, hält die Spielerfigur über Wechsel hinweg, Stimmung je Thema | `world/level.tscn`, `world/level.gd` |
 | Übergänge über Treppen und Gruft-Eingang, Ladebildschirm, Rückkehrportal im Bossraum | `world/exit_trigger.gd`, `world/loading_screen.gd`, `World.travel_to()` |
 | Daten für die Minikarte (Bild mit einem Pixel pro Zelle, Umrechnung Welt ↔ Bild, Raum unter einer Position) | `world/minimap_data.gd` |
-| Ersatzfigur zum Laufen (Kapsel, Klick oder WASD), solange AP2 keine Figur liefert | `world/placeholder_walker.gd` |
+| Spielerfigur: der Krieger aus AP2 (`player/player.tscn`), Ersatzkapsel nur als Rückfall | `world/level.tscn`, `world/placeholder_walker.gd` |
 | Testszene mit Minikarte, Übersicht und Tasten für alle Ebenen | `debug/world_test.tscn` |
 | Tests: Vorlagen, Drehungen, gleicher Seed, 1.000 Seeds erreichbar, Dorf, Minikarte, Aufbauzeit, Wege, Übergänge | `tests/unit/test_world_generator.gd`, `tests/sim/test_level_build.gd` |
 
@@ -55,8 +55,9 @@ wechselt mit Ladebildschirm die Ebene. Unten links stehen Seed, Anzahl Räume un
 - **Gegner (AP3):** `layout.spawn_points` mit `layout.spawn_rooms` (Raum je Punkt, im Startraum und
   im Bossraum keine). Gegner als Kinder von `Level.get_active().actors` einsetzen, dann räumt der
   Wechsel sie automatisch weg. Navigation liegt auf der Standardkarte der Welt, Agentenradius 0,5 m.
-- **Spielerfigur (AP2, AP9):** Die Level-Szene nimmt `Game.player`, sonst `player_scene`, sonst die
-  Ersatzkapsel. Hat die Figur eine Methode `teleport(position)`, wird sie beim Wechsel benutzt.
+- **Spielerfigur (AP2, AP9):** Die Level-Szene nimmt `Game.player`, sonst `player_scene` (steht auf
+  `player/player.tscn`), sonst die Ersatzkapsel. Beim Wechsel wird die Figur versetzt und `stop()`
+  gerufen; hat sie eine Methode `teleport(position)`, wird stattdessen diese benutzt.
   Ausgänge reagieren auf Körper in der Ebene `player`, die `Game.player` sind oder in der Gruppe
   `player` stehen.
 - **Boss (AP9):** Marker `boss_spawn`, `boss_chest`, `boss_gate` (Türöffnung des Bossraums),

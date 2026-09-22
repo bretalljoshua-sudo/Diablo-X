@@ -20,7 +20,8 @@ const ENVIRONMENT_PATH := "res://graphics/environments/%s.tres"
 @export var start_depth: int = 1
 ## Baut beim Start sofort eine Ebene auf.
 @export var auto_load: bool = true
-## Spielerfigur (AP2). Leer = Game.player oder eine PlaceholderWalker-Kapsel.
+## Spielerfigur (AP2). Vorrang hat Game.player. Ist beides leer, läuft eine Ersatzkapsel
+## (PlaceholderWalker).
 @export var player_scene: PackedScene
 
 var layout: LevelLayout
@@ -210,6 +211,8 @@ func _place_player(from_depth: int) -> void:
 		player.call(&"teleport", point)
 	else:
 		player.global_position = point
+		if player.has_method(&"stop"):
+			player.call(&"stop")
 	if camera_rig != null:
 		camera_rig.target = player
 		camera_rig.global_position = point
