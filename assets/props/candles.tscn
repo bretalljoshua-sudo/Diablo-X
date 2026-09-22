@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_candles.res" id="1_e0n5n"]
+
+[node name="PropCandles" type="StaticBody3D" unique_id=1937409508]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1553892940]
+mesh = ExtResource("1_e0n5n")

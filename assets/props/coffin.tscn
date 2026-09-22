@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_coffin.res" id="1_q0od7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8yg77"]
+size = Vector3(2, 0.9, 3)
+
+[node name="PropCoffin" type="StaticBody3D" unique_id=99600757]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=123889933]
+mesh = ExtResource("1_q0od7")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=510688833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("BoxShape3D_8yg77")

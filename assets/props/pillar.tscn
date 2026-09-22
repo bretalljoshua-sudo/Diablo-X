@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/pillar.res" id="1_0arb2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wh4vs"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tk1px"]
+size = Vector3(1.5, 4, 1.5)
+
+[node name="Pillar" type="StaticBody3D" unique_id=1737794506]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=260216347]
+mesh = ExtResource("1_0arb2")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=1051376784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_wh4vs")
+
+[node name="Collision1" type="CollisionShape3D" parent="." unique_id=844695084]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_tk1px")

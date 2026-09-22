@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/doorway.res" id="1_1bley"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vsj3i"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31iwi"]
+size = Vector3(0.8, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3gqpy"]
+size = Vector3(0.8, 4, 1)
+
+[node name="Doorway" type="StaticBody3D" unique_id=1955950039]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=519384090]
+mesh = ExtResource("1_1bley")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=637980680]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_vsj3i")
+
+[node name="Collision1" type="CollisionShape3D" parent="." unique_id=1665549575]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2, 0)
+shape = SubResource("BoxShape3D_31iwi")
+
+[node name="Collision2" type="CollisionShape3D" parent="." unique_id=563579003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2, 0)
+shape = SubResource("BoxShape3D_3gqpy")

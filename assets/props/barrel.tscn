@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_barrel.res" id="1_lglh2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7hdlt"]
+size = Vector3(1.8, 2, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lgi4p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ppmn0"]
+
+[node name="PropBarrel" type="StaticBody3D" unique_id=539518944]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1769305025]
+mesh = ExtResource("1_lglh2")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=659649749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1, -0.4)
+shape = SubResource("BoxShape3D_7hdlt")
+
+[node name="Collision1" type="CollisionShape3D" parent="." unique_id=1554870656]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.5, 0.6)
+shape = SubResource("BoxShape3D_lgi4p")
+
+[node name="Collision2" type="CollisionShape3D" parent="." unique_id=1577602746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.5, -1.2)
+shape = SubResource("BoxShape3D_ppmn0")

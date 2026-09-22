@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/well.res" id="1_dh4bc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6iqhv"]
+size = Vector3(2.4, 1.5, 2.4)
+
+[node name="Well" type="StaticBody3D" unique_id=666287814]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=550864022]
+mesh = ExtResource("1_dh4bc")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=1062359590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("BoxShape3D_6iqhv")

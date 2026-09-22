@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_cobweb.res" id="1_qnhks"]
+
+[node name="PropCobweb" type="StaticBody3D" unique_id=487644168]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1047564072]
+mesh = ExtResource("1_qnhks")
