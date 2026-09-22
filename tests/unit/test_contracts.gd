@@ -91,6 +91,7 @@ func test_physics_layers_match_project_settings() -> void:
 	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_3"), "enemy")
 	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_4"), "hurtbox")
 	assert_eq(PhysicsLayers.HURTBOX, 1 << 3)
+	assert_eq(PhysicsLayers.LOOT, 1 << 4)
 
 
 func test_level_layout_ap6_fields_survive_save_and_load() -> void:
