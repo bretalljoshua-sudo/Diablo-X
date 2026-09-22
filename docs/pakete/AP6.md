@@ -80,8 +80,8 @@ wechselt mit Ladebildschirm die Ebene. Unten links stehen Seed, Anzahl Räume un
 
 - **Am PC ansehen:** Licht, Wandhöhe und Lesbarkeit der grauen Blöcke sind nur per Software-Rendering
   in der Cloud geprüft (Bilder sahen stimmig aus: Treppe an der Wand, Fackeln richtig gedreht).
-- **Echter Baukasten:** kommt von AP8 unter `res://assets/world/world_kit.tres`. Danach Wandstücke
-  und Drehungen im Bild prüfen.
+- **Echter Baukasten:** AP8 hat ihn unter `res://assets/world/world_kit.tres` geliefert. Im
+  Software-Rendering passen Wände, Ecken, Treppen und Dorf; der Aufbau dauert damit rund 110 ms.
 - **Verdeckende Wände** vor der Figur ausblenden macht AP1.
 - **Gänge sind gerade** und 4 m breit; Knicke und breitere Hallen wären eine spätere Erweiterung.
 - **Seed im Dorf:** Das Dorf ist fest, `--seed` wirkt nur auf die Katakomben.
