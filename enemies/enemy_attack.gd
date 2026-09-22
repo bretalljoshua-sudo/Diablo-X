@@ -61,8 +61,9 @@ enum Kind {
 @export var summon_distance: float = 2.5
 
 @export_group("Animation")
-## Name für play_action() am Modell, zum Beispiel &"attack" oder &"cast".
-@export var animation: StringName = &"attack"
+## Aktion für play_action() am Modell (AP8: attack_1 … attack_4, cast). Das Tempo wird so
+## gewählt, dass der Treffer- oder Abschusszeitpunkt der Animation am Ende der Vorwarnung liegt.
+@export var animation: StringName = &"attack_1"
 
 
 func is_in_range(edge_distance: float) -> bool:

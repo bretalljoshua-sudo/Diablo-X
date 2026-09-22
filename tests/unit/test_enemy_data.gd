@@ -30,6 +30,7 @@ func test_four_enemy_types_are_complete_enemy_defs() -> void:
 		assert_gt(type.experience, 0)
 		assert_false(type.attacks.is_empty(), "%s hat Angriffe" % type.id)
 		assert_true(type.model_path.begins_with("res://assets/characters/"))
+		assert_true(ResourceLoader.exists(type.model_path), "Modell von AP8: %s" % type.model_path)
 		assert_gt(type.base_stats.get_value(Enums.Stat.MAX_LIFE), 0.0)
 		for attack in type.attacks:
 			assert_gt(

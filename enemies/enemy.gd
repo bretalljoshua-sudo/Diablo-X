@@ -11,18 +11,22 @@ extends CharacterBody3D
 ##   loot_dropped (über Loot.drop_at), experience_awarded beim Tod.
 ## Für Lebensbalken (AP7): display_name, is_elite, level, get_health_bar_position().
 ##
-## Modell: lädt type.model_path (AP8), sonst eine Kapsel. Optional am Modell:
-##   play_action(name, speed) mit idle, run, attack, cast, hit, stunned, death
-##   set_move_speed(anteil 0..1)
-## Den Treffermoment bestimmt die Vorwarnung, nicht die Animation, damit sie fair bleibt.
+## Modell: lädt type.model_path (AP8, CharacterModel), sonst eine Kapsel. Genutzt wird, was das
+## Modell anbietet: play_action(name, tempo), set_move_velocity(m/s) oder set_move_speed(anteil),
+## get_event_time(clip, ereignis), get_action_length(clip), revive().
+## Den Treffermoment bestimmt die Vorwarnung, nicht die Animation, damit sie fair bleibt: Das
+## Tempo der Angriffsanimation wird so gewählt, dass ihr Trefferzeitpunkt aufs Ende fällt.
 
 signal state_changed(new_state: AIBrain.State)
 ## Der Gegner geht an den Pool zurück (Körper verschwunden).
 signal released
 
 const GROUP := &"enemies"
-## So lange bleibt der Körper nach dem Tod liegen.
+## So lange bleibt der Körper nach dem Tod mindestens liegen (länger, wenn die Todesanimation
+## länger dauert). In der letzten SINK_TIME versinkt er im Boden.
 const CORPSE_TIME := 1.5
+const SINK_TIME := 0.6
+const HIT_REACTION_INTERVAL := 0.6
 const SHIELD_REASON := &"elite_shield"
 const ELITE_SOURCE := &"elite"
 
@@ -51,7 +55,11 @@ var model: Node3D
 
 var _model_type_id: StringName = &""
 var _model_has_move_speed: bool = false
+var _model_has_velocity: bool = false
 var _model_has_action: bool = false
+var _model_speed_sent: float = -1.0
+var _corpse_time: float = CORPSE_TIME
+var _hit_reaction_left: float = 0.0
 var _floor_y: float = 0.0
 var _corpse_left: float = -1.0
 var _flash_left: float = 0.0
@@ -97,6 +105,8 @@ func setup(
 	attack_speed_multiplier = 1.0
 	_corpse_left = -1.0
 	_flash_left = 0.0
+	_hit_reaction_left = 0.0
+	_model_speed_sent = -1.0
 	_floor_y = global_position.y
 	facing = Vector3.FORWARD
 	velocity = Vector3.ZERO
@@ -125,6 +135,8 @@ func setup(
 	_update_label()
 	set_physics_process(true)
 	visible = true
+	if model.has_method(&"revive"):
+		model.call(&"revive")
 	_play(&"idle", 1.0)
 	EventBus.entity_spawned.emit(self)
 
@@ -188,6 +200,34 @@ func play_action(action: StringName, speed: float = 1.0) -> void:
 	_play(action, speed)
 
 
+## Spielt eine Angriffsanimation so, dass ihr Treffer- oder Abschusszeitpunkt nach windup
+## Sekunden kommt (genau am Ende der Vorwarnung).
+func play_attack(action: StringName, windup: float) -> void:
+	if not _model_has_action:
+		return
+	var time := maxf(windup, 0.05)
+	var speed := 1.0 / time
+	if model.has_method(&"get_event_time"):
+		var event_time: float = model.call(&"get_event_time", action, &"hit")
+		if event_time <= 0.0:
+			event_time = model.call(&"get_event_time", action, &"release")
+		if event_time > 0.0:
+			speed = event_time / time
+		elif model.has_method(&"get_action_length"):
+			speed = maxf(model.call(&"get_action_length", action), 0.1) / time
+	model.call(&"play_action", action, speed)
+
+
+## Aufstehen aus dem Boden (beschworene Diener), dauert duration Sekunden.
+func play_spawn(duration: float) -> void:
+	if not _model_has_action:
+		return
+	var length := 1.0
+	if model.has_method(&"get_action_length"):
+		length = maxf(model.call(&"get_action_length", &"spawn"), 0.1)
+	model.call(&"play_action", &"spawn", length / maxf(duration, 0.05))
+
+
 func _physics_process(delta: float) -> void:
 	if type == null:
 		return
@@ -215,10 +255,10 @@ func _process_corpse(delta: float) -> void:
 		return
 	_corpse_left -= delta
 	if not _model_has_action:
-		# Kapsel kippt um und versinkt im Boden.
+		# Kapsel kippt um.
 		model_root.rotation.x = lerpf(model_root.rotation.x, -PI * 0.5, minf(delta * 10.0, 1.0))
-		if _corpse_left < CORPSE_TIME * 0.5:
-			model_root.position.y -= delta * 1.2
+	if _corpse_left < SINK_TIME:
+		model_root.position.y -= delta * 1.5
 	if _corpse_left <= 0.0:
 		_corpse_left = -1.0
 		_release()
@@ -241,7 +281,10 @@ func _on_died(_killer: Node3D) -> void:
 	collision_layer = 0
 	velocity = Vector3.ZERO
 	knockback.cancel()
-	_corpse_left = CORPSE_TIME
+	_corpse_time = CORPSE_TIME
+	if _model_has_action and model.has_method(&"get_action_length"):
+		_corpse_time = maxf(CORPSE_TIME, model.call(&"get_action_length", &"death") + SINK_TIME)
+	_corpse_left = _corpse_time
 	_play(&"death", 1.0)
 	_update_label()
 	if not is_summon:
@@ -275,6 +318,15 @@ func _on_damaged(_amount: float, source: Node3D) -> void:
 	_flash_left = 0.12
 	_update_label()
 	brain.on_damaged(source)
+	# Trefferreaktion nur, wenn sie keinen Angriff unterbricht.
+	var state := brain.state
+	if (
+		_hit_reaction_left <= 0.0
+		and not health.is_dead()
+		and (state == AIBrain.State.CHASE or state == AIBrain.State.NOTICE)
+	):
+		_hit_reaction_left = HIT_REACTION_INTERVAL
+		_play(&"hit", 1.0)
 
 
 func _on_effect_started(_effect_id: StringName, kind: StatusEffectDef.Kind) -> void:
@@ -355,6 +407,7 @@ func _load_model() -> void:
 		model = _build_placeholder()
 	model_root.add_child(model)
 	_model_has_move_speed = model.has_method(&"set_move_speed")
+	_model_has_velocity = model.has_method(&"set_move_velocity")
 	_model_has_action = model.has_method(&"play_action")
 
 
@@ -423,13 +476,24 @@ func _placeholder_weapon_mesh() -> Mesh:
 
 func _update_model(delta: float) -> void:
 	model_root.rotation.y = atan2(-facing.x, -facing.z)
+	if _hit_reaction_left > 0.0:
+		_hit_reaction_left -= delta
 	if _flash_left > 0.0:
 		_flash_left -= delta
 		var t := clampf(_flash_left / 0.12, 0.0, 1.0)
 		model_root.rotation.x = -0.2 * t
-	if _model_has_move_speed:
+	if not _model_has_velocity and not _model_has_move_speed:
+		return
+	var speed := Vector2(velocity.x, velocity.z).length()
+	# Nur bei spürbarer Änderung weitergeben, das Setzen am AnimationTree kostet Zeit.
+	if absf(speed - _model_speed_sent) < 0.1:
+		return
+	_model_speed_sent = speed
+	if _model_has_velocity:
+		model.call(&"set_move_velocity", speed)
+	else:
 		var max_speed := maxf(stats.get_value(Enums.Stat.MOVE_SPEED), 0.01)
-		model.call(&"set_move_speed", Vector2(velocity.x, velocity.z).length() / max_speed)
+		model.call(&"set_move_speed", speed / max_speed)
 
 
 func _play(action: StringName, speed: float) -> void:

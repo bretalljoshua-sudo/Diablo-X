@@ -56,7 +56,7 @@ projectile_range = 15.0
 projectile_radius = 0.4
 projectile_color = Color(1, 0.45, 0.1, 1)
 aim_lock_before = 0.35
-animation = &"cast"
+animation = &"attack_4"
 
 [resource]
 script = ExtResource("1_type")
@@ -64,7 +64,7 @@ id = &"cultist"
 display_name = "Kultist-Beschwörer"
 behavior = &"summoner"
 experience = 22
-model_path = "res://assets/characters/cultist.tscn"
+model_path = "res://assets/characters/cultist_summoner.tscn"
 placeholder_color = Color(0.45, 0.12, 0.14, 1)
 body_radius = 0.38
 body_height = 1.85

@@ -36,7 +36,7 @@ damage_factor = 1.0
 knockback = 0.4
 arc_degrees = 100.0
 radius = 1.9
-animation = &"attack"
+animation = &"attack_1"
 
 [resource]
 script = ExtResource("1_type")
@@ -44,7 +44,7 @@ id = &"skeleton"
 display_name = "Skelett"
 behavior = &"melee"
 experience = 8
-model_path = "res://assets/characters/skeleton.tscn"
+model_path = "res://assets/characters/skeleton_swarm.tscn"
 placeholder_color = Color(0.85, 0.82, 0.72, 1)
 body_radius = 0.35
 body_height = 1.7

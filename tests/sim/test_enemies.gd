@@ -256,9 +256,7 @@ func test_pool_reuses_dead_enemies() -> void:
 	_kill(enemy)
 	assert_true(enemy.is_dead())
 	assert_true(
-		await _wait_until(
-			func() -> bool: return not enemy.is_inside_tree(), Enemy.CORPSE_TIME + 1.0
-		),
+		await _wait_until(func() -> bool: return not enemy.is_inside_tree(), 5.0),
 		"Körper verschwindet nach dem Tod"
 	)
 	assert_eq(_director.pool.free_count(&"skeleton"), 1)

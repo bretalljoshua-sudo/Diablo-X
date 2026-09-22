@@ -26,6 +26,8 @@ const WAYPOINT_REACHED := 0.35
 const TURN_SPEED := 10.0
 const SEPARATION_RANGE := 1.3
 const SEPARATION_STRENGTH := 1.6
+## So lange steigen beschworene Diener aus dem Boden, bevor sie handeln.
+const SUMMON_RISE_TIME := 0.8
 ## Höhe, aus der Geschosse starten und Sichtlinien geprüft werden.
 const EYE_HEIGHT := 1.2
 
@@ -415,7 +417,7 @@ func _start_attack(attack: EnemyAttack) -> void:
 		EnemyAttack.Kind.SUMMON:
 			_prepare_summon(attack, _timer, color)
 	_set_state(State.ATTACK)
-	_enemy.play_action(attack.animation, 1.0 / maxf(_timer, 0.05))
+	_enemy.play_attack(attack.animation, _timer)
 
 
 func _update_aim() -> void:
@@ -550,8 +552,9 @@ func _summon(attack: EnemyAttack) -> void:
 		minion.summoner = _enemy
 		minion.group_id = _enemy.group_id
 		_summons.append(minion)
+		minion.play_spawn(SUMMON_RISE_TIME)
 		if _target_valid():
-			minion.brain.notice(target, 0.2, false)
+			minion.brain.notice(target, SUMMON_RISE_TIME, false)
 	_summon_spots.clear()
 
 
