@@ -91,3 +91,21 @@ func test_physics_layers_match_project_settings() -> void:
 	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_3"), "enemy")
 	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_4"), "hurtbox")
 	assert_eq(PhysicsLayers.HURTBOX, 1 << 3)
+
+
+func test_level_layout_ap6_fields_survive_save_and_load() -> void:
+	var layout := LevelLayout.new()
+	layout.depth = 2
+	layout.props[Vector3i(3, 0, 4)] = 20
+	layout.rooms.append(Rect2i(0, 0, 5, 6))
+	layout.room_links.append(Vector2i(0, 1))
+	layout.markers[&"boss_spawn"] = Vector3(8, 0, 8)
+	var path := "user://test_layout_ap6.tres"
+	assert_eq(ResourceSaver.save(layout, path), OK)
+	var loaded := ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as LevelLayout
+	assert_eq(loaded.depth, 2)
+	assert_eq(loaded.props[Vector3i(3, 0, 4)], 20)
+	assert_eq(loaded.rooms[0], Rect2i(0, 0, 5, 6))
+	assert_eq(loaded.room_links[0], Vector2i(0, 1))
+	assert_eq(loaded.markers[&"boss_spawn"], Vector3(8, 0, 8))
+	assert_eq(loaded.entrance, Vector3.INF, "Standard: kein Rückweg")

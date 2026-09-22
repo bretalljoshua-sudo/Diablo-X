@@ -34,3 +34,11 @@ signal potion_charges_changed(charges: int, maximum: int, progress: float)
 signal status_effect_changed(entity: Node3D, effect_id: StringName, active: bool)
 ## Die Figur unter der Maus hat gewechselt (null = keine). Für Gegner-Lebensbalken und Umriss.
 signal hovered_target_changed(target: Node3D)
+
+# --- Ergänzt von AP6 (Dungeon und Dorf) ---
+
+## Die aktuelle Ebene wird gleich abgebaut (Wechsel zur nächsten Ebene oder ins Dorf).
+## Wer Knoten in die Ebene gesetzt hat (Gegner, Beute), räumt sie hier weg.
+signal level_unloading(layout: LevelLayout)
+## Ein Ebenenwechsel beginnt, der Ladebildschirm ist sichtbar. target_depth wie LevelConfig.depth.
+signal level_transition_started(target_depth: int)
