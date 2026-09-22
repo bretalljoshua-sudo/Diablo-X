@@ -20,16 +20,22 @@ extends CharacterBody3D
 ## Modell: lädt MODEL_SCENE_PATH (AP8), sonst die Kapsel als Platzhalter. Das Modell darf
 ## play_action(name, speed) und set_move_speed(ratio) anbieten und das Signal hit_frame
 ## senden; dann kommt der Treffermoment aus der Animation statt aus dem Zeitgeber.
+##
+## Skills (AP5): lädt SKILLS_SCENE_PATH als Kind, falls vorhanden. Das Skill-System steuert die
+## Figur über begin_cast(), cast_velocity und end_cast() (Zustand CASTING) und übernimmt den
+## Treffermoment des Standardangriffs über basic_attack_handler (Basis-Skill „Hieb“).
 
 signal state_changed(new_state: State)
 ## Ein Standardangriff hat getroffen (Liste der getroffenen Figuren, kann leer sein).
 signal attack_landed(targets: Array[Node3D])
 signal dodged(direction: Vector3)
 
-enum State { IDLE, MOVING, ATTACKING, DODGING, STUNNED, DEAD }
+## CASTING: ein Skill (AP5) steuert die Figur, siehe begin_cast().
+enum State { IDLE, MOVING, ATTACKING, DODGING, STUNNED, DEAD, CASTING }
 
 const MODEL_SCENE_PATH := "res://assets/characters/warrior.tscn"
 const DEFAULT_CONFIG_PATH := "res://data/player/warrior.tres"
+const SKILLS_SCENE_PATH := "res://skills/warrior_skills.tscn"
 const GRAVITY := 25.0
 const BODY_MASK := PhysicsLayers.WORLD | PhysicsLayers.ENEMY
 ## Beim Anlaufen auf ein Ziel: so viel näher als attack_range, damit der Schlag sicher trifft.
@@ -42,6 +48,8 @@ const EQUIPMENT_SOURCE := &"equipment"
 @export var config: PlayerConfig
 ## Maus und Tastatur auswerten. Aus = nur Befehle (Bots, Zwischensequenzen).
 @export var input_enabled: bool = true
+## Skill-System aus SKILLS_SCENE_PATH laden (AP5). Aus = nur Standardangriff.
+@export var load_skills: bool = true
 
 var state: State = State.IDLE
 ## Blickrichtung (waagerecht, normiert).
@@ -53,6 +61,13 @@ var attack_target: Node3D
 ## Beute, zu der die Figur gerade läuft, oder null.
 var pickup_target: GroundItem
 var model: Node3D
+## Skill-System (AP5), oder null.
+var skills: Node
+## Waagerechte Geschwindigkeit, solange ein Skill die Figur steuert (Zustand CASTING).
+var cast_velocity: Vector3 = Vector3.ZERO
+## Ersetzt den Treffermoment des Standardangriffs: func(direction: Vector3) -> Array[Node3D]
+## liefert die getroffenen Figuren. Leer = eingebauter Standardangriff.
+var basic_attack_handler: Callable
 
 var _move_target: Vector3 = Vector3.ZERO
 var _has_move_target: bool = false
@@ -101,6 +116,7 @@ func _ready() -> void:
 	equipment.stats_changed.connect(_on_equipment_changed)
 	_on_equipment_changed()
 	_load_model()
+	_load_skills()
 	_on_health_changed(health.current, health.maximum)
 	potions.refill()
 
@@ -138,7 +154,7 @@ func attack(target: Node3D, repeat: bool = false) -> void:
 
 ## Schlägt im Stand in eine Richtung (WASD-Steuerung, Schlag zur Maus).
 func attack_direction(direction: Vector3) -> void:
-	if not can_act() or state == State.ATTACKING:
+	if not can_act() or state == State.ATTACKING or state == State.CASTING:
 		return
 	attack_target = null
 	_attack_repeat = false
@@ -197,6 +213,28 @@ func stop() -> void:
 	pickup_target = null
 	_attack_repeat = false
 	if state == State.MOVING:
+		_set_state(State.IDLE)
+
+
+## Ein Skill übernimmt die Figur (Zustand CASTING): Laufen und Angriffe brechen ab, die Figur
+## bewegt sich mit cast_velocity. Liefert false, wenn sie tot, betäubt oder in der Rolle ist.
+## Ausweichrolle, Betäubung und Tod beenden CASTING über state_changed.
+func begin_cast() -> bool:
+	if not can_act() or state == State.DODGING:
+		return false
+	attack_target = null
+	pickup_target = null
+	_attack_repeat = false
+	_has_move_target = false
+	cast_velocity = Vector3.ZERO
+	_set_state(State.CASTING)
+	return true
+
+
+## Gibt die Figur nach einem Skill zurück (nur aus CASTING).
+func end_cast() -> void:
+	cast_velocity = Vector3.ZERO
+	if state == State.CASTING:
 		_set_state(State.IDLE)
 
 
@@ -321,6 +359,8 @@ func _physics_process(delta: float) -> void:
 			horizontal = _process_dodge(delta)
 		State.ATTACKING:
 			_process_attack(delta)
+		State.CASTING:
+			horizontal = cast_velocity
 		_:
 			horizontal = _process_movement(delta)
 	horizontal += knockback.consume(delta)
@@ -480,6 +520,11 @@ func _cancel_attack() -> void:
 ## Treffermoment des Standardangriffs: alle Gegner im Bogen vor der Figur.
 func _perform_hit() -> void:
 	_attack_hit_done = true
+	if basic_attack_handler.is_valid():
+		var handled: Array[Node3D] = []
+		handled.assign(basic_attack_handler.call(_attack_direction))
+		attack_landed.emit(handled)
+		return
 	var targets := MeleeQuery.find_targets(
 		get_tree(),
 		global_position,
@@ -557,7 +602,11 @@ func _process_held_mouse(delta: float) -> void:
 	if _primary_held and not Input.is_action_pressed(&"primary_action"):
 		_primary_held = false
 		_attack_repeat = false
-	if not _primary_held or not can_act() or state in [State.ATTACKING, State.DODGING]:
+	if (
+		not _primary_held
+		or not can_act()
+		or state in [State.ATTACKING, State.DODGING, State.CASTING]
+	):
 		return
 	if attack_target != null and Components.is_alive(attack_target):
 		_attack_repeat = true
@@ -627,6 +676,16 @@ func _load_model() -> void:
 		model.connect(&"hit_frame", _on_model_hit_frame)
 
 
+func _load_skills() -> void:
+	if not load_skills or not ResourceLoader.exists(SKILLS_SCENE_PATH):
+		return
+	var scene := load(SKILLS_SCENE_PATH) as PackedScene
+	if scene == null:
+		return
+	skills = scene.instantiate()
+	add_child(skills)
+
+
 func _update_model(_delta: float) -> void:
 	model_root.rotation.y = atan2(-facing.x, -facing.z)
 	if model != null and model.has_method(&"set_move_speed"):
@@ -658,6 +717,7 @@ func _on_equipment_changed() -> void:
 
 func _on_died(_killer: Node3D) -> void:
 	_cancel_attack()
+	cast_velocity = Vector3.ZERO
 	pickup_target = null
 	_has_move_target = false
 	_primary_held = false
