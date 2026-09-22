@@ -390,6 +390,9 @@ func _apply_body() -> void:
 	hurt.height = type.body_height * scale_factor + 0.2
 	hurt_shape.position.y = hurt.height * 0.5
 	hurtbox.radius = hurt.radius
+	# Für AP1: welcher Treffer-Effekt in welcher Höhe erscheint.
+	set_meta(&"hit_vfx", type.hit_vfx)
+	set_meta(&"hit_height", hurt.height * 0.6)
 
 
 func _load_model() -> void:

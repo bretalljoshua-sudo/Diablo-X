@@ -12,6 +12,8 @@ extends EnemyDef
 ## erscheint eine Kapsel in placeholder_color.
 @export_file("*.tscn") var model_path: String = ""
 @export var placeholder_color: Color = Color(0.8, 0.8, 0.75)
+## Treffer-Effekt aus AP1 (VfxLibrary), zum Beispiel &"bone_chips" oder &"blood".
+@export var hit_vfx: StringName = &"blood"
 ## Körpermaße für Kollision und Trefferfläche.
 @export var body_radius: float = 0.4
 @export var body_height: float = 1.8
