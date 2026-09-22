@@ -12,3 +12,5 @@ extends Resource
 @export var icon: Texture2D
 ## Größe im Inventar-Raster.
 @export var grid_size: Vector2i = Vector2i(1, 1)
+## Kleinste Gegenstandsstufe, ab der diese Grundform fallen kann (bessere Formen ab höherer Stufe).
+@export var min_level: int = 1
