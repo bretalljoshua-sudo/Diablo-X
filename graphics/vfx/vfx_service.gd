@@ -7,8 +7,9 @@ extends Node
 ##   entity_died    → Auflösen des Modells, Staub und Glut, Blutlache
 ##   entity_spawned → setzt Auflösen und Aufblitzen zurück (Gegner aus dem Pool, AP3)
 ##   loot_dropped / loot_picked_up → Lichtsäule nach Seltenheit an und aus
-##   skill_cast     → Effekt aus SkillDef.vfx_key (AP5), außer bei Skills, deren Effekt AP5 selbst
-##                    im richtigen Moment über Vfx.spawn() startet (SKILLS_FROM_CAST)
+##   skill_cast     → Effekt aus SkillDef.vfx_key (AP5), außer bei Skills, deren Effekt erst
+##                    im Treffermoment kommt (SKILLS_FROM_CAST). Den ruft AP5 selbst über
+##                    Vfx.spawn("<vfx_key>_hit") auf, siehe resolve_key().
 ##   level_unloading, Szenenwechsel → alles wegräumen
 ##
 ## Wer selbst Effekte auslösen will: Vfx.spawn(key, position). Schlüssel stehen in
@@ -25,15 +26,18 @@ const DEFAULT_HIT_HEIGHT := 1.1
 ## Anteil der normalen Treffer, die Blut am Boden hinterlassen.
 const BLOOD_DECAL_CHANCE := 0.3
 ## Skills, deren Effekt an der Figur hängt statt am Zielpunkt.
-const SKILLS_AT_CASTER: Array[StringName] = [&"skill_ancients", &"skill_charge"]
-## Skills, deren Effekt AP5 selbst startet (Landung, Schrei, jeder Wirbel-Takt). skill_cast
-## löst für sie nichts aus, sonst käme der Effekt doppelt.
-const SKILLS_FROM_CAST: Array[StringName] = [&"skill_leap", &"skill_war_cry", &"skill_whirlwind"]
-## Kurze Schlüssel, die AP5 an Vfx.spawn() gibt und die hier einen eigenen Effekt bekommen.
-## Alle anderen kurzen Schlüssel werden zu „skill_<Schlüssel>“.
+const SKILLS_AT_CASTER: Array[StringName] = [&"skill_ancients", &"skill_charge", &"skill_whirlwind"]
+## Skills, deren Effekt erst im Treffermoment kommt (AP5 ruft dann Vfx.spawn("<vfx_key>_hit")).
+## skill_cast startet für sie nichts, sonst käme der Effekt doppelt oder zu früh.
+const SKILLS_FROM_CAST: Array[StringName] = [&"skill_leap", &"skill_war_cry"]
+## Treffer-Schlüssel aus AP5 („<vfx_key>_hit“ und andere), die einen eigenen Effekt bekommen.
+## Andere „…_hit“ nehmen den Effekt ohne „_hit“, kurze Schlüssel werden zu „skill_<Schlüssel>“.
 const SPAWN_ALIASES: Dictionary[StringName, StringName] = {
+	&"skill_ancients_hit": &"skill_ancients_strike",
 	&"ancients": &"skill_ancients_strike",
-	&"fire_ring": &"fire_hit",
+	&"skill_strike_hit": &"skill_cleave",
+	&"skill_charge_hit": &"skill_strike",
+	&"fire_ring": &"skill_fire_ring",
 }
 ## Läuft derselbe Skill-Effekt in diesem Umkreis schon kürzer als DEDUPE_AGE, startet spawn()
 ## keinen zweiten (AP5 und skill_cast im selben Moment, Wirbel-Takte).
@@ -70,7 +74,7 @@ func _ready() -> void:
 
 
 ## Startet den Effekt key an position. Liefert den Effekt-Knoten (VfxEffect) oder null,
-## wenn es den Schlüssel nicht gibt. Kurze Skill-Schlüssel aus AP5 („war_cry“) gehen auch.
+## wenn es den Schlüssel nicht gibt. Treffer-Schlüssel aus AP5 („skill_leap_hit“) gehen auch.
 ## Skill-Effekte wackeln hier nicht an der Kamera, das macht AP5 selbst (SkillFx.shake).
 func spawn(key: StringName, position: Vector3) -> Node3D:
 	var resolved := resolve_key(key)
@@ -94,7 +98,12 @@ static func resolve_key(key: StringName) -> StringName:
 	var alias: StringName = SPAWN_ALIASES.get(key, &"")
 	if alias != &"" and VfxLibrary.has_effect(alias):
 		return alias
-	var prefixed := StringName("skill_%s" % key)
+	var text := String(key)
+	if text.ends_with("_hit"):
+		var base := resolve_key(StringName(text.trim_suffix("_hit")))
+		if base != &"":
+			return base
+	var prefixed := StringName("skill_%s" % text)
 	return prefixed if VfxLibrary.has_effect(prefixed) else &""
 
 
@@ -432,8 +441,9 @@ func _on_skill_cast(caster: Node3D, skill: SkillDef, target_position: Vector3) -
 	var direction := Vector3.ZERO
 	if caster_ok:
 		direction = target_position - caster.global_position
+	var follow := caster if key == &"skill_whirlwind" and caster_ok else null
 	if _recent_effect(key, position) == null:
-		spawn_effect(key, position, direction)
+		spawn_effect(key, position, direction, 1.0, follow)
 
 
 ## Ein laufender Effekt key nahe position, der jünger ist als seine Doppel-Sperre, sonst null.

@@ -176,29 +176,41 @@ func test_skill_cast_spawns_its_effect() -> void:
 	var caster: Target = add_child_autofree(Target.new())
 	caster.global_position = Vector3(5, 0, 5)
 	var skill := SkillDef.new()
-	skill.vfx_key = &"cleave"
+	skill.vfx_key = &"skill_cleave"
 	EventBus.skill_cast.emit(caster, skill, Vector3(9, 0, 9))
-	assert_eq(Vfx.active_count(&"skill_cleave"), 1, "kurzer Schlüssel aus AP5")
+	assert_eq(Vfx.active_count(&"skill_cleave"), 1)
 	var guessed := SkillDef.new()
 	guessed.behavior = &"whirlwind"
 	assert_eq(Vfx.skill_key_for(guessed), &"skill_whirlwind", "ohne vfx_key über das Verhalten")
 	assert_eq(Vfx.skill_key_for(SkillDef.new()), &"")
 
 
-func test_skill_cast_leaves_cast_driven_effects_to_ap5() -> void:
+func test_real_skills_have_effects() -> void:
+	for path in DirAccess.get_files_at("res://data/skills"):
+		var skill := load("res://data/skills/" + path.trim_suffix(".remap")) as SkillDef
+		if skill == null or skill.vfx_key == &"":
+			continue
+		assert_true(VfxLibrary.has_effect(Vfx.skill_key_for(skill)), "Effekt für %s" % skill.id)
+		var hit_key := StringName("%s_hit" % skill.vfx_key)
+		assert_ne(Vfx.resolve_key(hit_key), &"", "Treffer-Effekt %s" % hit_key)
+	assert_ne(Vfx.resolve_key(&"skill_fire_ring"), &"")
+
+
+func test_skill_cast_leaves_hit_moment_effects_to_ap5() -> void:
 	var caster: Target = add_child_autofree(Target.new())
 	var skill := SkillDef.new()
-	skill.vfx_key = &"leap"
+	skill.vfx_key = &"skill_leap"
 	EventBus.skill_cast.emit(caster, skill, Vector3(4, 0, 0))
 	assert_eq(Vfx.active_count(&"skill_leap"), 0, "die Landung startet AP5 über Vfx.spawn")
-	assert_not_null(Vfx.spawn(&"leap", Vector3(4, 0, 0)))
+	assert_not_null(Vfx.spawn(&"skill_leap_hit", Vector3(4, 0, 0)))
 	assert_eq(Vfx.active_count(&"skill_leap"), 1)
 
 
-func test_spawn_resolves_short_keys_and_aliases() -> void:
+func test_spawn_resolves_hit_keys_and_aliases() -> void:
+	assert_eq(Vfx.resolve_key(&"skill_war_cry_hit"), &"skill_war_cry")
 	assert_eq(Vfx.resolve_key(&"war_cry"), &"skill_war_cry")
 	assert_eq(Vfx.resolve_key(&"blood"), &"blood")
-	assert_eq(Vfx.resolve_key(&"ancients"), &"skill_ancients_strike", "ein Einschlag pro Schlag")
+	assert_eq(Vfx.resolve_key(&"skill_ancients_hit"), &"skill_ancients_strike", "pro Schlag")
 	assert_eq(Vfx.resolve_key(&"gibt_es_nicht"), &"")
 	assert_null(Vfx.spawn(&"gibt_es_nicht", Vector3.ZERO), "SkillFx zeigt dann den Kreis")
 
@@ -206,13 +218,13 @@ func test_spawn_resolves_short_keys_and_aliases() -> void:
 func test_same_skill_effect_is_not_doubled() -> void:
 	var caster: Target = add_child_autofree(Target.new())
 	var skill := SkillDef.new()
-	skill.vfx_key = &"strike"
+	skill.vfx_key = &"skill_whirlwind"
 	EventBus.skill_cast.emit(caster, skill, Vector3(1, 0, 0))
-	var from_skill := Vfx.spawn(&"strike", Vector3(0.5, 0, 0))
-	assert_not_null(from_skill, "liefert den laufenden Effekt, damit AP5 keinen Kreis zeigt")
-	assert_eq(Vfx.active_count(&"skill_strike"), 1)
-	Vfx.spawn(&"strike", Vector3(8, 0, 0))
-	assert_eq(Vfx.active_count(&"skill_strike"), 2, "weit weg ist ein neuer Treffer")
+	var tick := Vfx.spawn(&"skill_whirlwind_hit", Vector3(0.5, 0, 0))
+	assert_not_null(tick, "liefert den laufenden Effekt, damit AP5 keinen Kreis zeigt")
+	assert_eq(Vfx.active_count(&"skill_whirlwind"), 1)
+	Vfx.spawn(&"skill_whirlwind_hit", Vector3(8, 0, 0))
+	assert_eq(Vfx.active_count(&"skill_whirlwind"), 2, "weit weg ist ein neuer Effekt")
 
 
 func test_blood_decals_respect_budget() -> void:

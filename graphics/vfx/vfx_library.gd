@@ -543,6 +543,31 @@ const SPECS: Dictionary[StringName, Dictionary] = {
 		],
 	},
 	# Ein Einschlag der Ahnen am Zielpunkt (AP5 ruft ihn pro Schlag über Vfx.spawn auf).
+	# Feuerring um den Krieger (Aspekt, AP5 ruft ihn jede Sekunde auf).
+	&"skill_fire_ring":
+	{
+		"lifetime": 1.1,
+		"light": [Color(1.0, 0.45, 0.15), 3.0, 7.0],
+		"emitters":
+		[
+			{
+				"amount": 70,
+				"life": 0.8,
+				"size": 0.45,
+				"add": true,
+				"energy": 2.5,
+				"colors":
+				[Color(1, 0.8, 0.4, 0.9), Color(1, 0.4, 0.1, 0.7), Color(0.4, 0.05, 0, 0)],
+				"speed": [0.6, 1.6],
+				"spread": 15.0,
+				"gravity": 1.5,
+				"dir": Vector3.UP,
+				"shape": "ring",
+				"radius": 3.2,
+				"scale": [1.0, 0.8, 0.2],
+			},
+		],
+	},
 	&"skill_ancients_strike":
 	{
 		"lifetime": 1.2,
