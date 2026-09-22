@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/portal.res" id="1_edrpe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1tm55"]
+size = Vector3(4, 0.2, 4)
+
+[node name="Portal" type="StaticBody3D" unique_id=1824350284]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=472594812]
+mesh = ExtResource("1_edrpe")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=1928009706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_1tm55")

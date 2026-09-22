@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/rock.res" id="1_x408n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0oher"]
+size = Vector3(3.6, 3, 3.6)
+
+[node name="Rock" type="StaticBody3D" unique_id=828617374]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=131540812]
+mesh = ExtResource("1_x408n")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=1596102132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_0oher")

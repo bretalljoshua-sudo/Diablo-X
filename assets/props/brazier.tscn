@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/brazier.res" id="1_ieqcp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0reh7"]
+size = Vector3(0.7, 1.4, 0.7)
+
+[node name="Brazier" type="StaticBody3D" unique_id=658872407]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1018704602]
+mesh = ExtResource("1_ieqcp")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=1126878191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("BoxShape3D_0reh7")

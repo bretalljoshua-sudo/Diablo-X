@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/tree.res" id="1_y3o7e"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2ipho"]
+size = Vector3(0.7, 3, 0.7)
+
+[node name="Tree" type="StaticBody3D" unique_id=426272099]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=399075806]
+mesh = ExtResource("1_y3o7e")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=753682117]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_2ipho")

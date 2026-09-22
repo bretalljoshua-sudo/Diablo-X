@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_chest.res" id="1_lqlti"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ra74g"]
+size = Vector3(1.6, 1.1, 1.3)
+
+[node name="PropChest" type="StaticBody3D" unique_id=972591711]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=665653826]
+mesh = ExtResource("1_lqlti")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=313305301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+shape = SubResource("BoxShape3D_ra74g")

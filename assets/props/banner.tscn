@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_banner.res" id="1_jea8m"]
+
+[node name="PropBanner" type="StaticBody3D" unique_id=1908260149]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=258654081]
+mesh = ExtResource("1_jea8m")

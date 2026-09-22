@@ -1,0 +1,445 @@
+[gd_resource type="MeshLibrary" format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/floor.res" id="1_5farf"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/floor_cracked.res" id="2_j3h03"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/stairs_down.res" id="3_lcd4a"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/stairs_up.res" id="4_xfogr"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/floor_boss.res" id="5_05gd0"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/portal.res" id="6_mv11c"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/floor_rubble.res" id="7_gnvtv"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_barrel.res" id="8_tmk03"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_crate.res" id="9_lxyew"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_bones.res" id="10_71t38"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_candles.res" id="11_0gs1l"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_coffin.res" id="12_v7gtu"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_rubble.res" id="13_diji0"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_table.res" id="14_32afh"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_banner.res" id="15_wkseb"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/torch_wall.res" id="16_expxi"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/brazier.res" id="17_1m83t"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/wall.res" id="18_3l0ae"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_chest.res" id="19_a2m4e"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/prop_cobweb.res" id="20_84x11"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/wall_corner.res" id="21_h775r"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/ground_grass.res" id="22_gwjbl"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/ground_path.res" id="23_6d0ge"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/ground_dirt.res" id="24_ewfr7"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/house_wall.res" id="25_jy6kg"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/house_corner.res" id="26_6pyt6"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/house_door.res" id="27_tvk10"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/fence.res" id="28_m1odt"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/tree.res" id="29_0x3ap"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/rock.res" id="30_v8na5"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/well.res" id="31_a6j3l"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/wall_corner_outer.res" id="32_ehrhv"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/lamp_post.res" id="33_6jugp"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/market_stall.res" id="34_bbkgk"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/crypt_entrance.res" id="35_iggw8"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/house_roof.res" id="36_pw6r1"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/wall_double.res" id="37_3excq"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/wall_end.res" id="38_qdgnm"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/doorway.res" id="39_i0uc5"]
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/pillar.res" id="40_ce545"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_802bs"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ucieo"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2otwn"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h0a0b"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4okrh"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1tm55"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_stogo"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7hdlt"]
+size = Vector3(1.8, 2, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lgi4p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ppmn0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bib0r"]
+size = Vector3(2.1, 2.1, 2.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8yg77"]
+size = Vector3(2, 0.9, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dqttj"]
+size = Vector3(3.6, 1.6, 1.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ssbh7"]
+size = Vector3(2, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0reh7"]
+size = Vector3(0.7, 1.4, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ligdb"]
+size = Vector3(4, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ra74g"]
+size = Vector3(1.6, 1.1, 1.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t68ve"]
+size = Vector3(1, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nprjw"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_viw7j"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jpbhs"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_osb8r"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bwigv"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s3e7b"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8xg42"]
+size = Vector3(4, 1.5, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2ipho"]
+size = Vector3(0.7, 3, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0oher"]
+size = Vector3(3.6, 3, 3.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6iqhv"]
+size = Vector3(2.4, 1.5, 2.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v0nhj"]
+size = Vector3(4, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3gxpl"]
+size = Vector3(1, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_32d4g"]
+size = Vector3(0.4, 3, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nqjua"]
+size = Vector3(4, 1.9, 2.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hiyc0"]
+size = Vector3(3, 4, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ybp3h"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gq6fl"]
+size = Vector3(4, 4, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tiksa"]
+size = Vector3(3, 4, 3.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vsj3i"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31iwi"]
+size = Vector3(0.8, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3gqpy"]
+size = Vector3(0.8, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wh4vs"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tk1px"]
+size = Vector3(1.5, 4, 1.5)
+
+[resource]
+item/0/name = "floor"
+item/0/mesh = ExtResource("1_5farf")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/mesh_cast_shadow = 1
+item/0/shapes = [SubResource("BoxShape3D_802bs"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1
+item/1/name = "floor_cracked"
+item/1/mesh = ExtResource("2_j3h03")
+item/1/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/mesh_cast_shadow = 1
+item/1/shapes = [SubResource("BoxShape3D_ucieo"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/1/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/1/navigation_layers = 1
+item/2/name = "floor_rubble"
+item/2/mesh = ExtResource("7_gnvtv")
+item/2/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/2/mesh_cast_shadow = 1
+item/2/shapes = [SubResource("BoxShape3D_stogo"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/2/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/2/navigation_layers = 1
+item/3/name = "wall"
+item/3/mesh = ExtResource("18_3l0ae")
+item/3/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/3/mesh_cast_shadow = 1
+item/3/shapes = [SubResource("BoxShape3D_ligdb"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1.5)]
+item/3/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/3/navigation_layers = 1
+item/4/name = "wall_corner"
+item/4/mesh = ExtResource("21_h775r")
+item/4/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/4/mesh_cast_shadow = 1
+item/4/shapes = [SubResource("BoxShape3D_t68ve"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2, 1.5)]
+item/4/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/4/navigation_layers = 1
+item/5/name = "wall_corner_outer"
+item/5/mesh = ExtResource("32_ehrhv")
+item/5/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/5/mesh_cast_shadow = 1
+item/5/shapes = [SubResource("BoxShape3D_v0nhj"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1.5), SubResource("BoxShape3D_3gxpl"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2, 0)]
+item/5/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/5/navigation_layers = 1
+item/6/name = "wall_double"
+item/6/mesh = ExtResource("37_3excq")
+item/6/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/6/mesh_cast_shadow = 1
+item/6/shapes = [SubResource("BoxShape3D_gq6fl"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)]
+item/6/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/6/navigation_layers = 1
+item/7/name = "wall_end"
+item/7/mesh = ExtResource("38_qdgnm")
+item/7/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/7/mesh_cast_shadow = 1
+item/7/shapes = [SubResource("BoxShape3D_tiksa"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.25)]
+item/7/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/7/navigation_layers = 1
+item/8/name = "doorway"
+item/8/mesh = ExtResource("39_i0uc5")
+item/8/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/8/mesh_cast_shadow = 1
+item/8/shapes = [SubResource("BoxShape3D_vsj3i"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0), SubResource("BoxShape3D_31iwi"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2, 0), SubResource("BoxShape3D_3gqpy"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2, 0)]
+item/8/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/8/navigation_layers = 1
+item/9/name = "pillar"
+item/9/mesh = ExtResource("40_ce545")
+item/9/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/9/mesh_cast_shadow = 1
+item/9/shapes = [SubResource("BoxShape3D_wh4vs"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0), SubResource("BoxShape3D_tk1px"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)]
+item/9/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/9/navigation_layers = 1
+item/10/name = "stairs_down"
+item/10/mesh = ExtResource("3_lcd4a")
+item/10/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/10/mesh_cast_shadow = 1
+item/10/shapes = [SubResource("BoxShape3D_2otwn"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/10/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/10/navigation_layers = 1
+item/11/name = "stairs_up"
+item/11/mesh = ExtResource("4_xfogr")
+item/11/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/11/mesh_cast_shadow = 1
+item/11/shapes = [SubResource("BoxShape3D_h0a0b"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/11/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/11/navigation_layers = 1
+item/12/name = "floor_boss"
+item/12/mesh = ExtResource("5_05gd0")
+item/12/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/12/mesh_cast_shadow = 1
+item/12/shapes = [SubResource("BoxShape3D_4okrh"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/12/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/12/navigation_layers = 1
+item/13/name = "portal"
+item/13/mesh = ExtResource("6_mv11c")
+item/13/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/13/mesh_cast_shadow = 1
+item/13/shapes = [SubResource("BoxShape3D_1tm55"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/13/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/13/navigation_layers = 1
+item/20/name = "prop_barrel"
+item/20/mesh = ExtResource("8_tmk03")
+item/20/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/20/mesh_cast_shadow = 1
+item/20/shapes = [SubResource("BoxShape3D_7hdlt"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1, -0.4), SubResource("BoxShape3D_lgi4p"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.5, 0.6), SubResource("BoxShape3D_ppmn0"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.5, -1.2)]
+item/20/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/20/navigation_layers = 1
+item/21/name = "prop_crate"
+item/21/mesh = ExtResource("9_lxyew")
+item/21/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/21/mesh_cast_shadow = 1
+item/21/shapes = [SubResource("BoxShape3D_bib0r"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)]
+item/21/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/21/navigation_layers = 1
+item/22/name = "prop_bones"
+item/22/mesh = ExtResource("10_71t38")
+item/22/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/22/mesh_cast_shadow = 1
+item/22/shapes = []
+item/22/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/22/navigation_layers = 1
+item/23/name = "prop_candles"
+item/23/mesh = ExtResource("11_0gs1l")
+item/23/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/23/mesh_cast_shadow = 1
+item/23/shapes = []
+item/23/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/23/navigation_layers = 1
+item/24/name = "prop_coffin"
+item/24/mesh = ExtResource("12_v7gtu")
+item/24/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/24/mesh_cast_shadow = 1
+item/24/shapes = [SubResource("BoxShape3D_8yg77"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)]
+item/24/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/24/navigation_layers = 1
+item/25/name = "prop_rubble"
+item/25/mesh = ExtResource("13_diji0")
+item/25/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/25/mesh_cast_shadow = 1
+item/25/shapes = [SubResource("BoxShape3D_dqttj"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)]
+item/25/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/25/navigation_layers = 1
+item/26/name = "prop_table"
+item/26/mesh = ExtResource("14_32afh")
+item/26/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/26/mesh_cast_shadow = 1
+item/26/shapes = [SubResource("BoxShape3D_ssbh7"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)]
+item/26/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/26/navigation_layers = 1
+item/27/name = "prop_banner"
+item/27/mesh = ExtResource("15_wkseb")
+item/27/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/27/mesh_cast_shadow = 1
+item/27/shapes = []
+item/27/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/27/navigation_layers = 1
+item/28/name = "torch_wall"
+item/28/mesh = ExtResource("16_expxi")
+item/28/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/28/mesh_cast_shadow = 1
+item/28/shapes = []
+item/28/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/28/navigation_layers = 1
+item/29/name = "brazier"
+item/29/mesh = ExtResource("17_1m83t")
+item/29/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/29/mesh_cast_shadow = 1
+item/29/shapes = [SubResource("BoxShape3D_0reh7"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)]
+item/29/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/29/navigation_layers = 1
+item/30/name = "prop_chest"
+item/30/mesh = ExtResource("19_a2m4e")
+item/30/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/30/mesh_cast_shadow = 1
+item/30/shapes = [SubResource("BoxShape3D_ra74g"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)]
+item/30/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/30/navigation_layers = 1
+item/31/name = "prop_cobweb"
+item/31/mesh = ExtResource("20_84x11")
+item/31/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/31/mesh_cast_shadow = 1
+item/31/shapes = []
+item/31/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/31/navigation_layers = 1
+item/40/name = "ground_grass"
+item/40/mesh = ExtResource("22_gwjbl")
+item/40/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/40/mesh_cast_shadow = 1
+item/40/shapes = [SubResource("BoxShape3D_nprjw"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/40/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/40/navigation_layers = 1
+item/41/name = "ground_path"
+item/41/mesh = ExtResource("23_6d0ge")
+item/41/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/41/mesh_cast_shadow = 1
+item/41/shapes = [SubResource("BoxShape3D_viw7j"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/41/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/41/navigation_layers = 1
+item/42/name = "ground_dirt"
+item/42/mesh = ExtResource("24_ewfr7")
+item/42/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/42/mesh_cast_shadow = 1
+item/42/shapes = [SubResource("BoxShape3D_jpbhs"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)]
+item/42/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/42/navigation_layers = 1
+item/43/name = "house_wall"
+item/43/mesh = ExtResource("25_jy6kg")
+item/43/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/43/mesh_cast_shadow = 1
+item/43/shapes = [SubResource("BoxShape3D_osb8r"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)]
+item/43/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/43/navigation_layers = 1
+item/44/name = "house_corner"
+item/44/mesh = ExtResource("26_6pyt6")
+item/44/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/44/mesh_cast_shadow = 1
+item/44/shapes = [SubResource("BoxShape3D_bwigv"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)]
+item/44/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/44/navigation_layers = 1
+item/45/name = "house_door"
+item/45/mesh = ExtResource("27_tvk10")
+item/45/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/45/mesh_cast_shadow = 1
+item/45/shapes = [SubResource("BoxShape3D_s3e7b"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)]
+item/45/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/45/navigation_layers = 1
+item/46/name = "fence"
+item/46/mesh = ExtResource("28_m1odt")
+item/46/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/46/mesh_cast_shadow = 1
+item/46/shapes = [SubResource("BoxShape3D_8xg42"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)]
+item/46/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/46/navigation_layers = 1
+item/47/name = "tree"
+item/47/mesh = ExtResource("29_0x3ap")
+item/47/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/47/mesh_cast_shadow = 1
+item/47/shapes = [SubResource("BoxShape3D_2ipho"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)]
+item/47/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/47/navigation_layers = 1
+item/48/name = "rock"
+item/48/mesh = ExtResource("30_v8na5")
+item/48/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/48/mesh_cast_shadow = 1
+item/48/shapes = [SubResource("BoxShape3D_0oher"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)]
+item/48/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/48/navigation_layers = 1
+item/49/name = "well"
+item/49/mesh = ExtResource("31_a6j3l")
+item/49/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/49/mesh_cast_shadow = 1
+item/49/shapes = [SubResource("BoxShape3D_6iqhv"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)]
+item/49/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/49/navigation_layers = 1
+item/50/name = "lamp_post"
+item/50/mesh = ExtResource("33_6jugp")
+item/50/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/50/mesh_cast_shadow = 1
+item/50/shapes = [SubResource("BoxShape3D_32d4g"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)]
+item/50/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/50/navigation_layers = 1
+item/51/name = "market_stall"
+item/51/mesh = ExtResource("34_bbkgk")
+item/51/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/51/mesh_cast_shadow = 1
+item/51/shapes = [SubResource("BoxShape3D_nqjua"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.3)]
+item/51/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/51/navigation_layers = 1
+item/52/name = "crypt_entrance"
+item/52/mesh = ExtResource("35_iggw8")
+item/52/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/52/mesh_cast_shadow = 1
+item/52/shapes = [SubResource("BoxShape3D_hiyc0"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1)]
+item/52/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/52/navigation_layers = 1
+item/53/name = "house_roof"
+item/53/mesh = ExtResource("36_pw6r1")
+item/53/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/53/mesh_cast_shadow = 1
+item/53/shapes = [SubResource("BoxShape3D_ybp3h"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)]
+item/53/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/53/navigation_layers = 1

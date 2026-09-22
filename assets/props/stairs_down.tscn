@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/stairs_down.res" id="1_nr1c7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2otwn"]
+size = Vector3(4, 0.2, 4)
+
+[node name="StairsDown" type="StaticBody3D" unique_id=394094913]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=99273199]
+mesh = ExtResource("1_nr1c7")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=962275695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_2otwn")

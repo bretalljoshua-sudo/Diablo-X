@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/world/meshes/crypt_entrance.res" id="1_4jqm0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hiyc0"]
+size = Vector3(3, 4, 2)
+
+[node name="CryptEntrance" type="StaticBody3D" unique_id=2102235268]
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1710894354]
+mesh = ExtResource("1_4jqm0")
+
+[node name="Collision0" type="CollisionShape3D" parent="." unique_id=1677408580]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -1)
+shape = SubResource("BoxShape3D_hiyc0")
