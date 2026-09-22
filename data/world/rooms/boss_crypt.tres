@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RoomTemplate" format=3]
+
+[ext_resource type="Script" path="res://world/room_template.gd" id="1_tpl"]
+
+[resource]
+script = ExtResource("1_tpl")
+id = &"boss_crypt"
+kind = 1
+weight = 1.0
+min_depth = 3
+max_depth = 99
+pattern = PackedStringArray("#....,....#", "...........", "..P.....P..", ".....C.....", "...........", ".L...B...L.", "...........", "...........", "..P.....P..", ".....O.....", "#....,....#")

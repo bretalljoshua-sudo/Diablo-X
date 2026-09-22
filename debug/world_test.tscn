@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://debug/world_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://world/level.tscn" id="2_level"]
+
+[node name="WorldTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="Level" parent="." instance=ExtResource("2_level")]
+auto_load = false
+
+[node name="OverviewLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0.25, -0.433013, 0, 0.866025, 0.5, 0.5, -0.433013, 0.75, 0, 20, 0)
+visible = false
+light_energy = 1.6
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Minimap" type="TextureRect" parent="UI"]
+offset_left = 1600.0
+offset_top = 16.0
+offset_right = 1900.0
+offset_bottom = 316.0
+mouse_filter = 2
+expand_mode = 1
+texture_filter = 1
+
+[node name="PlayerDot" type="ColorRect" parent="UI/Minimap"]
+offset_right = 6.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.3, 1)
+
+[node name="Info" type="Label" parent="UI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -80.0
+offset_right = 1400.0
+offset_bottom = -52.0
+grow_vertical = 0
+
+[node name="Hint" type="Label" parent="UI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -44.0
+offset_right = 1400.0
+offset_bottom = -16.0
+grow_vertical = 0
+text = "0 Dorf · 1/2 Ebenen · 3 Bossraum · N neuer Dungeon · P Portal öffnen · O Übersicht · M/Tab Karte · Linksklick/WASD laufen · Treppen wechseln die Ebene"

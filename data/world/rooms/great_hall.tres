@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RoomTemplate" format=3]
+
+[ext_resource type="Script" path="res://world/room_template.gd" id="1_tpl"]
+
+[resource]
+script = ExtResource("1_tpl")
+id = &"great_hall"
+kind = 0
+weight = 0.8
+min_depth = 2
+max_depth = 99
+pattern = PackedStringArray(".........", ".P..L..P.", ".........", "...S.S...", ".........", "...S.S...", ".........", ".P..L..P.", ".........")

@@ -1,9 +1,89 @@
 # AP6 – Dungeon und Dorf
 
-Stand: 22.09.2026 · in Arbeit
+Stand: 22.09.2026 · fertig bis auf die Prüfung am PC
 
-Dieses Dokument legt zuerst die **Absprache mit AP8** fest (Baukasten, Zellnamen, Pfad der
-MeshLibrary). Der Rest folgt, wenn das Paket fertig ist.
+## Was gebaut ist
+
+| Bereich | Wo |
+|---|---|
+| Dungeon-Generator: Räume aus Vorlagen wachsen als Baum, gerade Gänge, zusätzliche Schleifen | `world/dungeon_generator.gd` |
+| 12 Raumvorlagen (gedreht und gespiegelt), darunter ein Bossraum | `data/world/rooms/*.tres`, Klasse `world/room_template.gd` |
+| Ebenen-Einstellungen: Dorf, Ebene 1 (7 Räume), Ebene 2 (9 Räume), Bossraum | `data/world/levels/depth_<n>.tres` (`LevelConfig`) |
+| Dorf „Aschental“ als feste Karte mit Händler, Truhe, Brunnen, Häusern und Gruft-Eingang | `data/world/village.tres`, `world/village_map.gd` |
+| Wände, Ecken, Türöffnungen, Säulen, Treppen, Fackeln, Feuerschalen, Requisiten, Spawnpunkte je Raum | im Generator |
+| Aufbau als zwei `GridMap` (Aufbau und Requisiten) mit Kollision auf Ebene `world` | `world/level_builder.gd` |
+| Navigation zur Laufzeit gebacken, direkt aus den begehbaren Zellen | `LevelBuilder.bake_navigation()` |
+| Platzhalter-Baukasten aus grauen Blöcken, Umschalten auf AP8 über den festen Pfad | `world/placeholder_kit.gd`, `world/world_kit.gd` |
+| Spielwelt-Szene: baut Ebenen, hält die Spielerfigur über Wechsel hinweg, Stimmung je Thema | `world/level.tscn`, `world/level.gd` |
+| Übergänge über Treppen und Gruft-Eingang, Ladebildschirm, Rückkehrportal im Bossraum | `world/exit_trigger.gd`, `world/loading_screen.gd`, `World.travel_to()` |
+| Daten für die Minikarte (Bild mit einem Pixel pro Zelle, Umrechnung Welt ↔ Bild, Raum unter einer Position) | `world/minimap_data.gd` |
+| Ersatzfigur zum Laufen (Kapsel, Klick oder WASD), solange AP2 keine Figur liefert | `world/placeholder_walker.gd` |
+| Testszene mit Minikarte, Übersicht und Tasten für alle Ebenen | `debug/world_test.tscn` |
+| Tests: Vorlagen, Drehungen, gleicher Seed, 1.000 Seeds erreichbar, Dorf, Minikarte, Aufbauzeit, Wege, Übergänge | `tests/unit/test_world_generator.gd`, `tests/sim/test_level_build.gd` |
+
+„Fertig, wenn“ aus dem Plan:
+
+- Gleicher Seed ergibt gleichen Dungeon: `test_same_seed_same_dungeon` (Zellen, Drehungen, Requisiten,
+  Spawnpunkte, Ausgänge, Lichter, Räume, Start).
+- Alle Räume erreichbar über 1.000 Seeds: `test_all_rooms_reachable_over_many_seeds` prüft per
+  Flutfüllung vom Start, dass jede begehbare Zelle, jeder Ausgang, jeder Spawnpunkt und jeder Marker
+  erreichbar ist (Ebenen 1, 2 und Bossraum gemischt).
+- Aufbau einer Ebene unter 1 Sekunde: `test_build_is_fast_for_all_depths` (Generieren, GridMap,
+  Navigation, Lichter). Gemessen in der Cloud: 11 bis 57 ms je Ebene.
+
+## Wie man es testet
+
+```bash
+tools/run_tests.sh
+godot --path . -- --scene=world_test                 # Ebene 1
+godot --path . -- --scene=world_test --depth=0       # Dorf (2 = Ebene 2, 3 = Bossraum)
+godot --path . -- --scene=world_test --overview --seed=7
+SpielJBR.exe --scene=world_test                      # dasselbe im Windows-Build
+```
+
+Tasten in der Testszene: **0** Dorf, **1** und **2** Ebenen, **3** Bossraum, **N** neuer Dungeon,
+**P** Portal im Bossraum öffnen, **O** Übersicht über die ganze Ebene, **M** oder **Tab** große
+Minikarte, **Linksklick** oder **WASD** laufen. Wer auf eine Treppe oder in den Gruft-Eingang läuft,
+wechselt mit Ladebildschirm die Ebene. Unten links stehen Seed, Anzahl Räume und Aufbauzeit.
+
+## Für andere Pakete
+
+- **Ebene wechseln:** `World.travel_to(depth)`. Aus dem Dorf in die Katakomben wird immer neu
+  gewürfelt, innerhalb eines Durchlaufs bleiben die Ebenen gleich (Seed aus `World.run_seed`).
+- **Signale:** `level_transition_started(target_depth)`, dann `level_unloading(layout)` (eigene Knoten
+  wegräumen), dann `level_loaded(layout)`.
+- **Gegner (AP3):** `layout.spawn_points` mit `layout.spawn_rooms` (Raum je Punkt, im Startraum und
+  im Bossraum keine). Gegner als Kinder von `Level.get_active().actors` einsetzen, dann räumt der
+  Wechsel sie automatisch weg. Navigation liegt auf der Standardkarte der Welt, Agentenradius 0,5 m.
+- **Spielerfigur (AP2, AP9):** Die Level-Szene nimmt `Game.player`, sonst `player_scene`, sonst die
+  Ersatzkapsel. Hat die Figur eine Methode `teleport(position)`, wird sie beim Wechsel benutzt.
+  Ausgänge reagieren auf Körper in der Ebene `player`, die `Game.player` sind oder in der Gruppe
+  `player` stehen.
+- **Boss (AP9):** Marker `boss_spawn`, `boss_chest`, `boss_gate` (Türöffnung des Bossraums),
+  `portal`, `boss_room_center`; `layout.boss_room` ist der Index des Bossraums. Nach dem Sieg
+  `World.open_portal()` aufrufen, dann führt das Portal ins Dorf.
+- **Dorf (AP7, AP9):** Marker `merchant` und `stash` für Händler und Truhe.
+- **Minikarte (AP7):** `MinimapData.build_image(layout)`, `world_to_pixel()`, `room_at()`;
+  `layout.rooms` und `layout.room_links` für Raumumrisse.
+- **Licht und Stimmung (AP1):** Liegt unter `res://graphics/environments/<theme>.tres` ein
+  `Environment` (Themen `catacombs`, `boss`, `village`), nimmt die Level-Szene dieses. Lichter baut
+  `LevelBuilder.make_light()`, dort kann AP1 seine Licht-Vorlagen einsetzen.
+
+## Geänderte Verträge
+
+- `LevelLayout`: neue Felder `depth`, `theme`, `cell_size`, `cell_orientations`, `props`,
+  `prop_orientations`, `rooms`, `room_links`, `spawn_rooms`, `boss_room`, `entrance`, `markers`.
+- `EventBus`: neue Signale `level_unloading(layout)` und `level_transition_started(target_depth)`.
+
+## Offen
+
+- **Am PC ansehen:** Licht, Wandhöhe und Lesbarkeit der grauen Blöcke sind nur per Software-Rendering
+  in der Cloud geprüft (Bilder sahen stimmig aus: Treppe an der Wand, Fackeln richtig gedreht).
+- **Echter Baukasten:** kommt von AP8 unter `res://assets/world/world_kit.tres`. Danach Wandstücke
+  und Drehungen im Bild prüfen.
+- **Verdeckende Wände** vor der Figur ausblenden macht AP1.
+- **Gänge sind gerade** und 4 m breit; Knicke und breitere Hallen wären eine spätere Erweiterung.
+- **Seed im Dorf:** Das Dorf ist fest, `--seed` wirkt nur auf die Katakomben.
 
 ## Absprache mit AP8: Baukasten als MeshLibrary
 
@@ -36,6 +116,8 @@ schreibt eine Warnung ins Log.
   brauchen eine flache Kollision, damit Figuren darauf stehen. Die Navigation backt `world/` selbst
   aus den Zellen, sie hängt nicht an den Meshes.
 - Wandhöhe frei, Vorschlag 3 bis 4 m. Das Ausblenden verdeckender Wände macht AP1.
+- Der Platzhalter füllt Wandzellen als ganze graue Blöcke (2,5 m hoch) mit heller Kante auf der
+  begehbaren Seite, damit Drehfehler sofort auffallen.
 
 ### Zellnamen
 

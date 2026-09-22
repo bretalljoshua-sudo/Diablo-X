@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FixedMap" format=3]
+
+[ext_resource type="Script" path="res://world/fixed_map.gd" id="1_map"]
+
+[resource]
+script = ExtResource("1_map")
+id = &"village"
+theme = &"village"
+pattern = PackedStringArray("RRRRRRRRRRRRRRRRRRRRRRRR", "RTT,,,,,,,,,RRR,,,,,TTTR", "RT,,HHHH,,,,,E,,,,,,,,TR", "R,,,HHHH,,,,,a.,,HHH,,,R", "R,,,HHDH,l,,,..,,HHH,,,R", "R,,,,,.......:.,,HDH,,TR", "R,T,,,.,,,,,,.,,,,.,,,,R", "R,,,,,.,,FFFF.,,,,.,,,,R", "R,,,,l.,,,,,,.......l,,R", "R,,,,,.,,,W,,.,,,,,,,,,R", "R,,,,,........,,,,,,,T,R", "R,HHH,.,,,,,,.,,mM,,,,,R", "R,HHH,.,,,,,,.,,..,,,,,R", "R,HDH,.......@......,,,R", "R,,.....,,,,,.,,,,C,,,,R", "R,,,,,,,,,,,,.,,,,,,T,,R", "R,T,,,,,,,l,,.,,,,,,,,,R", "R,,,,,,,,,,,,.,,,,,,,,,R", "RTT,,,,,,,,,,,,,,,,,,TTR", "RRRRRRRRRRRRRRRRRRRRRRRR")
