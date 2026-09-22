@@ -122,3 +122,10 @@ func test_ap0_stats_property_still_works() -> void:
 	holder.set("stats", StatBlock.from_dict({Enums.Stat.ARMOR: 33.0}))
 	assert_eq(Stats.get_stat(holder, Enums.Stat.ARMOR), 33.0)
 	assert_eq(Stats.get_stat(null, Enums.Stat.ARMOR), 0.0)
+
+
+func test_health_changes_reach_event_bus() -> void:
+	var entity := _make({Enums.Stat.MAX_LIFE: 100.0})
+	watch_signals(EventBus)
+	Components.health(entity).take_damage(25.0)
+	assert_signal_emitted_with_parameters(EventBus, "entity_health_changed", [entity, 75.0, 100.0])

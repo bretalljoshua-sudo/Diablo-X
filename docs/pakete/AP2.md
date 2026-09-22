@@ -70,7 +70,7 @@ Tasten: Linksklick laufen oder angreifen (halten: folgen oder weiter schlagen), 
   `Stats.set_percent_source(player, &"shout", block)`. Wucht: `Combat.hit_stop_for(results)`.
   Der Standardangriff ist fest eingebaut; wenn „Hieb“ als Skill kommt, kann AP5 ihn über
   `attack_landed` ergänzen oder die Linksklick-Belegung übernehmen (dann bitte hier absprechen).
-- **AP7 (UI):** `EventBus.player_health_changed`, `potion_charges_changed`,
+- **AP7 (UI):** `EventBus.entity_health_changed` (jede `HealthComponent`), `player_health_changed`, `potion_charges_changed`,
   `status_effect_changed`, `hovered_target_changed` (Gegner unter der Maus für den Lebensbalken),
   `damage_dealt` mit `result.crit` für Schadenszahlen. Abklingzeit der Rolle:
   `Player.get_dodge_cooldown_left()`.

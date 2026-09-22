@@ -1,6 +1,8 @@
 class_name HealthComponent
 extends Node
-## Leben einer Figur. Das Maximum kommt aus Enums.Stat.MAX_LIFE der StatsComponent
+## Leben einer Figur. Jede Änderung geht auch als EventBus.entity_health_changed hinaus
+## (Lebensbalken über Gegnern, Bossbalken).
+## Das Maximum kommt aus Enums.Stat.MAX_LIFE der StatsComponent
 ## derselben Figur (sonst fallback_max_life). Schaden läuft über Combat.apply_damage(),
 ## nicht direkt über take_damage(), damit Rüstung, Signale und Tod einheitlich sind.
 
@@ -27,7 +29,7 @@ func _ready() -> void:
 		_stats.stats_changed.connect(_on_stats_changed)
 	maximum = _read_maximum()
 	current = maximum
-	health_changed.emit(current, maximum)
+	_emit_changed()
 
 
 func is_dead() -> bool:
@@ -57,7 +59,7 @@ func take_damage(amount: float, source: Node3D = null) -> bool:
 		return false
 	current = maxf(current - amount, 0.0)
 	damaged.emit(amount, source)
-	health_changed.emit(current, maximum)
+	_emit_changed()
 	if current <= 0.0:
 		_dead = true
 		died.emit(source)
@@ -74,7 +76,7 @@ func heal(amount: float) -> float:
 	var delta := current - before
 	if delta > 0.0:
 		healed.emit(delta)
-		health_changed.emit(current, maximum)
+		_emit_changed()
 	return delta
 
 
@@ -85,14 +87,14 @@ func revive(ratio: float = 1.0) -> void:
 	_dead = false
 	_invulnerable_reasons.clear()
 	revived.emit()
-	health_changed.emit(current, maximum)
+	_emit_changed()
 
 
 ## Setzt das Leben auf das Maximum (ohne Tod oder Wiederbelebung zu melden).
 func reset_to_full() -> void:
 	maximum = _read_maximum()
 	current = maximum
-	health_changed.emit(current, maximum)
+	_emit_changed()
 
 
 func _read_maximum() -> float:
@@ -110,4 +112,11 @@ func _on_stats_changed() -> void:
 	maximum = new_max
 	if not _dead:
 		current = clampf(maximum * ratio, 1.0, maximum)
+	_emit_changed()
+
+
+func _emit_changed() -> void:
 	health_changed.emit(current, maximum)
+	var entity := get_parent() as Node3D
+	if entity != null:
+		EventBus.entity_health_changed.emit(entity, current, maximum)
