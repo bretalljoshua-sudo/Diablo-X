@@ -88,6 +88,10 @@ func bind_player(player: Node) -> void:
 	var equipment := Equipment.find_on(player)
 	inventory_window.bind(inventory, equipment, player)
 	merchant_window.bind(inventory, equipment)
+	# Skills (AP5) senden ihren Stand beim Start; eine später gebundene UI holt ihn sich hier.
+	var skills := SkillUser.find_on(player)
+	if skills != null:
+		skills.broadcast_state.call_deferred()
 
 
 ## Öffnet oder schließt ein Fenster: &"inventory", &"skills", &"map", &"pause".
