@@ -5,9 +5,17 @@
 [ext_resource type="AnimationLibrary" path="res://assets/animations/libraries/skeleton_swarm.tres" id="3_skeleton"]
 [ext_resource type="AnimationNodeStateMachine" path="res://assets/animations/character_state_machine.tres" id="4_characte"]
 [ext_resource type="PackedScene" path="res://assets/weapons/skeleton_blade.glb" id="5_skeleton"]
+[ext_resource type="AudioStream" path="res://assets/audio/bone_break.tres" id="s0_bone_b"]
+[ext_resource type="AudioStream" path="res://assets/audio/footstep.tres" id="s1_footst"]
+[ext_resource type="AudioStream" path="res://assets/audio/hurt.tres" id="s2_hurt"]
+[ext_resource type="AudioStream" path="res://assets/audio/swing.tres" id="s3_swing"]
 
 [node name="SkeletonSwarm" type="Node3D"]
 script = ExtResource("1_characte")
+footstep_sound = ExtResource("s1_footst")
+attack_sound = ExtResource("s3_swing")
+hit_sound = ExtResource("s2_hurt")
+death_sound = ExtResource("s0_bone_b")
 walk_speed = 0.29
 run_speed = 2.4
 weapon_right = ExtResource("5_skeleton")

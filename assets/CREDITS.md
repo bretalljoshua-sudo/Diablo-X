@@ -12,6 +12,7 @@ Urheber trotzdem.
 | KayKit Dungeon Remastered 1.0 (Kay Lousberg) – Böden, Wände, Säulen, Treppen, Fässer, Truhen, Fackeln | https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0 · https://kaylousberg.itch.io/kaykit-dungeon-remastered | CC0 1.0 | `assets/world/kaykit_dungeon/` |
 | KayKit Halloween Bits 1.0 (Kay Lousberg) – Särge, Kerzen, Gruft, Bäume, Zaun, Laterne | https://github.com/KayKit-Game-Assets/KayKit-Halloween-Bits-1.0 · https://kaylousberg.itch.io/halloween-bits | CC0 1.0 | `assets/world/kaykit_halloween/` |
 | KayKit Medieval Hexagon Pack 1.0 (Kay Lousberg) – Brunnen, Felsen | https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0 · https://kaylousberg.itch.io/kaykit-medieval-hexagon | CC0 1.0 | `assets/world/kaykit_medieval/` |
+| Kenney Starter Kits (FPS, 3D Platformer, City Builder) – Klänge: Schmerz, Zerfall, Zauber, Münze, Aufprall, Ablegen | https://github.com/KenneyNL/Starter-Kit-FPS · https://github.com/KenneyNL/Starter-Kit-3D-Platformer · https://github.com/KenneyNL/Starter-Kit-City-Builder · https://kenney.nl | Klänge CC0 1.0 (Code der Kits MIT, nicht übernommen) | `assets/audio/kenney/` |
 
 ## Eigene Ableitungen (ebenfalls CC0)
 
@@ -22,3 +23,5 @@ Urheber trotzdem.
 | Kultist-Farbtextur (dunkles Karmesin statt Grün) | `rogue_texture.png` aus den Adventurers | `assets/characters/textures/` |
 | Baukasten `world_kit.tres`, zusammengesetzte Meshes, Requisiten-Szenen | KayKit-Teile, erzeugt mit `assets/tools/build_world_kit.gd` | `assets/world/`, `assets/props/` |
 | Gras- und Spinnennetz-Textur | eigene, prozedural erzeugt | `assets/world/textures/grass_ground.png`, `cobweb.png` |
+| Schritte, Schwünge, Treffer, Beuteklänge (selten, legendär) | eigene, erzeugt mit `assets/tools/synth_sounds.py` | `assets/audio/synth/` |
+| Klang-Ressourcen mit Varianten (`*.tres`) | erzeugt mit `assets/tools/build_sounds.gd` | `assets/audio/` |

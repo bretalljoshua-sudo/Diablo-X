@@ -1,0 +1,17 @@
+[gd_resource type="AudioStreamRandomizer" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/synth/footstep_1.wav" id="1_8twkh"]
+[ext_resource type="AudioStream" path="res://assets/audio/synth/footstep_2.wav" id="2_k4cdr"]
+[ext_resource type="AudioStream" path="res://assets/audio/synth/footstep_3.wav" id="3_1gnip"]
+[ext_resource type="AudioStream" path="res://assets/audio/synth/footstep_4.wav" id="4_x2m42"]
+[ext_resource type="AudioStream" path="res://assets/audio/kenney/land.ogg" id="5_pcmbq"]
+
+[resource]
+random_pitch = 1.12
+random_volume_offset_db = 3.0
+streams_count = 5
+stream_0/stream = ExtResource("1_8twkh")
+stream_1/stream = ExtResource("2_k4cdr")
+stream_2/stream = ExtResource("3_1gnip")
+stream_3/stream = ExtResource("4_x2m42")
+stream_4/stream = ExtResource("5_pcmbq")

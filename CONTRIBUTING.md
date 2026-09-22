@@ -148,11 +148,20 @@ Alle Aktionen für Version 0.1 sind in `project.godot` angelegt, damit niemand d
 
 ## Große Dateien (Git LFS)
 
-- Modelle, Texturen, Klänge und Schriften laufen über Git LFS (siehe `.gitattributes`).
-  Vor dem ersten Commit solcher Dateien `git lfs install` ausführen.
-- Das kostenlose Kontingent ist klein (1 GB Speicher). Nur Dateien einchecken, die das Spiel wirklich
-  lädt; Blender-Quellen und Rohdaten bleiben außerhalb des Repos.
-- Jede fremde Quelle mit Lizenz in `assets/CREDITS.md` eintragen.
+- **`assets/` liegt ohne LFS im Repo.** `assets/.gitattributes` schaltet LFS dort ab: Die
+  Cloud-Sitzungen können nicht zu LFS hochladen (lfs.github.com ist dort gesperrt), und normale Dateien
+  verbrauchen kein LFS-Kontingent. Die Assets sind klein gehalten (Stand AP8: rund 12 MB).
+- Für die anderen Ordner gilt weiter die LFS-Regel aus der obersten `.gitattributes`. Wer dort Modelle,
+  Texturen oder Klänge ablegt, braucht `git lfs install` am PC; aus der Cloud geht das nicht.
+- **Klonen mit git-lfs** (empfohlen am PC): `git lfs install` einmalig, dann
+  `git clone https://github.com/bretalljoshua-sudo/Diablo-X.git`. Mögliche LFS-Dateien kommen mit.
+- **Klonen ohne git-lfs**: einfach `git clone …`. Alles unter `assets/` ist vollständig da; nur
+  LFS-Dateien außerhalb von `assets/` (derzeit keine) wären Zeiger statt echter Dateien. Mit
+  `GIT_LFS_SKIP_SMUDGE=1 git clone …` klont man bewusst ohne LFS-Inhalte.
+- Das kostenlose LFS-Kontingent ist klein (1 GB Speicher, 1 GB Übertragung im Monat). Aus der Cloud
+  lässt es sich nicht prüfen; am PC unter GitHub → Settings → Billing → Git LFS.
+- Nur Dateien einchecken, die das Spiel wirklich lädt; Blender-Quellen und Rohdaten bleiben außerhalb
+  des Repos. Jede fremde Quelle mit Lizenz in `assets/CREDITS.md` eintragen.
 
 ## CI
 
