@@ -6,3 +6,6 @@ extends RefCounted
 var amount: float = 0.0
 var crit: bool = false
 var killed: bool = false
+## true, wenn das Ziel unverwundbar war (zum Beispiel Ausweichrolle). Dann gibt es keinen
+## Schaden und kein EventBus.damage_dealt.
+var evaded: bool = false

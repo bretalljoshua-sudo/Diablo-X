@@ -76,6 +76,18 @@ func test_event_bus_has_all_contract_signals() -> void:
 		"level_loaded",
 		"boss_phase_changed",
 		"run_completed",
+		"player_health_changed",
+		"potion_charges_changed",
+		"status_effect_changed",
+		"hovered_target_changed",
 	]
 	for signal_name: String in expected:
 		assert_true(EventBus.has_signal(signal_name), "EventBus.%s fehlt" % signal_name)
+
+
+func test_physics_layers_match_project_settings() -> void:
+	assert_eq(PhysicsLayers.WORLD, 1)
+	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_2"), "player")
+	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_3"), "enemy")
+	assert_eq(ProjectSettings.get_setting("layer_names/3d_physics/layer_4"), "hurtbox")
+	assert_eq(PhysicsLayers.HURTBOX, 1 << 3)

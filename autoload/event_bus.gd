@@ -23,3 +23,14 @@ signal player_equipped(slot: Enums.Slot, item: ItemInstance)
 signal level_loaded(layout: LevelLayout)
 signal boss_phase_changed(boss: Node3D, phase: int)
 signal run_completed(duration_sec: float)
+
+# --- Ergänzt von AP2 (Spieler und Kampf) ---
+
+## Leben des Spielers hat sich geändert (für HUD, AP7).
+signal player_health_changed(current: float, maximum: float)
+## Heiltrank-Ladungen des Spielers. progress = Fortschritt zur nächsten Ladung (0 bis 1).
+signal potion_charges_changed(charges: int, maximum: int, progress: float)
+## Ein Statuseffekt (Verlangsamung, Brennen, Betäubung) beginnt oder endet an einer Figur.
+signal status_effect_changed(entity: Node3D, effect_id: StringName, active: bool)
+## Die Figur unter der Maus hat gewechselt (null = keine). Für Gegner-Lebensbalken und Umriss.
+signal hovered_target_changed(target: Node3D)
