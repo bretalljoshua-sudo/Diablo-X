@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectDef" format=3]
+
+[ext_resource type="Script" path="res://combat/status_effect_def.gd" id="1_8pihd"]
+
+[resource]
+script = ExtResource("1_8pihd")
+id = &"burn"
+kind = 1
+duration = 3.0
+magnitude = 8.0

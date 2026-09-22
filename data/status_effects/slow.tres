@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StatusEffectDef" format=3]
+
+[ext_resource type="Script" path="res://combat/status_effect_def.gd" id="1_dyd8x"]
+
+[resource]
+script = ExtResource("1_dyd8x")
+id = &"slow"
+magnitude = 0.4

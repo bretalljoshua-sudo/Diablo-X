@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://components/stats_component.gd" id="2_stats"]
+[ext_resource type="Script" path="res://components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://components/status_effects_component.gd" id="5_status"]
+[ext_resource type="Script" path="res://components/knockback_component.gd" id="6_knockback"]
+[ext_resource type="Script" path="res://player/potion_belt.gd" id="7_potions"]
+
+[sub_resource type="CapsuleShape3D" id="BodyShape"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CylinderShape3D" id="HurtShape"]
+radius = 0.5
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="BodyMat"]
+albedo_color = Color(0.62, 0.6, 0.55, 1)
+metallic = 0.7
+roughness = 0.4
+
+[sub_resource type="CapsuleMesh" id="BodyMesh"]
+material = SubResource("BodyMat")
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="VisorMat"]
+albedo_color = Color(0.75, 0.12, 0.08, 1)
+emission_enabled = true
+emission = Color(0.8, 0.15, 0.05, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxMesh" id="VisorMesh"]
+material = SubResource("VisorMat")
+size = Vector3(0.5, 0.12, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="SwordMat"]
+albedo_color = Color(0.8, 0.82, 0.85, 1)
+metallic = 1.0
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="SwordMesh"]
+material = SubResource("SwordMat")
+size = Vector3(0.08, 0.08, 1.1)
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_player")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("BodyShape")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Placeholder" type="Node3D" parent="Model"]
+
+[node name="Body" type="MeshInstance3D" parent="Model/Placeholder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("BodyMesh")
+
+[node name="Visor" type="MeshInstance3D" parent="Model/Placeholder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.33)
+mesh = SubResource("VisorMesh")
+
+[node name="Sword" type="MeshInstance3D" parent="Model/Placeholder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.95, -0.45)
+mesh = SubResource("SwordMesh")
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("2_stats")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_health")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+script = ExtResource("4_hurtbox")
+faction = 0
+radius = 0.45
+
+[node name="Shape" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("HurtShape")
+
+[node name="StatusEffects" type="Node" parent="."]
+script = ExtResource("5_status")
+
+[node name="Knockback" type="Node" parent="."]
+script = ExtResource("6_knockback")
+resistance = 0.3
+
+[node name="PotionBelt" type="Node" parent="."]
+script = ExtResource("7_potions")
+
+[node name="NavigationAgent" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.4
+target_desired_distance = 0.2
+radius = 0.4
+height = 1.8
