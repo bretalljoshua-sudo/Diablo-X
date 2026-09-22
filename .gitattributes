@@ -1,0 +1,32 @@
+# Zeilenenden einheitlich halten (Windows-PC und Linux-Cloud arbeiten am selben Repo).
+* text=auto eol=lf
+*.bat text eol=crlf
+
+# Große Binärdateien über Git LFS (siehe CONTRIBUTING.md).
+# Modelle
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.gltf.bin filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+# Texturen und Bilder
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+*.hdr filter=lfs diff=lfs merge=lfs -text
+*.ktx2 filter=lfs diff=lfs merge=lfs -text
+# Klang
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+# Schriften
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.otf filter=lfs diff=lfs merge=lfs -text
+
+# Ausnahme: Dateien des GUT-Addons bleiben normale Git-Dateien.
+addons/gut/**/*.png !filter !diff !merge binary
+addons/gut/**/*.ttf !filter !diff !merge binary

@@ -1,0 +1,15 @@
+# Godot
+.godot/
+*.translation
+export_credentials.cfg
+
+# Builds
+build/
+
+# Werkzeuge und Betriebssystem
+.DS_Store
+Thumbs.db
+*.tmp
+__pycache__/
+.vscode/
+.idea/

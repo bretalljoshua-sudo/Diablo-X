@@ -1,0 +1,60 @@
+# Lint und headless Tests bei jedem Push.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (gdformat, gdlint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install "gdtoolkit==4.5.0"
+      - run: tools/lint.sh
+
+  test:
+    name: Tests (GUT headless + Rauchtest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      # Git-LFS-Dateien mit Cache holen, damit das LFS-Kontingent geschont wird.
+      - name: LFS-Dateiliste
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      - uses: actions/cache@v5
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+      - run: git lfs pull
+
+      - name: Godot-Version lesen
+        id: godot
+        run: echo "version=$(tr -d '[:space:]' < .godot-version)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v5
+        with:
+          path: ~/.cache/godot
+          key: godot-${{ steps.godot.outputs.version }}-linux
+      - run: tools/install_godot.sh
+
+      - name: Tests
+        run: tools/run_tests.sh
+        env:
+          TEST_LOG_DIR: ${{ runner.temp }}/logs
+      - name: Logs hochladen
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: test-logs
+          path: ${{ runner.temp }}/logs

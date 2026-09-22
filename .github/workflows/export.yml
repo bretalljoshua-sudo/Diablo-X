@@ -1,0 +1,54 @@
+# Windows-Build als Download (Artifact). Läuft nur bei Pushes auf main und manuell
+# (Actions → „Windows-Export“ → „Run workflow“), um Actions-Minuten zu sparen.
+name: Windows-Export
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: export-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  export:
+    name: Windows-Build exportieren
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: LFS-Dateiliste
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      - uses: actions/cache@v5
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+      - run: git lfs pull
+
+      - name: Godot-Version lesen
+        id: godot
+        run: echo "version=$(tr -d '[:space:]' < .godot-version)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v5
+        with:
+          path: ~/.cache/godot
+          key: godot-${{ steps.godot.outputs.version }}-linux
+      - uses: actions/cache@v5
+        with:
+          path: ~/.local/share/godot/export_templates
+          key: godot-${{ steps.godot.outputs.version }}-templates-windows
+      - run: tools/install_godot.sh --templates
+
+      - name: Export
+        run: tools/export_windows.sh
+
+      - name: Kurzname des Commits
+        id: meta
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: SpielJBR-windows-${{ steps.meta.outputs.sha }}
+          path: build/windows/
+          retention-days: 30
+          if-no-files-found: error

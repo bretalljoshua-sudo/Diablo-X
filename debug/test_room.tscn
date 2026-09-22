@@ -1,0 +1,156 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://debug/test_room.gd" id="1_room"]
+[ext_resource type="Script" path="res://graphics/camera_rig.gd" id="2_rig"]
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.03, 0.03, 0.045, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.38, 0.5, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 4
+ssao_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.1, 0.1, 0.14, 1)
+
+[sub_resource type="StandardMaterial3D" id="EmberMat"]
+shading_mode = 0
+albedo_color = Color(1, 0.55, 0.2, 1)
+
+[sub_resource type="SphereMesh" id="EmberMesh"]
+material = SubResource("EmberMat")
+radius = 0.12
+height = 0.24
+
+[sub_resource type="StandardMaterial3D" id="FloorMat"]
+albedo_color = Color(0.23, 0.22, 0.21, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMat")
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="StandardMaterial3D" id="CubeMat"]
+albedo_color = Color(0.55, 0.08, 0.06, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="CubeMesh"]
+material = SubResource("CubeMat")
+size = Vector3(1.5, 1.5, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="PillarMat"]
+albedo_color = Color(0.32, 0.3, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="PillarMesh"]
+material = SubResource("PillarMat")
+size = Vector3(1, 4, 1)
+
+[sub_resource type="BoxShape3D" id="PillarShape"]
+size = Vector3(1, 4, 1)
+
+[node name="TestRoom" type="Node3D" unique_id=1429255850]
+script = ExtResource("1_room")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=896521803]
+environment = SubResource("Env")
+
+[node name="Moonlight" type="DirectionalLight3D" parent="." unique_id=188093289]
+transform = Transform3D(0.8660254, 0.38302222, -0.32139382, 0, 0.64278764, 0.76604444, 0.5, -0.66341394, 0.5566704, 0, 8, 0)
+light_color = Color(0.55, 0.62, 0.85, 1)
+light_energy = 0.35
+shadow_enabled = true
+
+[node name="Torch" type="OmniLight3D" parent="." unique_id=1405235088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.2, 2.5)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 3.0
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Ember" type="MeshInstance3D" parent="Torch" unique_id=671592709]
+mesh = SubResource("EmberMesh")
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=578137514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor" unique_id=1883655484]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor" unique_id=734591670]
+shape = SubResource("FloorShape")
+
+[node name="Cube" type="MeshInstance3D" parent="." unique_id=1991826984]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("CubeMesh")
+
+[node name="Pillars" type="Node3D" parent="." unique_id=2110975798]
+
+[node name="PillarNW" type="StaticBody3D" parent="Pillars" unique_id=1124659710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, -6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Pillars/PillarNW" unique_id=1003479511]
+mesh = SubResource("PillarMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Pillars/PillarNW" unique_id=1668046388]
+shape = SubResource("PillarShape")
+
+[node name="PillarNE" type="StaticBody3D" parent="Pillars" unique_id=495456960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, -6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Pillars/PillarNE" unique_id=1942865041]
+mesh = SubResource("PillarMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Pillars/PillarNE" unique_id=129445203]
+shape = SubResource("PillarShape")
+
+[node name="PillarSW" type="StaticBody3D" parent="Pillars" unique_id=1036558781]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, 6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Pillars/PillarSW" unique_id=2112408283]
+mesh = SubResource("PillarMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Pillars/PillarSW" unique_id=203365352]
+shape = SubResource("PillarShape")
+
+[node name="PillarSE" type="StaticBody3D" parent="Pillars" unique_id=164278512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, 6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Pillars/PillarSE" unique_id=2110828484]
+mesh = SubResource("PillarMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Pillars/PillarSE" unique_id=581148132]
+shape = SubResource("PillarShape")
+
+[node name="Title" type="Label3D" parent="." unique_id=572177372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+billboard = 1
+text = "Spiel JBR – Testraum"
+font_size = 48
+outline_size = 10
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=265491293]
+script = ExtResource("2_rig")
+
+[node name="Hint" type="CanvasLayer" parent="." unique_id=1890030725]
+
+[node name="Label" type="Label" parent="Hint" unique_id=1183673148]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -48.0
+offset_right = 300.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Linksklick: Markierung auf den Boden setzen   ·   F3: Debug-Anzeige   ·   F12: Screenshot"
+horizontal_alignment = 1

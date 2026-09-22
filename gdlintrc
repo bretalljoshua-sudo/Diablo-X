@@ -1,0 +1,8 @@
+# Konfiguration für gdlint (gdtoolkit 4.5). Standardregeln, Ausnahmen hier eintragen.
+excluded_directories: !!set
+  .git: null
+  .godot: null
+  addons: null
+max-line-length: 100
+max-public-methods: 25
+function-arguments-number: 8
