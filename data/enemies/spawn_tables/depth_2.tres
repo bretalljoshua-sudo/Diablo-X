@@ -72,3 +72,4 @@ script = ExtResource("1_table")
 groups = Array[ExtResource("2_group")]([SubResource("G0"), SubResource("G1"), SubResource("G2"), SubResource("G3")])
 level = 3
 elite_chance = 0.25
+fill_ratio = 0.4

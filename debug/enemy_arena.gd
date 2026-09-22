@@ -9,9 +9,11 @@ extends Node3D
 ## Sind alle Wellen besiegt, ist die Arena bestanden. Rote Flächen am Boden sind Vorwarnungen:
 ## Wer sie rechtzeitig verlässt oder durch sie hindurchrollt, wird nicht getroffen.
 ##
-## Tasten: 1–4 Gruppe an der Maus (Skelette, Bogenschützen, Ghul, Kultist), 5 Elite-Gegner mit
-## zufälligen Eigenschaften, 6 Belastungstest mit 60 Gegnern, B Bot an/aus, K alle besiegen,
-## R Arena neu starten.
+## Oberfläche aus AP7 (Lebenskugel, Skillleiste, Lebensbalken über Gegnern). Die Skills des
+## Kriegers aus AP5 liegen wie im Spiel auf Rechtsklick und 1 bis 4.
+## Tasten: F5–F8 Gruppe an der Maus (Skelette, Bogenschützen, Ghul, Kultist), F9 Elite-Gegner
+## mit zufälligen Eigenschaften, F10 Belastungstest mit 60 Gegnern, B Bot an/aus,
+## X alle besiegen, R Arena neu starten.
 ## Kommandozeile: --bot (Bot spielt), --stress (60 Gegner statt Wellen), --no-waves (leere Arena).
 
 signal wave_started(index: int)
@@ -55,7 +57,6 @@ var _physics_ms_avg: float = 0.0
 
 
 func _ready() -> void:
-	Enemy.debug_labels = true
 	_rng = Rng.stream(&"enemy_arena")
 	_build_arena()
 	nav_region.bake_navigation_mesh(false)
@@ -72,10 +73,6 @@ func _ready() -> void:
 	elif args.has("--stress"):
 		phase = Phase.FREE
 		spawn_stress.call_deferred()
-
-
-func _exit_tree() -> void:
-	Enemy.debug_labels = false
 
 
 func _physics_process(_delta: float) -> void:
@@ -108,25 +105,25 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if key == null or not key.pressed or key.echo:
 		return
 	match key.physical_keycode:
-		KEY_1:
+		KEY_F5:
 			director.spawn_types(_repeat(SKELETON, 5), _spawn_point_near_mouse())
-		KEY_2:
+		KEY_F6:
 			director.spawn_types(
 				_types([ARCHER, ARCHER, SKELETON, SKELETON]), _spawn_point_near_mouse()
 			)
-		KEY_3:
+		KEY_F7:
 			director.spawn_types(_types([GHOUL, SKELETON, SKELETON]), _spawn_point_near_mouse())
-		KEY_4:
+		KEY_F8:
 			director.spawn_types(_types([CULTIST, SKELETON]), _spawn_point_near_mouse())
-		KEY_5:
+		KEY_F9:
 			var types := _types([SKELETON, GHOUL, ARCHER, CULTIST])
 			var type := types[_rng.randi_range(0, types.size() - 1)]
 			director.spawn(type, _spawn_point_near_mouse(), 1, true, _rng)
-		KEY_6:
+		KEY_F10:
 			spawn_stress()
 		KEY_B:
 			bot.enabled = not bot.enabled
-		KEY_K:
+		KEY_X:
 			kill_all()
 		KEY_R:
 			restart()

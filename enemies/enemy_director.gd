@@ -6,6 +6,9 @@ extends Node
 ## vor dem Wechsel wieder ab (EventBus.level_unloading).
 
 const SPAWN_TABLE_PATH := "res://data/enemies/spawn_tables/depth_%d.tres"
+const NAVIGATION_WAIT_FRAMES := 30
+## Liegt der nächste Punkt des Netzes weiter weg, gilt ein Punkt als nicht auf dem Netz.
+const MAX_SNAP_DISTANCE := 3.0
 
 static var _group_counter: int = 0
 
@@ -157,18 +160,30 @@ static func formation(center: Vector3, count: int, spacing: float, angle: float)
 	return spots
 
 
+## Zieht einen Punkt auf das nächste Stück Navigationsnetz. Ohne Netz in der Nähe bleibt er,
+## wie er ist (zum Beispiel in Tests ohne Navigation).
 func snap_to_navigation(point: Vector3) -> Vector3:
-	var viewport := get_viewport()
-	if viewport == null:
-		return point
-	var world := viewport.find_world_3d()
-	if world == null:
-		return point
-	var map := world.navigation_map
+	var map := _navigation_map()
 	if not map.is_valid() or NavigationServer3D.map_get_iteration_id(map) == 0:
 		return point
 	var closest := NavigationServer3D.map_get_closest_point(map, point)
+	if Vector2(closest.x - point.x, closest.z - point.z).length() > MAX_SNAP_DISTANCE:
+		return point
 	return Vector3(closest.x, point.y, closest.z)
+
+
+func _is_on_navigation(point: Vector3) -> bool:
+	var map := _navigation_map()
+	if not map.is_valid() or NavigationServer3D.map_get_iteration_id(map) == 0:
+		return false
+	var closest := NavigationServer3D.map_get_closest_point(map, point)
+	return Vector2(closest.x - point.x, closest.z - point.z).length() < 1.0
+
+
+func _navigation_map() -> RID:
+	var viewport := get_viewport()
+	var world := viewport.find_world_3d() if viewport != null else null
+	return world.navigation_map if world != null else RID()
 
 
 func _next_rng() -> RandomNumberGenerator:
@@ -178,6 +193,22 @@ func _next_rng() -> RandomNumberGenerator:
 
 func _on_level_loaded(layout: LevelLayout) -> void:
 	if not auto_populate:
+		return
+	_populate_when_navigation_ready(layout)
+
+
+## Das Navigationsnetz einer neuen Ebene ist erst nach ein paar Physik-Takten auf der Karte.
+## Vorher ließen sich Spawnpunkte nicht auf das Netz ziehen und Gruppenmitglieder landeten in
+## Wänden. Gewartet wird, bis ein Spawnpunkt der Ebene tatsächlich auf dem Netz liegt.
+func _populate_when_navigation_ready(layout: LevelLayout) -> void:
+	if not layout.spawn_points.is_empty():
+		var probe := layout.spawn_points[0]
+		for i in NAVIGATION_WAIT_FRAMES:
+			if _is_on_navigation(probe):
+				break
+			await get_tree().physics_frame
+	var level := Level.get_active()
+	if level != null and level.layout != layout:
 		return
 	populate(layout, load_spawn_table(layout.depth))
 

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://graphics/camera_rig.gd" id="3_rig"]
 [ext_resource type="Script" path="res://enemies/enemy_director.gd" id="4_director"]
 [ext_resource type="Script" path="res://debug/enemy_arena_bot.gd" id="5_bot"]
+[ext_resource type="PackedScene" path="res://ui/game_ui.tscn" id="6_ui"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1
@@ -28,6 +29,8 @@ agent_max_climb = 0.25
 
 [node name="EnemyArena" type="Node3D"]
 script = ExtResource("1_arena")
+
+[node name="GameUI" parent="." instance=ExtResource("6_ui")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Env")
@@ -69,10 +72,10 @@ distance = 22.0
 
 [node name="Status" type="Label" parent="Hud"]
 offset_left = 16.0
-offset_top = 16.0
+offset_top = 100.0
 offset_right = 700.0
-offset_bottom = 260.0
-theme_override_font_sizes/font_size = 20
+offset_bottom = 280.0
+theme_override_font_sizes/font_size = 18
 text = "Arena"
 
 [node name="Banner" type="Label" parent="Hud"]
@@ -89,16 +92,10 @@ horizontal_alignment = 1
 text = ""
 
 [node name="Hint" type="Label" parent="Hud"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -760.0
-offset_top = -48.0
-offset_right = 760.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 0
-horizontal_alignment = 1
-text = "Linksklick: laufen / angreifen · Leertaste: Rolle · Q: Trank · 1–4: Gruppe an der Maus · 5: Elite · 6: 60 Gegner · B: Bot · K: alle besiegen · R: Arena neu"
+offset_left = 16.0
+offset_top = 280.0
+offset_right = 700.0
+offset_bottom = 400.0
+theme_override_font_sizes/font_size = 16
+text = "F5–F8: Skelette, Bogenschützen, Ghul, Kultist an der Maus
+F9: Elite-Gegner · F10: 60 Gegner · B: Bot · X: alle besiegen · R: neu"

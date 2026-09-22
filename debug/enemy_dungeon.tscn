@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://debug/enemy_dungeon.gd" id="1_scene"]
+[ext_resource type="PackedScene" path="res://ui/game_ui.tscn" id="2_ui"]
+[ext_resource type="PackedScene" path="res://world/level.tscn" id="3_level"]
+[ext_resource type="Script" path="res://enemies/enemy_director.gd" id="4_director"]
+[ext_resource type="Script" path="res://debug/enemy_arena_bot.gd" id="5_bot"]
+
+[node name="EnemyDungeon" type="Node3D"]
+script = ExtResource("1_scene")
+
+[node name="GameUI" parent="." instance=ExtResource("2_ui")]
+
+[node name="Director" type="Node" parent="."]
+script = ExtResource("4_director")
+auto_populate = true
+
+[node name="Level" parent="." instance=ExtResource("3_level")]
+auto_load = false
+
+[node name="Bot" type="Node" parent="."]
+script = ExtResource("5_bot")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="Hud"]
+offset_left = 16.0
+offset_top = 100.0
+offset_right = 700.0
+offset_bottom = 200.0
+theme_override_font_sizes/font_size = 18
+text = "Dungeon"
