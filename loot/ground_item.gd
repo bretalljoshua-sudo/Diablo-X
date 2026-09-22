@@ -4,6 +4,7 @@ extends Area3D
 ## aufsammeln per Klick. Lichtsäule, Klang und Effekte baut AP1 (hört auf loot_dropped).
 ##
 ## Beim Klick wird das Inventar von Game.player verwendet (Inventory.find_on()).
+## Physik-Ebene: PhysicsLayers.LOOT (Ebene 5 „loot“).
 
 signal picked_up(ground_item: GroundItem)
 

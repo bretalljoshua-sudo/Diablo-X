@@ -127,6 +127,7 @@ func _handle_click() -> void:
 		from, from + rig.camera.project_ray_normal(mouse) * PICK_RAY_LENGTH
 	)
 	query.collide_with_areas = true
+	query.collision_mask = PhysicsLayers.WORLD | PhysicsLayers.LOOT
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if hit.get("collider") is GroundItem:
 		var ground := hit["collider"] as GroundItem

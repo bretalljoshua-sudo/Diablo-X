@@ -84,3 +84,9 @@ func test_loot_tables_load() -> void:
 		assert_not_null(table, String(table_name))
 		assert_false(table.entries.is_empty())
 		assert_gt(table.gold.y, 0)
+
+
+func test_ground_item_uses_loot_layer() -> void:
+	var node := (load(GroundItem.SCENE_PATH) as PackedScene).instantiate() as GroundItem
+	assert_eq(node.collision_layer, PhysicsLayers.LOOT)
+	node.free()
