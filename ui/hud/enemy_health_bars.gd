@@ -3,7 +3,8 @@ extends Control
 ## Kleine Lebensbalken über Gegnern. Ein Balken erscheint, sobald ein Gegner Schaden hat oder
 ## unter der Maus ist (dann mit Namen), und verschwindet beim Tod.
 ## Daten: EventBus.entity_health_changed (AP2), hovered_target_changed (AP2), entity_died.
-## Optional am Gegner: Eigenschaft display_name (String) und is_elite (bool), sonst Knotenname.
+## Optional am Gegner (AP3 liefert alles): display_name (String), is_elite (bool) und
+## get_health_bar_position() (Weltpunkt über dem Kopf), sonst Knotenname und feste Höhe.
 
 const BAR_SIZE := Vector2(78, 7)
 ## Höhe über dem Ursprung der Figur in Metern.
@@ -56,6 +57,16 @@ static func display_name_of(entity: Node) -> String:
 	return String(entity.name)
 
 
+## Weltpunkt des Balkens: vom Gegner, wenn er get_health_bar_position() hat, sonst über dem
+## Ursprung.
+static func bar_world_position(entity: Node3D) -> Vector3:
+	if entity.has_method(&"get_health_bar_position"):
+		var value: Variant = entity.call(&"get_health_bar_position")
+		if value is Vector3:
+			return value
+	return entity.global_position + Vector3.UP * HEAD_HEIGHT
+
+
 func _on_boss_started(boss: Node3D, _boss_name: String) -> void:
 	excluded.append(boss)
 	entries.erase(boss)
@@ -98,7 +109,7 @@ func _draw() -> void:
 	for entity in shown:
 		if not is_instance_valid(entity) or not _is_shown(entity):
 			continue
-		var world := entity.global_position + Vector3.UP * HEAD_HEIGHT
+		var world := bar_world_position(entity)
 		if camera.is_position_behind(world):
 			continue
 		var screen := camera.unproject_position(world)

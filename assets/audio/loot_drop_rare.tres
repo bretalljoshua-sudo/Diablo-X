@@ -1,0 +1,8 @@
+[gd_resource type="AudioStreamRandomizer" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/synth/loot_drop_rare.wav" id="1_5hpk7"]
+
+[resource]
+random_pitch = 1.03
+streams_count = 1
+stream_0/stream = ExtResource("1_5hpk7")

@@ -1,0 +1,7 @@
+[gd_resource type="AudioStreamRandomizer" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/synth/loot_drop_legendary.wav" id="1_s504r"]
+
+[resource]
+streams_count = 1
+stream_0/stream = ExtResource("1_s504r")

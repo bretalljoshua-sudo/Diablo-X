@@ -10,6 +10,7 @@ const WARRIOR_SCENE := "res://assets/characters/warrior.tscn"
 const SPIN_SPEED := 0.35
 
 var viewport: SubViewport
+var camera: Camera3D
 var pivot: Node3D
 ## Platzhalterteile je Platz (nur ohne echtes Modell).
 var pieces: Dictionary[Enums.Slot, MeshInstance3D] = {}
@@ -30,6 +31,31 @@ func _init() -> void:
 	viewport.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
 	add_child(viewport)
 	_build_world()
+
+
+func _ready() -> void:
+	if uses_real_model:
+		frame_model()
+
+
+## Richtet die Kamera so aus, dass die ganze Figur ins Bild passt (Modelle von AP8 sind
+## unterschiedlich groß).
+func frame_model() -> void:
+	var bounds := AABB()
+	var first := true
+	for node in pivot.find_children("*", "VisualInstance3D", true, false):
+		var visual := node as VisualInstance3D
+		if not visual.is_visible_in_tree():
+			continue
+		var box := visual.global_transform * visual.get_aabb()
+		bounds = box if first else bounds.merge(box)
+		first = false
+	if first or bounds.size.y <= 0.01:
+		return
+	var center := bounds.get_center()
+	var half_height := maxf(bounds.size.y, bounds.size.x) * 0.58
+	var distance := half_height / tan(deg_to_rad(camera.fov * 0.5)) + bounds.size.z
+	camera.look_at_from_position(center + Vector3(0, bounds.size.y * 0.08, distance), center)
 
 
 func _process(delta: float) -> void:
@@ -74,7 +100,7 @@ func _build_world() -> void:
 	world_env.environment = environment
 	viewport.add_child(world_env)
 
-	var camera := Camera3D.new()
+	camera = Camera3D.new()
 	camera.fov = 30.0
 	camera.position = Vector3(0, 1.1, 4.6)
 	camera.look_at_from_position(camera.position, Vector3(0, 0.95, 0))

@@ -66,3 +66,27 @@ func test_skill_tree_only_requests_allowed_rank_ups() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "skill_rank_up_requested", [skill])
 	assert_false(window.request_slot_assign(2, skill), "ungelernte Skills nicht auf die Leiste")
 	window.free()
+
+
+func test_enemy_bar_uses_position_from_enemy() -> void:
+	var plain := Node3D.new()
+	add_child_autofree(plain)
+	plain.global_position = Vector3(1, 0, 2)
+	var expected := Vector3(1, EnemyHealthBars.HEAD_HEIGHT, 2)
+	assert_eq(EnemyHealthBars.bar_world_position(plain), expected)
+	var enemy := Node3D.new()
+	var script := GDScript.new()
+	script.source_code = (
+		"\n"
+		. join(
+			[
+				"extends Node3D",
+				"func get_health_bar_position() -> Vector3:",
+				"\treturn Vector3(0, 5, 0)",
+			]
+		)
+	)
+	script.reload()
+	enemy.set_script(script)
+	add_child_autofree(enemy)
+	assert_eq(EnemyHealthBars.bar_world_position(enemy), Vector3(0, 5, 0))

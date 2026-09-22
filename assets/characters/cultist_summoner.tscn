@@ -6,9 +6,17 @@
 [ext_resource type="AnimationNodeStateMachine" path="res://assets/animations/character_state_machine.tres" id="4_characte"]
 [ext_resource type="PackedScene" path="res://assets/weapons/staff.glb" id="5_skeleton"]
 [ext_resource type="Texture2D" path="res://assets/characters/textures/cultist_texture.png" id="6_cultist_"]
+[ext_resource type="AudioStream" path="res://assets/audio/cast.tres" id="s0_cast"]
+[ext_resource type="AudioStream" path="res://assets/audio/death.tres" id="s1_death"]
+[ext_resource type="AudioStream" path="res://assets/audio/footstep.tres" id="s2_footst"]
+[ext_resource type="AudioStream" path="res://assets/audio/hurt.tres" id="s3_hurt"]
 
 [node name="CultistSummoner" type="Node3D"]
 script = ExtResource("1_characte")
+footstep_sound = ExtResource("s2_footst")
+attack_sound = ExtResource("s0_cast")
+hit_sound = ExtResource("s3_hurt")
+death_sound = ExtResource("s1_death")
 walk_speed = 0.59
 run_speed = 1.3
 weapon_right = ExtResource("5_skeleton")

@@ -1,0 +1,15 @@
+[gd_resource type="AudioStreamRandomizer" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/kenney/placement-a.ogg" id="1_5v4ky"]
+[ext_resource type="AudioStream" path="res://assets/audio/kenney/placement-b.ogg" id="2_5a0j2"]
+[ext_resource type="AudioStream" path="res://assets/audio/kenney/placement-c.ogg" id="3_nwrtk"]
+[ext_resource type="AudioStream" path="res://assets/audio/kenney/land.ogg" id="4_xwccr"]
+
+[resource]
+random_pitch = 1.1
+random_volume_offset_db = 2.0
+streams_count = 4
+stream_0/stream = ExtResource("1_5v4ky")
+stream_1/stream = ExtResource("2_5a0j2")
+stream_2/stream = ExtResource("3_nwrtk")
+stream_3/stream = ExtResource("4_xwccr")

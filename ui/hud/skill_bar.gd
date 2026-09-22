@@ -1,7 +1,8 @@
 class_name SkillBar
 extends HBoxContainer
 ## Skillleiste mit sechs Plätzen: linke und rechte Maustaste, Tasten 1 bis 4.
-## Hört auf skill_slot_changed, skill_cooldown_started, skill_cast und resource_changed.
+## Hört auf skill_slot_changed, skill_cooldown_started, skill_cast, skill_cast_failed und
+## resource_changed.
 
 signal slot_clicked(slot: int)
 
@@ -40,6 +41,7 @@ func _init() -> void:
 	EventBus.skill_cooldown_started.connect(start_cooldown)
 	EventBus.skill_cast.connect(_on_skill_cast)
 	EventBus.resource_changed.connect(_on_resource_changed)
+	EventBus.skill_cast_failed.connect(_on_skill_cast_failed)
 
 
 func set_slot(slot: int, skill: SkillDef) -> void:
@@ -96,6 +98,13 @@ func _on_skill_cast(_caster: Node3D, skill: SkillDef, _target: Vector3) -> void:
 	var slot := get_slot_for(skill)
 	if slot != null:
 		slot.flash()
+
+
+## Fehlschlag (Abklingzeit, zu wenig Wut, …): der Platz blinkt rot.
+func _on_skill_cast_failed(skill: SkillDef, _reason: StringName) -> void:
+	var slot := get_slot_for(skill)
+	if slot != null:
+		slot.flash(UiTheme.WORSE)
 
 
 func _on_resource_changed(current: float, _maximum: float) -> void:

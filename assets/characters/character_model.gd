@@ -71,7 +71,11 @@ const FOOTSTEP_MIN_INTERVAL := 0.2
 @export var albedo_override: Texture2D
 ## Einfärbung aller Teile, Weiß = unverändert.
 @export var tint: Color = Color.WHITE
+## Klänge (siehe GameSounds). Schritte laufen über einen eigenen Spieler, damit sie
+## Schwung, Schmerz und Tod nicht abschneiden.
 @export var footstep_sound: AudioStream
+## Schwung beim Treffer- oder Auslösezeitpunkt eines Angriffs.
+@export var attack_sound: AudioStream
 @export var hit_sound: AudioStream
 @export var death_sound: AudioStream
 
@@ -84,6 +88,7 @@ var _move_speed: float = 0.0
 var _clock: float = 0.0
 var _last_footstep: float = -1.0
 var _audio: AudioStreamPlayer3D
+var _steps: AudioStreamPlayer3D
 
 @onready var model: Node3D = $Model
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -95,10 +100,8 @@ func _ready() -> void:
 	_apply_looks()
 	_attach_weapon(weapon_right, &"handslot.r", &"WeaponRight")
 	_attach_weapon(weapon_left, &"handslot.l", &"WeaponLeft")
-	_audio = AudioStreamPlayer3D.new()
-	_audio.name = &"Audio"
-	_audio.bus = &"Master"
-	add_child(_audio)
+	_audio = _add_audio_player(&"Audio")
+	_steps = _add_audio_player(&"Steps")
 
 
 func _process(delta: float) -> void:
@@ -246,15 +249,17 @@ func get_skeleton() -> Skeleton3D:
 func _on_anim_event(event: StringName) -> void:
 	match event:
 		&"hit":
+			_play_sound(attack_sound)
 			hit_frame.emit()
 		&"release":
+			_play_sound(attack_sound)
 			release_frame.emit()
 		&"footstep":
 			if _clock - _last_footstep < FOOTSTEP_MIN_INTERVAL:
 				return
 			_last_footstep = _clock
 			footstep.emit()
-			_play_sound(footstep_sound, -8.0)
+			_play_sound(footstep_sound, -6.0, _steps)
 	anim_event.emit(event)
 
 
@@ -306,9 +311,21 @@ func _attach_weapon(scene: PackedScene, bone: StringName, node_name: StringName)
 	attachment.add_child(scene.instantiate())
 
 
-func _play_sound(stream: AudioStream, volume_db: float = 0.0) -> void:
-	if stream == null or _audio == null:
+func _add_audio_player(player_name: StringName) -> AudioStreamPlayer3D:
+	var player := AudioStreamPlayer3D.new()
+	player.name = player_name
+	player.bus = GameSounds.bus()
+	add_child(player)
+	return player
+
+
+func _play_sound(
+	stream: AudioStream, volume_db: float = 0.0, player: AudioStreamPlayer3D = null
+) -> void:
+	if player == null:
+		player = _audio
+	if stream == null or player == null:
 		return
-	_audio.stream = stream
-	_audio.volume_db = volume_db
-	_audio.play()
+	player.stream = stream
+	player.volume_db = volume_db
+	player.play()
