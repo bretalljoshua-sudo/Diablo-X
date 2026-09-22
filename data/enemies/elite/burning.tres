@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EliteAffix" format=3]
+
+[ext_resource type="Script" path="res://enemies/elite_affix.gd" id="1_affix"]
+[ext_resource type="Resource" path="res://data/status_effects/burn.tres" id="2_burn"]
+
+[resource]
+script = ExtResource("1_affix")
+id = &"burning"
+display_name = "Brennend"
+kind = 1
+color = Color(1, 0.45, 0.05, 1)
+interval = 5.5
+duration = 3.0
+radius = 2.0
+windup = 1.0
+damage_factor = 0.6
+on_hit_effect = ExtResource("2_burn")

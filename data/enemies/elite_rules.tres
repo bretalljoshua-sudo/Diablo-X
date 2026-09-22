@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EliteRules" format=3]
+
+[ext_resource type="Script" path="res://enemies/elite_rules.gd" id="1_rules"]
+[ext_resource type="Script" path="res://enemies/elite_affix.gd" id="2_affix"]
+[ext_resource type="Resource" path="res://data/enemies/elite/fast.tres" id="3_fast"]
+[ext_resource type="Resource" path="res://data/enemies/elite/burning.tres" id="4_burning"]
+[ext_resource type="Resource" path="res://data/enemies/elite/shielding.tres" id="5_shielding"]
+[ext_resource type="Resource" path="res://data/enemies/elite/teleporting.tres" id="6_teleporting"]
+[ext_resource type="Resource" path="res://data/enemies/elite/vampiric.tres" id="7_vampiric"]
+[ext_resource type="Resource" path="res://data/loot_tables/elite.tres" id="8_loot"]
+
+[resource]
+script = ExtResource("1_rules")
+affixes = Array[ExtResource("2_affix")]([ExtResource("3_fast"), ExtResource("4_burning"), ExtResource("5_shielding"), ExtResource("6_teleporting"), ExtResource("7_vampiric")])
+life_multiplier = 2.5
+damage_multiplier = 1.3
+experience_multiplier = 3.0
+scale = 1.2
+affix_count_by_level = Array[int]([1, 1, 1, 2, 2, 2, 2, 3])
+loot_table = ExtResource("8_loot")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EliteAffix" format=3]
+
+[ext_resource type="Script" path="res://enemies/elite_affix.gd" id="1_affix"]
+
+[resource]
+script = ExtResource("1_affix")
+id = &"teleporting"
+display_name = "Teleportierend"
+kind = 3
+color = Color(0.75, 0.35, 1, 1)
+interval = 6.0
+radius = 2.2
+windup = 0.6
+min_distance = 5.0

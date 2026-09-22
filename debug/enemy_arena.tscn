@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://debug/enemy_arena.gd" id="1_arena"]
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://graphics/camera_rig.gd" id="3_rig"]
+[ext_resource type="Script" path="res://enemies/enemy_director.gd" id="4_director"]
+[ext_resource type="Script" path="res://debug/enemy_arena_bot.gd" id="5_bot"]
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.03, 0.03, 0.045, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.38, 0.5, 1)
+ambient_light_energy = 0.45
+tonemap_mode = 4
+ssao_enabled = true
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.1, 0.1, 0.14, 1)
+fog_density = 0.004
+
+[sub_resource type="NavigationMesh" id="NavMesh"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+agent_height = 2.0
+agent_radius = 0.5
+agent_max_climb = 0.25
+
+[node name="EnemyArena" type="Node3D"]
+script = ExtResource("1_arena")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
+[node name="Moonlight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, 0.38302222, -0.32139382, 0, 0.64278764, 0.76604444, 0.5, -0.66341394, 0.5566704, 0, 8, 0)
+light_color = Color(0.55, 0.62, 0.85, 1)
+light_energy = 0.5
+shadow_enabled = true
+
+[node name="NavRegion" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavMesh")
+
+[node name="Torches" type="Node3D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="PlayerLight" type="OmniLight3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+light_color = Color(1, 0.85, 0.7, 1)
+light_energy = 0.9
+omni_range = 7.0
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="Director" type="Node" parent="." node_paths=PackedStringArray("actors_parent")]
+script = ExtResource("4_director")
+actors_parent = NodePath("../Actors")
+
+[node name="Bot" type="Node" parent="."]
+script = ExtResource("5_bot")
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("3_rig")
+distance = 22.0
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="Hud"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 700.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 20
+text = "Arena"
+
+[node name="Banner" type="Label" parent="Hud"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -500.0
+offset_top = 90.0
+offset_right = 500.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+text = ""
+
+[node name="Hint" type="Label" parent="Hud"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -760.0
+offset_top = -48.0
+offset_right = 760.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+text = "Linksklick: laufen / angreifen · Leertaste: Rolle · Q: Trank · 1–4: Gruppe an der Maus · 5: Elite · 6: 60 Gegner · B: Bot · K: alle besiegen · R: Arena neu"

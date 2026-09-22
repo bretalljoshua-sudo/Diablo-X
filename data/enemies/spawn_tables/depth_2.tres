@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="EnemySpawnTable" format=3]
+
+[ext_resource type="Script" path="res://enemies/enemy_spawn_table.gd" id="1_table"]
+[ext_resource type="Script" path="res://enemies/enemy_spawn_group.gd" id="2_group"]
+[ext_resource type="Script" path="res://enemies/enemy_spawn_member.gd" id="3_member"]
+[ext_resource type="Resource" path="res://data/enemies/skeleton.tres" id="4_skeleton"]
+[ext_resource type="Resource" path="res://data/enemies/ghoul.tres" id="5_ghoul"]
+[ext_resource type="Resource" path="res://data/enemies/skeleton_archer.tres" id="6_archer"]
+[ext_resource type="Resource" path="res://data/enemies/cultist.tres" id="7_cultist"]
+
+[sub_resource type="Resource" id="M0"]
+script = ExtResource("3_member")
+type = ExtResource("4_skeleton")
+count = Vector2i(5, 7)
+
+[sub_resource type="Resource" id="G0"]
+script = ExtResource("2_group")
+id = &"skeleton_pack"
+weight = 3.0
+members = Array[ExtResource("3_member")]([SubResource("M0")])
+
+[sub_resource type="Resource" id="M1"]
+script = ExtResource("3_member")
+type = ExtResource("6_archer")
+count = Vector2i(2, 4)
+
+[sub_resource type="Resource" id="M2"]
+script = ExtResource("3_member")
+type = ExtResource("4_skeleton")
+count = Vector2i(2, 3)
+
+[sub_resource type="Resource" id="G1"]
+script = ExtResource("2_group")
+id = &"archers"
+weight = 2.0
+members = Array[ExtResource("3_member")]([SubResource("M1"), SubResource("M2")])
+
+[sub_resource type="Resource" id="M3"]
+script = ExtResource("3_member")
+type = ExtResource("5_ghoul")
+count = Vector2i(1, 2)
+
+[sub_resource type="Resource" id="M4"]
+script = ExtResource("3_member")
+type = ExtResource("4_skeleton")
+count = Vector2i(2, 3)
+
+[sub_resource type="Resource" id="G2"]
+script = ExtResource("2_group")
+id = &"ghoul"
+weight = 2.0
+members = Array[ExtResource("3_member")]([SubResource("M3"), SubResource("M4")])
+
+[sub_resource type="Resource" id="M5"]
+script = ExtResource("3_member")
+type = ExtResource("7_cultist")
+count = Vector2i(1, 2)
+
+[sub_resource type="Resource" id="M6"]
+script = ExtResource("3_member")
+type = ExtResource("6_archer")
+count = Vector2i(1, 2)
+
+[sub_resource type="Resource" id="G3"]
+script = ExtResource("2_group")
+id = &"cult"
+weight = 2.0
+members = Array[ExtResource("3_member")]([SubResource("M5"), SubResource("M6")])
+
+[resource]
+script = ExtResource("1_table")
+groups = Array[ExtResource("2_group")]([SubResource("G0"), SubResource("G1"), SubResource("G2"), SubResource("G3")])
+level = 3
+elite_chance = 0.25

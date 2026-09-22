@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="EnemyType" format=3]
+
+[ext_resource type="Script" path="res://enemies/enemy_type.gd" id="1_type"]
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="2_stats"]
+[ext_resource type="Script" path="res://enemies/enemy_attack.gd" id="3_attack"]
+[ext_resource type="Resource" path="res://data/loot_tables/normal.tres" id="4_loot"]
+[ext_resource type="PackedScene" path="res://enemies/enemy.tscn" id="5_scene"]
+[ext_resource type="Resource" path="res://data/enemies/skeleton.tres" id="6_skeleton"]
+
+[sub_resource type="Resource" id="Base"]
+script = ExtResource("2_stats")
+values = Dictionary[int, float]({
+0: 55.0,
+1: 5.0,
+2: 11.0,
+4: 0.0,
+6: 3.4,
+11: 0.25
+})
+
+[sub_resource type="Resource" id="PerLevel"]
+script = ExtResource("2_stats")
+values = Dictionary[int, float]({
+0: 14.0,
+1: 2.0,
+2: 2.2
+})
+
+[sub_resource type="Resource" id="Attack0"]
+script = ExtResource("3_attack")
+id = &"summon"
+kind = 3
+min_range = 0.0
+max_range = 14.0
+windup = 1.2
+recovery = 0.6
+cooldown = 9.0
+summon_type = ExtResource("6_skeleton")
+summon_count = 2
+summon_max_alive = 4
+summon_distance = 2.2
+animation = &"cast"
+
+[sub_resource type="Resource" id="Attack1"]
+script = ExtResource("3_attack")
+id = &"fire_bolt"
+kind = 2
+max_range = 13.0
+windup = 0.9
+recovery = 0.5
+cooldown = 2.8
+damage_factor = 1.0
+damage_type = 1
+projectile_speed = 10.0
+projectile_range = 15.0
+projectile_radius = 0.4
+projectile_color = Color(1, 0.45, 0.1, 1)
+aim_lock_before = 0.35
+animation = &"cast"
+
+[resource]
+script = ExtResource("1_type")
+id = &"cultist"
+display_name = "Kultist-Beschwörer"
+behavior = &"summoner"
+experience = 22
+model_path = "res://assets/characters/cultist.tscn"
+placeholder_color = Color(0.45, 0.12, 0.14, 1)
+body_radius = 0.38
+body_height = 1.85
+aggro_range = 13.0
+notice_time = 0.5
+keep_distance_min = 6.0
+keep_distance_max = 12.0
+flee_distance = 5.0
+scene = ExtResource("5_scene")
+base_stats = SubResource("Base")
+stats_per_level = SubResource("PerLevel")
+loot_table = ExtResource("4_loot")
+attacks = Array[ExtResource("3_attack")]([SubResource("Attack0"), SubResource("Attack1")])
