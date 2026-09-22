@@ -93,6 +93,7 @@ func test_event_bus_has_all_contract_signals() -> void:
 		"merchant_item_bought",
 		"merchant_item_sold",
 		"ui_window_toggled",
+		"skill_cast_failed",
 	]
 	for signal_name: String in expected:
 		assert_true(EventBus.has_signal(signal_name), "EventBus.%s fehlt" % signal_name)
@@ -150,3 +151,12 @@ func test_settings_key_binding_roundtrip() -> void:
 	Settings.reset_key_bindings()
 	assert_eq(Settings.get_key_binding(&"open_inventory"), before)
 	assert_eq(before, KEY_I)
+
+
+func test_skill_def_params_and_upgrade() -> void:
+	var skill := SkillDef.new()
+	skill.params = {&"arc_degrees": 180.0}
+	assert_eq(skill.get_param(&"arc_degrees"), 180.0)
+	assert_eq(skill.get_param(&"missing", 3.0), 3.0)
+	assert_eq(skill.upgrade_rank, 2)
+	assert_eq(skill.behavior, &"")

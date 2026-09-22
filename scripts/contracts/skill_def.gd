@@ -24,3 +24,21 @@ extends Resource
 @export var animation: StringName = &""
 ## Schlüssel für Vfx.spawn() (AP1).
 @export var vfx_key: StringName = &""
+
+# --- Ergänzt von AP5 (Skills und Krieger) ---
+
+## Name des Verhaltens, das AP5 auswertet: &"melee", &"whirlwind", &"shout", &"leap",
+## &"charge", &"ancients". Leer = nach targeting.
+@export var behavior: StringName = &""
+## Freie Zahlenwerte, die das Verhalten auswertet (Dauer, Winkel, Buffwerte, Verbesserung).
+## Die Namen stehen in docs/pakete/AP5.md.
+@export var params: Dictionary[StringName, float] = {}
+## Verbesserung, die ab upgrade_rank wirkt (je Skill eine).
+@export var upgrade_name: String = ""
+@export_multiline var upgrade_description: String = ""
+@export var upgrade_rank: int = 2
+
+
+## Zahlenwert aus params, sonst default.
+func get_param(key: StringName, default: float = 0.0) -> float:
+	return params.get(key, default)

@@ -76,3 +76,9 @@ signal ui_window_toggled(window: StringName, open: bool)
 ## Erfahrung für den Spieler, gesendet einmal pro besiegtem Gegner (AP3). amount ist schon mit
 ## Stufe und Elite-Bonus verrechnet, source ist der Gegner. AP5 vergibt damit Erfahrung und Stufen.
 signal experience_awarded(amount: int, source: Node3D)
+
+# --- Ergänzt von AP5 (Skills und Krieger) ---
+
+## Ein Skill konnte nicht eingesetzt werden. reason: &"cooldown", &"resource",
+## &"not_learned", &"busy" (Figur betäubt, tot oder in einer anderen Aktion).
+signal skill_cast_failed(skill: SkillDef, reason: StringName)
