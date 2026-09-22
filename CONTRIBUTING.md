@@ -81,6 +81,8 @@ Gemeinsam genutzt werden:
 | `Loot` | `roll_drop(table: LootTable, level: int, rng: RandomNumberGenerator) -> Array[ItemInstance]` | `loot/loot_service.gd` | AP4 |
 | `World` | `generate(p_seed: int, config: LevelConfig) -> LevelLayout` | `world/world_service.gd` | AP6 |
 | `CameraRig` | `shake()`, `screen_to_ground()`, `get_active()` | `graphics/camera_rig.gd` | AP1 |
+| `Vfx` | `spawn(key: StringName, position: Vector3) -> Node3D` | `graphics/vfx/vfx_service.gd` | AP1 |
+| `Graphics` | Grafikstufen, Umgebungen, Licht-Vorlagen | `graphics/graphics_service.gd` | AP1 |
 
 AP0 hat für jeden Dienst eine einfache **Ersatzversion** angelegt (Schaden ohne Rüstung, festes
 Übungsschwert, flacher Testraum). Die Dateien liegen schon im Ordner des zuständigen Pakets: das Paket
