@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://components/status_effects_component.gd" id="5_status"]
 [ext_resource type="Script" path="res://components/knockback_component.gd" id="6_knockback"]
 [ext_resource type="Script" path="res://player/potion_belt.gd" id="7_potions"]
+[ext_resource type="Script" path="res://loot/inventory.gd" id="8_inventory"]
+[ext_resource type="Script" path="res://loot/equipment.gd" id="9_equipment"]
 
 [sub_resource type="CapsuleShape3D" id="BodyShape"]
 radius = 0.4
@@ -94,6 +96,12 @@ resistance = 0.3
 
 [node name="PotionBelt" type="Node" parent="."]
 script = ExtResource("7_potions")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("8_inventory")
+
+[node name="Equipment" type="Node" parent="."]
+script = ExtResource("9_equipment")
 
 [node name="NavigationAgent" type="NavigationAgent3D" parent="."]
 path_desired_distance = 0.4

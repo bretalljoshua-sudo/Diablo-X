@@ -7,9 +7,10 @@ extends Node
 ##   1. StatsComponent an der Figur (Figur selbst oder direktes Kind)
 ##   2. Eigenschaft `stats: StatBlock` an der Figur (Ersatz-Konvention aus AP0)
 ##   3. StatDefaults
-## Ausrüstung: EventBus.player_equipped(slot, item) setzt am Spieler (Game.player) die feste
-## Quelle &"equipment:<slot>" auf item.get_stats(); item = null nimmt sie weg. AP4 muss dafür
-## nur das Signal senden.
+## Ausrüstung: Hat die Spielerfigur eine Equipment-Komponente (AP4), rechnet die Figur selbst
+## Equipment.get_bonus_stats() als feste Quelle &"equipment" ein (siehe Player). Ohne
+## Equipment setzt EventBus.player_equipped(slot, item) am Spieler (Game.player) die Quelle
+## &"equipment:<slot>" auf item.get_stats(); item = null nimmt sie weg.
 
 ## Standardwerte, wie in AP0 (siehe StatDefaults).
 const DEFAULTS := StatDefaults.VALUES
@@ -64,6 +65,6 @@ static func equipment_key(slot: Enums.Slot) -> StringName:
 
 
 func _on_player_equipped(slot: Enums.Slot, item: ItemInstance) -> void:
-	if not is_instance_valid(Game.player):
+	if not is_instance_valid(Game.player) or Equipment.find_on(Game.player) != null:
 		return
 	set_flat_source(Game.player, equipment_key(slot), item.get_stats() if item != null else null)

@@ -9,9 +9,13 @@ extends CharacterBody3D
 ##   W A S D                direkt laufen; Linksklick schlägt dann im Stand zur Maus
 ##   Leertaste              Ausweichrolle (kurz unverwundbar, durch Gegner hindurch)
 ##   Q                      Heiltrank
+##   Linksklick auf Beute   hinlaufen und aufheben (GroundItem, AP4)
 ##
 ## Befehle für Bots, Tests und andere Pakete: move_to(), attack(), attack_direction(),
-## dodge(), drink_potion(), stop(), revive().
+## dodge(), drink_potion(), pick_up(), stop(), revive().
+##
+## Ausrüstung: Equipment (AP4) hängt an der Figur; ihre Summe geht als feste Quelle
+## &"equipment" in die StatsComponent ein.
 ##
 ## Modell: lädt MODEL_SCENE_PATH (AP8), sonst die Kapsel als Platzhalter. Das Modell darf
 ## play_action(name, speed) und set_move_speed(ratio) anbieten und das Signal hit_frame
@@ -31,6 +35,9 @@ const BODY_MASK := PhysicsLayers.WORLD | PhysicsLayers.ENEMY
 ## Beim Anlaufen auf ein Ziel: so viel näher als attack_range, damit der Schlag sicher trifft.
 const APPROACH_MARGIN := 0.25
 const NAV_RETARGET_INTERVAL := 0.2
+## Ab diesem waagerechten Abstand hebt die Figur Beute auf (Meter).
+const PICKUP_RANGE := 1.3
+const EQUIPMENT_SOURCE := &"equipment"
 
 @export var config: PlayerConfig
 ## Maus und Tastatur auswerten. Aus = nur Befehle (Bots, Zwischensequenzen).
@@ -43,6 +50,8 @@ var facing: Vector3 = Vector3.FORWARD
 var hovered_target: Node3D
 ## Aktuelles Angriffsziel, oder null.
 var attack_target: Node3D
+## Beute, zu der die Figur gerade läuft, oder null.
+var pickup_target: GroundItem
 var model: Node3D
 
 var _move_target: Vector3 = Vector3.ZERO
@@ -67,6 +76,8 @@ var _model_drives_hits: bool = false
 @onready var status_effects: StatusEffectsComponent = $StatusEffects
 @onready var knockback: KnockbackComponent = $Knockback
 @onready var potions: PotionBelt = $PotionBelt
+@onready var inventory: Inventory = $Inventory
+@onready var equipment: Equipment = $Equipment
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent
 @onready var model_root: Node3D = $Model
 
@@ -87,6 +98,8 @@ func _ready() -> void:
 	health.health_changed.connect(_on_health_changed)
 	health.died.connect(_on_died)
 	status_effects.effect_started.connect(_on_effect_started)
+	equipment.stats_changed.connect(_on_equipment_changed)
+	_on_equipment_changed()
 	_load_model()
 	_on_health_changed(health.current, health.maximum)
 	potions.refill()
@@ -107,6 +120,7 @@ func move_to(point: Vector3) -> void:
 	if not can_act():
 		return
 	attack_target = null
+	pickup_target = null
 	_attack_repeat = false
 	_set_move_target(point)
 
@@ -117,6 +131,7 @@ func attack(target: Node3D, repeat: bool = false) -> void:
 	if not can_act() or not Components.is_alive(target):
 		return
 	attack_target = target
+	pickup_target = null
 	_attack_repeat = repeat
 	_has_move_target = false
 
@@ -159,6 +174,16 @@ func dodge(direction: Vector3 = Vector3.ZERO) -> bool:
 	return true
 
 
+## Läuft zur Beute und hebt sie auf, sobald sie in Reichweite ist.
+func pick_up(item: GroundItem) -> void:
+	if not can_act() or not is_instance_valid(item):
+		return
+	attack_target = null
+	_attack_repeat = false
+	pickup_target = item
+	_set_move_target(item.global_position)
+
+
 func drink_potion() -> bool:
 	if state == State.DEAD:
 		return false
@@ -169,6 +194,7 @@ func drink_potion() -> bool:
 func stop() -> void:
 	_has_move_target = false
 	attack_target = null
+	pickup_target = null
 	_attack_repeat = false
 	if state == State.MOVING:
 		_set_state(State.IDLE)
@@ -324,6 +350,8 @@ func _process_movement(delta: float) -> Vector3:
 				_set_move_target(attack_target.global_position)
 				_nav_retarget_left = NAV_RETARGET_INTERVAL
 			direction = _path_direction()
+	elif pickup_target != null:
+		direction = _process_pickup()
 	elif _has_move_target:
 		direction = _path_direction()
 	if direction == Vector3.ZERO:
@@ -334,6 +362,40 @@ func _process_movement(delta: float) -> Vector3:
 	facing = _turn_towards(facing, direction, delta)
 	_set_state(State.MOVING)
 	return direction * stats.get_value(Enums.Stat.MOVE_SPEED)
+
+
+## Läuft zur Beute; in Reichweite wird sie aufgehoben. Liefert die Laufrichtung.
+func _process_pickup() -> Vector3:
+	if not is_instance_valid(pickup_target) or pickup_target.is_queued_for_deletion():
+		pickup_target = null
+		return Vector3.ZERO
+	if _flat_offset(pickup_target.global_position).length() <= PICKUP_RANGE:
+		pickup_target.try_pick_up(inventory)
+		pickup_target = null
+		_has_move_target = false
+		return Vector3.ZERO
+	if not _has_move_target:
+		_set_move_target(pickup_target.global_position)
+	var direction := _path_direction()
+	if direction == Vector3.ZERO:
+		# Wegfindung endet vor der Beute (zum Beispiel am Rand des Netzes): direkt hin.
+		direction = _flat(pickup_target.global_position - global_position)
+	return direction
+
+
+## Beute unter einer Bildschirmposition, oder null.
+func pick_loot_at_screen(screen_position: Vector2) -> GroundItem:
+	var rig := CameraRig.get_active()
+	if rig == null or rig.camera == null:
+		return null
+	var camera := rig.camera
+	var from := camera.project_ray_origin(screen_position)
+	var to := from + camera.project_ray_normal(screen_position) * 200.0
+	var query := PhysicsRayQueryParameters3D.create(from, to, PhysicsLayers.LOOT)
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	return hit.get("collider") as GroundItem if not hit.is_empty() else null
 
 
 ## Richtung zum nächsten Wegpunkt; Vector3.ZERO, wenn das Ziel erreicht ist.
@@ -477,6 +539,10 @@ func _on_primary_pressed() -> void:
 	if target != null:
 		attack(target, true)
 		return
+	var loot := pick_loot_at_screen(get_viewport().get_mouse_position())
+	if loot != null:
+		pick_up(loot)
+		return
 	var point := mouse_ground_point()
 	if point == Vector3.INF:
 		return
@@ -495,6 +561,8 @@ func _process_held_mouse(delta: float) -> void:
 		return
 	if attack_target != null and Components.is_alive(attack_target):
 		_attack_repeat = true
+		return
+	if pickup_target != null:
 		return
 	_follow_left -= delta
 	if _follow_left > 0.0:
@@ -584,8 +652,13 @@ func _on_health_changed(current: float, maximum: float) -> void:
 	EventBus.player_health_changed.emit(current, maximum)
 
 
+func _on_equipment_changed() -> void:
+	stats.set_flat_source(EQUIPMENT_SOURCE, equipment.get_bonus_stats())
+
+
 func _on_died(_killer: Node3D) -> void:
 	_cancel_attack()
+	pickup_target = null
 	_has_move_target = false
 	_primary_held = false
 	health.set_invulnerable(&"dodge", false)

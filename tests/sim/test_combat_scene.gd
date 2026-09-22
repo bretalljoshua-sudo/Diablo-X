@@ -169,3 +169,31 @@ func test_stun_blocks_actions_and_player_death() -> void:
 	_player.revive()
 	assert_eq(_player.state, Player.State.IDLE)
 	assert_eq(_player.health.current, _player.health.maximum)
+
+
+func test_equipment_changes_player_stats() -> void:
+	var damage := Stats.get_stat(_player, Enums.Stat.DAMAGE)
+	var base := ItemBase.new()
+	base.id = &"test_sword"
+	base.slot = Enums.Slot.WEAPON
+	base.base_stats = StatBlock.from_dict({Enums.Stat.DAMAGE: 9.0})
+	var item := ItemInstance.new()
+	item.base = base
+	var equipment := Equipment.find_on(_player)
+	assert_not_null(equipment, "Spieler hat Equipment (AP4)")
+	assert_not_null(Inventory.find_on(_player), "Spieler hat Inventory (AP4)")
+	equipment.equip(item, Enums.Slot.WEAPON)
+	assert_almost_eq(Stats.get_stat(_player, Enums.Stat.DAMAGE), damage + 9.0, 0.001)
+	equipment.unequip(Enums.Slot.WEAPON)
+	assert_almost_eq(Stats.get_stat(_player, Enums.Stat.DAMAGE), damage, 0.001)
+
+
+func test_player_walks_to_loot_and_picks_it_up() -> void:
+	var gold := GroundItem.spawn_gold(_scene, 25, _player.global_position + Vector3(4, 0, 0))
+	var inventory := Inventory.find_on(_player)
+	var before := inventory.gold
+	_player.pick_up(gold)
+	var picked := await _wait_until(func() -> bool: return inventory.gold > before, 3.0)
+	assert_true(picked, "Gold aufgehoben")
+	assert_eq(inventory.gold, before + 25)
+	assert_gt(_player.global_position.x, 2.0, "dafür hingelaufen")
