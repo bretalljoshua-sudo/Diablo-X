@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AspectDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="1_yltmx"]
+
+[resource]
+script = ExtResource("1_yltmx")
+id = &"aspect_bloodlust"
+display_name = "Aspekt des Blutdurstes"
+description = "Kern-Skills heilen dich um {lifesteal_percent} % des verursachten Schadens."
+skill_tags = Array[StringName]([&"core"])
+params = Dictionary[StringName, float]({
+&"lifesteal_percent": 5.0
+})

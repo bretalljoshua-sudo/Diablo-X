@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="NameParts" format=3]
+
+[ext_resource type="Script" path="res://loot/name_parts.gd" id="1_3usc1"]
+
+[resource]
+script = ExtResource("1_3usc1")
+suffixes = Dictionary[int, String]({
+0: "des Lebens",
+1: "der Wehr",
+2: "der Wut",
+3: "der Hast",
+4: "der Präzision",
+5: "des Schlächters",
+6: "des Wanderers",
+7: "des Blutegels",
+8: "des Zorns",
+9: "der Raserei",
+10: "der Zeit",
+11: "der Glut",
+12: "des Winters",
+13: "der Viper"
+})
+rare_first = PackedStringArray("Grabes", "Knochen", "Blut", "Aschen", "Toten", "Schatten", "Sturm", "Eisen", "Nacht", "Gruft", "Dorn", "Rabens")
+rare_second = PackedStringArray("zorn", "biss", "wacht", "fluch", "kralle", "ruf", "schrei", "hunger", "brand", "schwur", "atem", "mal")

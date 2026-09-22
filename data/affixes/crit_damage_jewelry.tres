@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_fuhjc"]
+
+[resource]
+script = ExtResource("1_fuhjc")
+id = &"crit_damage_jewelry"
+text = "+{value} kritischer Schaden"
+stat = 5
+min_value = 0.03
+max_value = 0.15
+allowed_slots = Array[int]([0, 6, 7, 8])
+weight = 2.0

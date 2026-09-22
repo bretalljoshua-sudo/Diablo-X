@@ -1,0 +1,109 @@
+[gd_resource type="Resource" script_class="LootTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/loot_entry.gd" id="1_vcjf0"]
+[ext_resource type="Resource" path="res://data/items/rusty_sword.tres" id="2_yh8tc"]
+[ext_resource type="Resource" path="res://data/items/war_axe.tres" id="3_o1ita"]
+[ext_resource type="Resource" path="res://data/items/crypt_blade.tres" id="4_b7hwx"]
+[ext_resource type="Resource" path="res://data/items/padded_tunic.tres" id="5_73k5w"]
+[ext_resource type="Resource" path="res://data/items/chainmail.tres" id="6_1w7mm"]
+[ext_resource type="Resource" path="res://data/items/plate_armor.tres" id="7_d5lwl"]
+[ext_resource type="Resource" path="res://data/items/leather_cap.tres" id="8_jh8dq"]
+[ext_resource type="Resource" path="res://data/items/iron_helm.tres" id="9_l5ecw"]
+[ext_resource type="Resource" path="res://data/items/leather_gloves.tres" id="10_okapq"]
+[ext_resource type="Resource" path="res://data/items/gauntlets.tres" id="11_ywo7v"]
+[ext_resource type="Resource" path="res://data/items/linen_pants.tres" id="12_8booi"]
+[ext_resource type="Resource" path="res://data/items/chain_leggings.tres" id="13_3lnu8"]
+[ext_resource type="Resource" path="res://data/items/leather_boots.tres" id="14_isrv8"]
+[ext_resource type="Resource" path="res://data/items/iron_boots.tres" id="15_b1yh6"]
+[ext_resource type="Resource" path="res://data/items/bone_amulet.tres" id="16_1rg5i"]
+[ext_resource type="Resource" path="res://data/items/silver_amulet.tres" id="17_m7mlm"]
+[ext_resource type="Resource" path="res://data/items/copper_ring.tres" id="18_rboch"]
+[ext_resource type="Resource" path="res://data/items/gold_ring.tres" id="19_c6ir3"]
+[ext_resource type="Script" path="res://scripts/contracts/loot_table.gd" id="20_siaox"]
+
+[sub_resource type="Resource" id="Resource_2e0h0"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("2_yh8tc")
+weight = 1.5
+
+[sub_resource type="Resource" id="Resource_irmjj"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("3_o1ita")
+weight = 1.5
+
+[sub_resource type="Resource" id="Resource_fnsij"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("4_b7hwx")
+weight = 1.5
+
+[sub_resource type="Resource" id="Resource_ip87t"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("5_73k5w")
+
+[sub_resource type="Resource" id="Resource_bsmdu"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("6_1w7mm")
+
+[sub_resource type="Resource" id="Resource_nmqt8"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("7_d5lwl")
+
+[sub_resource type="Resource" id="Resource_1lfu1"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("8_jh8dq")
+
+[sub_resource type="Resource" id="Resource_215fm"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("9_l5ecw")
+
+[sub_resource type="Resource" id="Resource_7xhh0"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("10_okapq")
+
+[sub_resource type="Resource" id="Resource_cmieh"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("11_ywo7v")
+
+[sub_resource type="Resource" id="Resource_w3j63"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("12_8booi")
+
+[sub_resource type="Resource" id="Resource_xgylx"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("13_3lnu8")
+
+[sub_resource type="Resource" id="Resource_itrb3"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("14_isrv8")
+
+[sub_resource type="Resource" id="Resource_sylw0"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("15_b1yh6")
+
+[sub_resource type="Resource" id="Resource_bqv7w"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("16_1rg5i")
+weight = 0.6
+
+[sub_resource type="Resource" id="Resource_wgjt6"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("17_m7mlm")
+weight = 0.6
+
+[sub_resource type="Resource" id="Resource_hal03"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("18_rboch")
+weight = 0.6
+
+[sub_resource type="Resource" id="Resource_6adtx"]
+script = ExtResource("1_vcjf0")
+item = ExtResource("19_c6ir3")
+weight = 0.6
+
+[resource]
+script = ExtResource("20_siaox")
+entries = Array[ExtResource("1_vcjf0")]([SubResource("Resource_2e0h0"), SubResource("Resource_irmjj"), SubResource("Resource_fnsij"), SubResource("Resource_ip87t"), SubResource("Resource_bsmdu"), SubResource("Resource_nmqt8"), SubResource("Resource_1lfu1"), SubResource("Resource_215fm"), SubResource("Resource_7xhh0"), SubResource("Resource_cmieh"), SubResource("Resource_w3j63"), SubResource("Resource_xgylx"), SubResource("Resource_itrb3"), SubResource("Resource_sylw0"), SubResource("Resource_bqv7w"), SubResource("Resource_wgjt6"), SubResource("Resource_hal03"), SubResource("Resource_6adtx")])
+item_count = Vector2i(3, 4)
+gold = Vector2i(60, 120)
+min_rarity = 2
+rarity_bonus = 1.0

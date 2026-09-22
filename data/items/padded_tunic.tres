@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemBase" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="1_se0um"]
+[ext_resource type="Script" path="res://scripts/contracts/item_base.gd" id="2_b8ebk"]
+
+[sub_resource type="Resource" id="Resource_v25am"]
+script = ExtResource("1_se0um")
+values = Dictionary[int, float]({
+1: 10.0
+})
+
+[resource]
+script = ExtResource("2_b8ebk")
+id = &"padded_tunic"
+display_name = "Gepolstertes Wams"
+slot = 1
+base_stats = SubResource("Resource_v25am")
+grid_size = Vector2i(2, 3)

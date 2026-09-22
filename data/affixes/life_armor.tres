@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_es7na"]
+
+[resource]
+script = ExtResource("1_es7na")
+id = &"life_armor"
+text = "+{value} Leben"
+stat = 0
+min_value = 10.0
+max_value = 80.0
+allowed_slots = Array[int]([0, 3, 4])
+weight = 3.0

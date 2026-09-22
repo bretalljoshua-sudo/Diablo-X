@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemBase" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="1_1o0xq"]
+[ext_resource type="Script" path="res://scripts/contracts/item_base.gd" id="2_hltxo"]
+
+[sub_resource type="Resource" id="Resource_323m0"]
+script = ExtResource("1_1o0xq")
+values = Dictionary[int, float]({
+1: 4.0
+})
+
+[resource]
+script = ExtResource("2_hltxo")
+id = &"leather_cap"
+display_name = "Lederkappe"
+slot = 0
+base_stats = SubResource("Resource_323m0")
+grid_size = Vector2i(2, 2)

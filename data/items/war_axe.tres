@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemBase" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="1_k3r3r"]
+[ext_resource type="Script" path="res://scripts/contracts/item_base.gd" id="2_a2ypb"]
+
+[sub_resource type="Resource" id="Resource_rrtbs"]
+script = ExtResource("1_k3r3r")
+values = Dictionary[int, float]({
+2: 14.0
+})
+
+[resource]
+script = ExtResource("2_a2ypb")
+id = &"war_axe"
+display_name = "Kriegsaxt"
+base_stats = SubResource("Resource_rrtbs")
+grid_size = Vector2i(2, 3)
+min_level = 4

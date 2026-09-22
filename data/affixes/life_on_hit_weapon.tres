@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_6u2nj"]
+
+[resource]
+script = ExtResource("1_6u2nj")
+id = &"life_on_hit_weapon"
+text = "+{value} Leben pro Treffer"
+stat = 7
+min_value = 1.0
+max_value = 8.0
+allowed_slots = Array[int]([5])
+weight = 2.0

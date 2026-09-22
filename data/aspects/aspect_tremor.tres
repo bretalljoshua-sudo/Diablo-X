@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AspectDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="1_hwpmp"]
+
+[resource]
+script = ExtResource("1_hwpmp")
+id = &"aspect_tremor"
+display_name = "Aspekt der Erschütterung"
+description = "Sprung betäubt getroffene Gegner für {stun_duration} s."
+skill_tags = Array[StringName]([&"leap"])
+params = Dictionary[StringName, float]({
+&"stun_duration": 1.5
+})

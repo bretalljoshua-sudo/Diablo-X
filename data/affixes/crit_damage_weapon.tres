@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_pdeyo"]
+
+[resource]
+script = ExtResource("1_pdeyo")
+id = &"crit_damage_weapon"
+text = "+{value} kritischer Schaden"
+stat = 5
+min_value = 0.05
+max_value = 0.3
+allowed_slots = Array[int]([5])
+weight = 2.0

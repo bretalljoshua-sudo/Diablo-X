@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_7r77f"]
+
+[resource]
+script = ExtResource("1_7r77f")
+id = &"resource_max"
+text = "+{value} maximale Wut"
+stat = 8
+min_value = 5.0
+max_value = 25.0
+allowed_slots = Array[int]([0, 6])
+weight = 2.0

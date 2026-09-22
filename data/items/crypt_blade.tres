@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemBase" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="1_2lb42"]
+[ext_resource type="Script" path="res://scripts/contracts/item_base.gd" id="2_1w23e"]
+
+[sub_resource type="Resource" id="Resource_yj368"]
+script = ExtResource("1_2lb42")
+values = Dictionary[int, float]({
+2: 22.0,
+4: 0.02
+})
+
+[resource]
+script = ExtResource("2_1w23e")
+id = &"crypt_blade"
+display_name = "Grabklinge"
+base_stats = SubResource("Resource_yj368")
+grid_size = Vector2i(1, 3)
+min_level = 7

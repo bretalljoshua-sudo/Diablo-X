@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="SkillTagCatalog" format=3]
+
+[ext_resource type="Script" path="res://loot/skill_tag_catalog.gd" id="1_vcbd5"]
+
+[resource]
+script = ExtResource("1_vcbd5")
+tags = Dictionary[StringName, String]({
+&"ancients": "Zorn der Ahnen",
+&"aoe": "Flächenschaden um den Krieger oder am Zielort",
+&"basic": "Basis-Skills (bauen Wut auf)",
+&"channeled": "Kanalisierte Skills (gehalten, zum Beispiel Wirbelsturm)",
+&"charge": "Ansturm",
+&"cleave": "Spaltschlag",
+&"core": "Kern-Skills (verbrauchen Wut)",
+&"defensive": "Verteidigungs-Skills",
+&"fire": "Skills mit Feuerschaden",
+&"leap": "Sprung",
+&"mobility": "Mobilitäts-Skills",
+&"movement": "Skills, die den Krieger bewegen",
+&"physical": "Skills mit physischem Schaden",
+&"shout": "Schreie (zum Beispiel Kriegsschrei)",
+&"strike": "Hieb (Basis-Skill des Kriegers)",
+&"ultimate": "Ultimative Skills",
+&"war_cry": "Kriegsschrei",
+&"whirlwind": "Wirbelsturm"
+})

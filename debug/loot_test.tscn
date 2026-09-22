@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://debug/loot_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://debug/loot_test_player.gd" id="2_player"]
+[ext_resource type="Script" path="res://loot/inventory.gd" id="3_inv"]
+[ext_resource type="Script" path="res://loot/equipment.gd" id="4_equip"]
+[ext_resource type="Script" path="res://graphics/camera_rig.gd" id="5_rig"]
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.03, 0.03, 0.045, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.4, 0.42, 0.5, 1)
+ambient_light_energy = 0.6
+tonemap_mode = 4
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="FloorMat"]
+albedo_color = Color(0.2, 0.19, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = SubResource("FloorMat")
+size = Vector3(24, 0.2, 24)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(24, 0.2, 24)
+
+[sub_resource type="StandardMaterial3D" id="PlayerMat"]
+albedo_color = Color(0.55, 0.12, 0.08, 1)
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+material = SubResource("PlayerMat")
+radius = 0.4
+height = 1.8
+
+[node name="LootTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
+[node name="Moonlight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, 0.38302222, -0.32139382, 0, 0.64278764, 0.76604444, 0.5, -0.66341394, 0.5566704, 0, 8, 0)
+light_color = Color(0.7, 0.75, 0.9, 1)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("FloorMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("FloorShape")
+
+[node name="Player" type="Node3D" parent="."]
+script = ExtResource("2_player")
+
+[node name="Mesh" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("PlayerMesh")
+
+[node name="Inventory" type="Node" parent="Player"]
+script = ExtResource("3_inv")
+
+[node name="Equipment" type="Node" parent="Player"]
+script = ExtResource("4_equip")
+
+[node name="Drops" type="Node3D" parent="."]
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("5_rig")
+distance = 22.0
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Info" type="Label" parent="Hud"]
+offset_left = 16.0
+offset_top = 150.0
+offset_right = 900.0
+offset_bottom = 700.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "Beute"
+
+[node name="Hint" type="Label" parent="Hud"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -560.0
+offset_top = -48.0
+offset_right = 560.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Linksklick: Beute fallen lassen / aufheben · 1/2: Stufe −/+ · 3: Tabelle · 4: 1.000 Drops simulieren · I: Bessere anlegen · Q: Inventar verkaufen"
+horizontal_alignment = 1

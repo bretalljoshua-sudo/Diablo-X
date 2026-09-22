@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AspectDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="1_21qhf"]
+
+[resource]
+script = ExtResource("1_21qhf")
+id = &"aspect_cruelty"
+display_name = "Aspekt der Grausamkeit"
+description = "Basis-Skills erzeugen {resource_bonus_percent} % mehr Wut."
+skill_tags = Array[StringName]([&"basic"])
+params = Dictionary[StringName, float]({
+&"resource_bonus_percent": 30.0
+})

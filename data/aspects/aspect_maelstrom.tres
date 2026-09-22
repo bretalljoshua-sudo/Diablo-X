@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AspectDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="1_dpa6c"]
+
+[resource]
+script = ExtResource("1_dpa6c")
+id = &"aspect_maelstrom"
+display_name = "Aspekt des Mahlstroms"
+description = "Wirbelsturm zieht Gegner im Umkreis von {pull_radius} m jede Sekunde {pull_strength} m zu dir heran."
+skill_tags = Array[StringName]([&"whirlwind"])
+params = Dictionary[StringName, float]({
+&"pull_radius": 5.0,
+&"pull_strength": 2.0
+})

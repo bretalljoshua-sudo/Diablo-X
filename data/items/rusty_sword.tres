@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemBase" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="1_vmcnm"]
+[ext_resource type="Script" path="res://scripts/contracts/item_base.gd" id="2_rxses"]
+
+[sub_resource type="Resource" id="Resource_8h8up"]
+script = ExtResource("1_vmcnm")
+values = Dictionary[int, float]({
+2: 8.0
+})
+
+[resource]
+script = ExtResource("2_rxses")
+id = &"rusty_sword"
+display_name = "Rostiges Schwert"
+base_stats = SubResource("Resource_8h8up")
+grid_size = Vector2i(1, 3)

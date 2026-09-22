@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_xj72o"]
+
+[resource]
+script = ExtResource("1_xj72o")
+id = &"armor_heavy"
+text = "+{value} Rüstung"
+stat = 1
+min_value = 5.0
+max_value = 60.0
+allowed_slots = Array[int]([1, 3])
+weight = 3.0

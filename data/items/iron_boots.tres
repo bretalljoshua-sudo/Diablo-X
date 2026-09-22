@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemBase" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="1_m8h6w"]
+[ext_resource type="Script" path="res://scripts/contracts/item_base.gd" id="2_iympo"]
+
+[sub_resource type="Resource" id="Resource_kh6qw"]
+script = ExtResource("1_m8h6w")
+values = Dictionary[int, float]({
+1: 8.0
+})
+
+[resource]
+script = ExtResource("2_iympo")
+id = &"iron_boots"
+display_name = "Eisenstiefel"
+slot = 4
+base_stats = SubResource("Resource_kh6qw")
+grid_size = Vector2i(2, 2)
+min_level = 5

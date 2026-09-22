@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_fdnb4"]
+
+[resource]
+script = ExtResource("1_fdnb4")
+id = &"cooldown_ring"
+text = "+{value} Abklingzeitverringerung"
+stat = 10
+min_value = 0.02
+max_value = 0.06
+allowed_slots = Array[int]([7, 8])

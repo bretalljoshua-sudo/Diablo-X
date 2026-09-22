@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="UniqueDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_roll.gd" id="1_d00ib"]
+[ext_resource type="Resource" path="res://data/affixes/damage_weapon.tres" id="2_xai53"]
+[ext_resource type="Resource" path="res://data/affixes/crit_damage_weapon.tres" id="3_0srpd"]
+[ext_resource type="Resource" path="res://data/affixes/attack_speed_weapon.tres" id="4_ra6tv"]
+[ext_resource type="Resource" path="res://data/items/war_axe.tres" id="5_4yf5q"]
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="6_jlomj"]
+[ext_resource type="Script" path="res://loot/unique_def.gd" id="7_nkt7g"]
+
+[sub_resource type="Resource" id="Resource_lmrrl"]
+script = ExtResource("1_d00ib")
+affix = ExtResource("2_xai53")
+value = 26.0
+
+[sub_resource type="Resource" id="Resource_50fpj"]
+script = ExtResource("1_d00ib")
+affix = ExtResource("3_0srpd")
+value = 0.4
+
+[sub_resource type="Resource" id="Resource_4a28b"]
+script = ExtResource("1_d00ib")
+affix = ExtResource("4_ra6tv")
+value = 0.08
+
+[sub_resource type="Resource" id="Resource_0mqvi"]
+script = ExtResource("6_jlomj")
+id = &"unique_ahnenzorn"
+display_name = "Kraft: Ahnenzorn"
+description = "Zorn der Ahnen ruft {extra_ancients} zusätzlichen Ahnen herbei, und alle Ahnen verursachen {damage_bonus_percent} % mehr Schaden."
+skill_tags = Array[StringName]([&"ancients"])
+params = Dictionary[StringName, float]({
+&"damage_bonus_percent": 25.0,
+&"extra_ancients": 1.0
+})
+
+[resource]
+script = ExtResource("7_nkt7g")
+id = &"wrath_of_ancients_axe"
+display_name = "Ahnenzorn"
+base = ExtResource("5_4yf5q")
+affixes = Array[ExtResource("1_d00ib")]([SubResource("Resource_lmrrl"), SubResource("Resource_50fpj"), SubResource("Resource_4a28b")])
+power = SubResource("Resource_0mqvi")
+flavor_text = "„Wer sie führt, kämpft nie allein.“"

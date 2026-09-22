@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AffixDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_def.gd" id="1_mg6jg"]
+
+[resource]
+script = ExtResource("1_mg6jg")
+id = &"attack_speed_gloves"
+text = "+{value} Angriffsgeschwindigkeit"
+stat = 3
+min_value = 0.02
+max_value = 0.08
+allowed_slots = Array[int]([2, 7, 8])
+weight = 2.0

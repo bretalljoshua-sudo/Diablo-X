@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AspectDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="1_t3gfc"]
+
+[resource]
+script = ExtResource("1_t3gfc")
+id = &"aspect_flame_cry"
+display_name = "Aspekt des Flammenschreis"
+description = "Schrei-Skills entfachen einen Feuerring, der {duration} s lang pro Sekunde {fire_damage_percent} % Waffenschaden als Feuerschaden verursacht."
+skill_tags = Array[StringName]([&"shout"])
+params = Dictionary[StringName, float]({
+&"duration": 4.0,
+&"fire_damage_percent": 40.0
+})

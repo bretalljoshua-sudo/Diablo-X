@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AspectDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="1_drh7n"]
+
+[resource]
+script = ExtResource("1_drh7n")
+id = &"aspect_stampede"
+display_name = "Aspekt des Sturmlaufs"
+description = "Ansturm verursacht {damage_bonus_percent} % mehr Schaden und stößt Gegner {knockback} m zurück."
+skill_tags = Array[StringName]([&"charge"])
+params = Dictionary[StringName, float]({
+&"damage_bonus_percent": 50.0,
+&"knockback": 3.0
+})

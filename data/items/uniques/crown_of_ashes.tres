@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="UniqueDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/contracts/affix_roll.gd" id="1_x3kfx"]
+[ext_resource type="Resource" path="res://data/affixes/life_armor.tres" id="2_7tfcc"]
+[ext_resource type="Resource" path="res://data/affixes/fire_resist.tres" id="3_f3un1"]
+[ext_resource type="Resource" path="res://data/affixes/resource_max.tres" id="4_kfo5e"]
+[ext_resource type="Resource" path="res://data/items/iron_helm.tres" id="5_nhq7a"]
+[ext_resource type="Script" path="res://scripts/contracts/aspect_def.gd" id="6_7hakr"]
+[ext_resource type="Script" path="res://loot/unique_def.gd" id="7_is8m2"]
+
+[sub_resource type="Resource" id="Resource_nn8vj"]
+script = ExtResource("1_x3kfx")
+affix = ExtResource("2_7tfcc")
+value = 60.0
+
+[sub_resource type="Resource" id="Resource_xfpws"]
+script = ExtResource("1_x3kfx")
+affix = ExtResource("3_f3un1")
+value = 0.3
+
+[sub_resource type="Resource" id="Resource_2t4dp"]
+script = ExtResource("1_x3kfx")
+affix = ExtResource("4_kfo5e")
+value = 20.0
+
+[sub_resource type="Resource" id="Resource_gm5uh"]
+script = ExtResource("6_7hakr")
+id = &"unique_crown_of_ashes"
+display_name = "Kraft: Krone der Asche"
+description = "Wirbelsturm verursacht zusätzlich {burn_damage_percent} % Waffenschaden als Feuerschaden und setzt Gegner {burn_duration} s in Brand."
+skill_tags = Array[StringName]([&"whirlwind"])
+params = Dictionary[StringName, float]({
+&"burn_damage_percent": 30.0,
+&"burn_duration": 3.0
+})
+
+[resource]
+script = ExtResource("7_is8m2")
+id = &"crown_of_ashes"
+display_name = "Krone der Asche"
+base = ExtResource("5_nhq7a")
+affixes = Array[ExtResource("1_x3kfx")]([SubResource("Resource_nn8vj"), SubResource("Resource_xfpws"), SubResource("Resource_2t4dp")])
+power = SubResource("Resource_gm5uh")
+flavor_text = "„Die Gruft vergisst nicht, wer in ihr verbrannte.“"
