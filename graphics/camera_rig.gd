@@ -19,7 +19,7 @@ const TELEPORT_DISTANCE := 5.0
 @export var yaw_degrees: float = 45.0
 @export var pitch_degrees: float = -52.0
 ## Abstand der Kamera zum Anker in Metern. Setzen wirkt als Zoomziel, der Übergang ist weich.
-@export var distance: float = 16.0:
+@export var distance: float = 19.0:
 	set(value):
 		distance = value
 		_zoom_goal = value
@@ -31,7 +31,7 @@ const TELEPORT_DISTANCE := 5.0
 ## Mausrad-Zoom an oder aus.
 @export var zoom_enabled: bool = true
 @export var zoom_min: float = 10.0
-@export var zoom_max: float = 24.0
+@export var zoom_max: float = 26.0
 ## Meter pro Mausrad-Raste.
 @export var zoom_step: float = 1.5
 @export var zoom_speed: float = 10.0
@@ -55,8 +55,8 @@ const TELEPORT_DISTANCE := 5.0
 
 var camera: Camera3D
 
-var _zoom_goal: float = 16.0
-var _current_distance: float = 16.0
+var _zoom_goal: float = 19.0
+var _current_distance: float = 19.0
 var _look_offset: Vector3 = Vector3.ZERO
 var _last_target_position: Vector3 = Vector3.INF
 var _shake_strength: float = 0.0

@@ -47,6 +47,9 @@ const OCCLUDING_ITEMS: PackedStringArray = [
 	"rock",
 ]
 
+## Farbton des Grases im echten Baukasten (dunkles, entsättigtes Moosgrün).
+const REAL_GRASS_TINT := Color(0.3, 0.38, 0.2)
+
 static var _cache: Dictionary[String, Material] = {}
 static var _textures: Dictionary[String, Texture2D] = {}
 static var _skinned: Dictionary[MeshLibrary, bool] = {}
@@ -131,20 +134,33 @@ static func skin_placeholder_library(library: MeshLibrary) -> void:
 
 
 ## Macht die Wände der echten Bibliothek (AP8) ausblendbar, ohne ihr Aussehen zu ändern.
+## Die sehr dunkle Gras-Textur bekommt das Gras-Material der Bibliothek (heller, ohne
+## sichtbare Kachelung), sonst versinkt die Wiese im Nachtlicht.
 static func make_library_occluding(library: MeshLibrary) -> void:
 	if library == null or _skinned.has(library):
 		return
 	_skinned[library] = true
 	for id in library.get_item_list():
-		if not OCCLUDING_ITEMS.has(library.get_item_name(id)):
-			continue
+		var item_name := library.get_item_name(id)
 		var mesh := library.get_item_mesh(id)
 		if mesh == null:
+			continue
+		if item_name == "ground_grass":
+			_set_mesh_material(mesh, 0, get_material(&"grass", REAL_GRASS_TINT))
+			continue
+		if not OCCLUDING_ITEMS.has(item_name):
 			continue
 		for surface in mesh.get_surface_count():
 			var old := mesh.surface_get_material(surface) as BaseMaterial3D
 			if old != null:
-				mesh.surface_set_material(surface, make_occluding(old))
+				_set_mesh_material(mesh, surface, make_occluding(old))
+
+
+static func _set_mesh_material(mesh: Mesh, surface: int, material: Material) -> void:
+	if mesh is PrimitiveMesh:
+		(mesh as PrimitiveMesh).material = material
+	elif mesh is ArrayMesh:
+		(mesh as ArrayMesh).surface_set_material(surface, material)
 
 
 ## Art eines Platzhalter-Teils. bounds im Raum des Items.
