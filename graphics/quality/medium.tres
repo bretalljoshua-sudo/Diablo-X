@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="QualityPreset" format=3]
+
+[ext_resource type="Script" path="res://graphics/quality/quality_preset.gd" id="1_25ml7"]
+
+[resource]
+script = ExtResource("1_25ml7")
+display_name = "Mittel"
+scaling_3d_mode = 2
+render_scale = 0.77
+mesh_lod_threshold = 2.0
+soft_shadow_quality = 1
+max_shadow_lights = 4
+directional_shadow_distance = 40.0
+ssao_quality = 1
+volumetric_fog = true
+volumetric_fog_size = 64
+volumetric_fog_depth = 48
+particle_amount = 0.75
+max_decals = 32

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="QualityPreset" format=3]
+
+[ext_resource type="Script" path="res://graphics/quality/quality_preset.gd" id="1_4carg"]
+
+[resource]
+script = ExtResource("1_4carg")
+display_name = "Niedrig"
+msaa_3d = 0
+screen_space_aa = 1
+scaling_3d_mode = 1
+render_scale = 0.67
+fsr_sharpness = 0.3
+mesh_lod_threshold = 4.0
+directional_shadow_size = 2048
+positional_shadow_atlas_size = 2048
+soft_shadow_quality = 0
+max_shadow_lights = 2
+directional_shadow_distance = 30.0
+ssao = false
+volumetric_fog_size = 64
+volumetric_fog_depth = 32
+particle_amount = 0.5
+max_decals = 16
+ambient_particles = false

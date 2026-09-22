@@ -1,0 +1,62 @@
+[gd_resource type="Environment" format=3]
+
+[sub_resource type="Gradient" id="Gradient_jd0m4"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.02, 0, 0, 1, 0.52, 0.47, 0.45, 1, 1, 0.92, 0.82, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6yyrd"]
+gradient = SubResource("Gradient_jd0m4")
+
+[resource]
+background_mode = 1
+background_color = Color(0.012, 0.002, 0.002, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.55, 0.28, 0.24, 1)
+ambient_light_energy = 0.5
+reflected_light_source = 1
+tonemap_mode = 4
+ssr_enabled = true
+ssr_max_steps = 48
+ssr_fade_in = 0.12
+ssr_depth_tolerance = 0.3
+ssao_enabled = true
+ssao_radius = 1.4
+ssao_intensity = 2.2
+ssao_power = 1.6
+ssao_detail = 0.6
+ssao_light_affect = 0.15
+ssil_enabled = true
+ssil_radius = 4.0
+ssil_intensity = 0.8
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_bounce_feedback = 0.4
+sdfgi_energy = 0.9
+glow_enabled = true
+glow_levels/2 = 0.6
+glow_levels/3 = 1.0
+glow_levels/4 = 0.8
+glow_levels/5 = 0.5
+glow_levels/6 = 0.3
+glow_normalized = true
+glow_intensity = 1.1
+glow_bloom = 0.04
+glow_blend_mode = 2
+glow_hdr_threshold = 1.1
+fog_enabled = true
+fog_light_color = Color(0.12, 0.03, 0.02, 1)
+fog_sky_affect = 0.0
+fog_height = 0.8
+fog_height_density = 0.18
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.04
+volumetric_fog_albedo = Color(1, 0.8, 0.75, 1)
+volumetric_fog_emission = Color(0.05, 0.008, 0.004, 1)
+volumetric_fog_gi_inject = 0.6
+volumetric_fog_anisotropy = 0.45
+volumetric_fog_ambient_inject = 0.05
+volumetric_fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_contrast = 1.18
+adjustment_saturation = 0.95
+adjustment_color_correction = SubResource("GradientTexture1D_6yyrd")

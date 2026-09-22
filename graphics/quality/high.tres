@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="QualityPreset" format=3]
+
+[ext_resource type="Script" path="res://graphics/quality/quality_preset.gd" id="1_24mrs"]
+
+[resource]
+script = ExtResource("1_24mrs")
+display_name = "Hoch"
+sdfgi = true
+ssr = true
+volumetric_fog = true

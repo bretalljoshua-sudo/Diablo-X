@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="QualityPreset" format=3]
+
+[ext_resource type="Script" path="res://graphics/quality/quality_preset.gd" id="1_ph84g"]
+
+[resource]
+script = ExtResource("1_ph84g")
+display_name = "Ultra"
+msaa_3d = 2
+mesh_lod_threshold = 0.5
+directional_shadow_size = 8192
+positional_shadow_atlas_size = 8192
+soft_shadow_quality = 3
+max_shadow_lights = 10
+directional_shadow_distance = 60.0
+sdfgi = true
+sdfgi_half_resolution = false
+sdfgi_ray_count = 4
+ssao_quality = 3
+ssao_half_size = false
+ssil = true
+ssr = true
+ssr_max_steps = 96
+volumetric_fog = true
+volumetric_fog_size = 160
+volumetric_fog_depth = 96
+glow_bicubic = true
+particle_amount = 1.5
+max_decals = 96
