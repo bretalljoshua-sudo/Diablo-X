@@ -70,3 +70,9 @@ signal merchant_item_bought(item: ItemInstance, price: int)
 signal merchant_item_sold(item: ItemInstance, price: int)
 ## Ein Fenster der UI (Inventar, Skillbaum, Karte, Händler, Pause) wurde geöffnet oder geschlossen.
 signal ui_window_toggled(window: StringName, open: bool)
+
+# --- Ergänzt von AP3 (Gegner und KI) ---
+
+## Erfahrung für den Spieler, gesendet einmal pro besiegtem Gegner (AP3). amount ist schon mit
+## Stufe und Elite-Bonus verrechnet, source ist der Gegner. AP5 vergibt damit Erfahrung und Stufen.
+signal experience_awarded(amount: int, source: Node3D)
