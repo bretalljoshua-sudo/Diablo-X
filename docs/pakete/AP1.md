@@ -96,6 +96,11 @@ Im Projektordner unter `screenshots/ap1/` (gerendert in der Cloud mit Software-R
 `effekte_bossraum.png` (Treffer, kritische Zahlen, Beute-Lichtsäule, Kriegsschrei),
 `leistungstest_50_gegner.png` (die FPS-Zahl darin ist die der Cloud, nicht aussagekräftig).
 
+Grafik-Update (Detail-Oberflächen, Boden, Kerzen) unter `screenshots/ap1/grafik-update/`:
+`vergleich_dorf.png`, `vergleich_katakomben.png`, `vergleich_bossraum.png` (links Version 0.1,
+rechts mit Update, gleiche Szene `graphics_test`, Seed 7, Stufe „Hoch“), dazu `vorher_*.png` und
+`nachher_*.png` in voller Größe.
+
 ## Was Joshua auf dem PC prüfen sollte
 
 1. **Leistung:** `graphics_perf` in 2560 × 1440 im Vollbild (F11) auf „Hoch“ (F7), B drücken.
