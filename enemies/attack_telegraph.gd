@@ -38,6 +38,7 @@ func _init() -> void:
 	add_child(_fill)
 	visible = false
 	set_process(false)
+	set_physics_process(false)
 
 
 ## Zeigt einen Kreis mit Radius r um den Ursprung dieses Knotens.
@@ -67,6 +68,7 @@ func hide_telegraph() -> void:
 	_active = false
 	visible = false
 	set_process(false)
+	set_physics_process(false)
 	if is_in_group(GROUP):
 		remove_from_group(GROUP)
 
@@ -110,10 +112,16 @@ func contains_point(point: Vector3, margin: float = 0.0) -> bool:
 	return inside
 
 
-func _process(delta: float) -> void:
+# Die Zeit läuft im Physik-Takt wie der Angriff selbst, damit get_time_left() genau zum Treffer
+# passt, unabhängig von der Bildrate.
+func _physics_process(delta: float) -> void:
+	if _active:
+		elapsed += delta
+
+
+func _process(_delta: float) -> void:
 	if not _active:
 		return
-	elapsed += delta
 	var t := get_progress()
 	match shape:
 		Shape.LINE:
@@ -137,6 +145,7 @@ func _start(mesh: Mesh, full_scale: Vector3, time: float, color: Color) -> void:
 	_active = true
 	visible = true
 	set_process(true)
+	set_physics_process(true)
 	if not is_in_group(GROUP):
 		add_to_group(GROUP)
 

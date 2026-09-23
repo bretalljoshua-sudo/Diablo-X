@@ -10,6 +10,8 @@ extends Node
 const DODGE_WHEN_LEFT := 0.35
 const POTION_BELOW := 0.45
 const RETARGET_INTERVAL := 0.25
+## Geprüfte Abweichungen von der Fluchtrichtung beim Rollen, in Grad.
+const DODGE_ANGLES: Array[float] = [0.0, 35.0, -35.0, 70.0, -70.0, 110.0, -110.0, 180.0]
 
 @export var enabled: bool = false
 
@@ -48,7 +50,7 @@ func _try_dodge() -> bool:
 			continue
 		if not telegraph.contains_point(player.global_position, margin):
 			continue
-		var direction := _escape_direction(telegraph)
+		var direction := _free_direction(_escape_direction(telegraph), margin)
 		if player.dodge(direction):
 			dodges += 1
 			return true
@@ -67,6 +69,36 @@ func _escape_direction(telegraph: AttackTelegraph) -> Vector3:
 	if away.length_squared() < 0.01:
 		return -player.facing
 	return away.normalized()
+
+
+## Wählt nahe der gewünschten Richtung eine, bei der die Rolle auf freiem Boden landet:
+## auf dem Navigationsnetz (nicht in einer Wand) und außerhalb aller Vorwarnungen. Ohne
+## das rollt der Bot am Rand gegen die Wand und bleibt in der Fläche stehen.
+func _free_direction(wanted: Vector3, margin: float) -> Vector3:
+	var distance := player.config.dodge_distance
+	var best := wanted
+	var best_score := -INF
+	for step in DODGE_ANGLES:
+		var direction := wanted.rotated(Vector3.UP, deg_to_rad(step))
+		var landing := player.global_position + direction * distance
+		var score := -absf(step) / 180.0
+		var ground := _closest_on_navigation(landing)
+		score -= Vector2(ground.x - landing.x, ground.z - landing.z).length() * 2.0
+		for node in get_tree().get_nodes_in_group(AttackTelegraph.GROUP):
+			var telegraph := node as AttackTelegraph
+			if telegraph != null and telegraph.contains_point(landing, margin):
+				score -= 3.0
+		if score > best_score:
+			best_score = score
+			best = direction
+	return best
+
+
+func _closest_on_navigation(point: Vector3) -> Vector3:
+	var map := player.get_world_3d().navigation_map
+	if NavigationServer3D.map_get_iteration_id(map) == 0:
+		return point
+	return NavigationServer3D.map_get_closest_point(map, point)
 
 
 func _leave_fire() -> bool:

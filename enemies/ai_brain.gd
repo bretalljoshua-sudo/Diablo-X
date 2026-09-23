@@ -75,6 +75,11 @@ func _ready() -> void:
 	set_physics_process(false)
 
 
+## Neuer Zufallsstrom für diesen Gegner (der Pool ruft das vor jedem Einsatz auf).
+func reseed(seed_value: int) -> void:
+	_rng = Rng.make(seed_value)
+
+
 ## Setzt die KI auf Ruhen zurück (neuer Gegner oder Wiederverwendung aus dem Pool).
 func reset() -> void:
 	_set_target(null)

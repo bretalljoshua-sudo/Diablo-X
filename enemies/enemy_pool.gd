@@ -11,6 +11,7 @@ static var _enemy_scene: PackedScene
 var _free: Dictionary[StringName, Array] = {}
 var _active: Array[Enemy] = []
 var _created: int = 0
+var _acquired: int = 0
 
 
 static func instantiate_enemy() -> Enemy:
@@ -42,6 +43,10 @@ func acquire(
 	enemy.position = position
 	parent.add_child(enemy)
 	enemy.global_position = position
+	# Zufall der KI hängt nur von master_seed und der Reihenfolge in diesem Pool ab, nicht davon,
+	# wie viele Gegner vorher irgendwo erzeugt wurden (reproduzierbare Läufe und Tests).
+	_acquired += 1
+	enemy.brain.reseed(Rng.derive_seed(&"enemy_ai", _acquired))
 	enemy.setup(type, level, affixes, summon)
 	_active.append(enemy)
 	return enemy
