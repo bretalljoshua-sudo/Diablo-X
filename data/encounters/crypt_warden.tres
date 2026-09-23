@@ -1,0 +1,133 @@
+[gd_resource type="Resource" script_class="BossDef" format=3]
+
+[ext_resource type="Script" path="res://encounters/boss/boss_def.gd" id="1_boss"]
+[ext_resource type="Script" path="res://enemies/enemy_type.gd" id="2_type"]
+[ext_resource type="Script" path="res://scripts/contracts/stat_block.gd" id="3_stats"]
+[ext_resource type="Script" path="res://enemies/enemy_attack.gd" id="4_attack"]
+[ext_resource type="Script" path="res://enemies/elite_affix.gd" id="5_affix"]
+[ext_resource type="Resource" path="res://data/loot_tables/boss.tres" id="6_loot"]
+[ext_resource type="Resource" path="res://data/loot_tables/chest.tres" id="7_chest"]
+[ext_resource type="Resource" path="res://data/enemies/skeleton.tres" id="8_skeleton"]
+[ext_resource type="Resource" path="res://data/status_effects/burn.tres" id="9_burn"]
+[ext_resource type="PackedScene" path="res://enemies/enemy.tscn" id="10_scene"]
+
+[sub_resource type="Resource" id="Base"]
+script = ExtResource("3_stats")
+values = Dictionary[int, float]({
+0: 1400.0,
+1: 80.0,
+2: 22.0,
+4: 0.0,
+6: 3.6,
+11: 0.3
+})
+
+[sub_resource type="Resource" id="PerLevel"]
+script = ExtResource("3_stats")
+values = Dictionary[int, float]({
+0: 320.0,
+1: 15.0,
+2: 4.5
+})
+
+[sub_resource type="Resource" id="Cleave"]
+script = ExtResource("4_attack")
+id = &"warden_cleave"
+kind = 0
+max_range = 2.2
+windup = 0.75
+recovery = 0.7
+cooldown = 2.4
+damage_factor = 1.0
+knockback = 1.5
+arc_degrees = 140.0
+radius = 3.6
+animation = &"attack_1"
+
+[sub_resource type="Resource" id="Slam"]
+script = ExtResource("4_attack")
+id = &"warden_slam"
+kind = 1
+max_range = 3.0
+windup = 1.25
+recovery = 1.2
+cooldown = 7.0
+damage_factor = 1.7
+knockback = 4.0
+radius = 3.4
+forward_offset = 1.8
+animation = &"attack_3"
+
+[sub_resource type="Resource" id="BoneSpear"]
+script = ExtResource("4_attack")
+id = &"warden_bone_spear"
+kind = 2
+min_range = 4.5
+max_range = 14.0
+windup = 1.0
+recovery = 0.6
+cooldown = 5.0
+damage_factor = 0.8
+projectile_speed = 14.0
+projectile_range = 16.0
+projectile_radius = 0.5
+projectile_color = Color(0.92, 0.88, 0.75, 1)
+aim_lock_before = 0.35
+animation = &"attack_4"
+
+[sub_resource type="Resource" id="Summon"]
+script = ExtResource("4_attack")
+id = &"warden_summon"
+kind = 3
+max_range = 14.0
+windup = 1.4
+recovery = 0.8
+cooldown = 13.0
+summon_type = ExtResource("8_skeleton")
+summon_count = 3
+summon_max_alive = 6
+summon_distance = 3.0
+animation = &"cast"
+
+[sub_resource type="Resource" id="Type"]
+script = ExtResource("2_type")
+id = &"crypt_warden"
+display_name = "Der Gruftwächter"
+behavior = &"melee"
+experience = 350
+model_path = "res://encounters/boss/crypt_warden_model.tscn"
+placeholder_color = Color(0.55, 0.45, 0.42, 1)
+hit_vfx = &"bone_chips"
+body_radius = 0.9
+body_height = 3.2
+model_scale = 1.45
+knockback_resistance = 1.0
+aggro_range = 9.0
+notice_time = 0.3
+lose_range = 80.0
+scene = ExtResource("10_scene")
+base_stats = SubResource("Base")
+stats_per_level = SubResource("PerLevel")
+loot_table = ExtResource("6_loot")
+attacks = Array[ExtResource("4_attack")]([SubResource("Slam"), SubResource("Cleave"), SubResource("BoneSpear")])
+
+[sub_resource type="Resource" id="Fire"]
+script = ExtResource("5_affix")
+id = &"warden_fire"
+display_name = "Grabesfeuer"
+kind = 1
+color = Color(1, 0.45, 0.05, 1)
+duration = 5.0
+radius = 1.8
+windup = 1.3
+on_hit_effect = ExtResource("9_burn")
+
+[resource]
+script = ExtResource("1_boss")
+display_name = "Der Gruftwächter"
+enemy_type = SubResource("Type")
+level_bonus = 1
+fire_damage_factor = 0.35
+phase_two_attacks = Array[ExtResource("4_attack")]([SubResource("Summon")])
+fire_affix = SubResource("Fire")
+chest_table = ExtResource("7_chest")

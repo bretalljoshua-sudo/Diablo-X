@@ -25,3 +25,4 @@ Urheber trotzdem.
 | Gras- und Spinnennetz-Textur | eigene, prozedural erzeugt | `assets/world/textures/grass_ground.png`, `cobweb.png` |
 | Schritte, Schwünge, Treffer, Beuteklänge (selten, legendär) | eigene, erzeugt mit `assets/tools/synth_sounds.py` | `assets/audio/synth/` |
 | Klang-Ressourcen mit Varianten (`*.tres`) | erzeugt mit `assets/tools/build_sounds.gd` | `assets/audio/` |
+| Musik: Dorf, Katakomben, Bosskampf (AP9) | eigene, erzeugt mit `encounters/tools/compose_music.gd` (keine Samples) | `assets/audio/music/` |

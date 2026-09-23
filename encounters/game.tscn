@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://encounters/game_session.gd" id="1_session"]
+[ext_resource type="PackedScene" path="res://ui/game_ui.tscn" id="2_ui"]
+[ext_resource type="Script" path="res://enemies/enemy_director.gd" id="3_director"]
+[ext_resource type="PackedScene" path="res://world/level.tscn" id="4_level"]
+[ext_resource type="Script" path="res://encounters/boss_arena.gd" id="5_arena"]
+[ext_resource type="Script" path="res://encounters/music_director.gd" id="6_music"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_session")
+
+[node name="GameUI" parent="." instance=ExtResource("2_ui")]
+
+[node name="Director" type="Node" parent="."]
+script = ExtResource("3_director")
+
+[node name="Level" parent="." instance=ExtResource("4_level")]
+auto_load = false
+
+[node name="BossArena" type="Node" parent="."]
+script = ExtResource("5_arena")
+
+[node name="Music" type="Node" parent="."]
+script = ExtResource("6_music")

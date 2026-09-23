@@ -1,12 +1,26 @@
 # Spiel JBR
 
 Isometrisches 3D-Action-RPG im Stil von Diablo 4, gebaut mit **Godot 4.7.2** für den Windows-Desktop.
-Nur Einzelspieler. Ziel für Version 0.1: 1 Klasse (Krieger), 1 Gebiet (Dorf und Katakomben), 1 Boss.
+Nur Einzelspieler. Version 0.1: 1 Klasse (Krieger), 1 Gebiet (Dorf und Katakomben), 1 Boss.
 
 Der vollständige Plan steht in [docs/PLAN.md](docs/PLAN.md), die Regeln für die Mitarbeit in
 [CONTRIBUTING.md](CONTRIBUTING.md), die Notizen je Arbeitspaket in [docs/pakete/](docs/pakete/).
 
-## Spielen ohne Godot (Windows-Build laden)
+## Spielen
+
+1. Unter **Releases** (rechts auf der Repo-Seite) die neueste Version öffnen, zum Beispiel
+   `v0.1.0`, und `SpielJBR-v0.1.0-windows.zip` laden.
+2. ZIP entpacken und `SpielJBR.exe` starten. Es erscheint der Titelbildschirm mit
+   **Neues Spiel**, **Weiter** und **Beenden**.
+3. Im Dorf steht die Händlerin Mira. Hinten im Dorf führt der Gruft-Eingang in die Katakomben:
+   Ebene 1, Ebene 2 und die Gruft des Wächters. Nach dem Sieg bringt das Portal zurück ins Dorf.
+
+Der Spielstand liegt in `%APPDATA%\Godot\app_userdata\Spiel JBR\savegame.json`, die
+Einstellungen daneben in `settings.cfg`. Gespeichert wird automatisch (Ebenenwechsel,
+Stufenaufstieg, Sieg, jede Minute, Beenden). **Weiter** lädt den Stand im Dorf. Wer neu anfangen
+will, wählt **Neues Spiel** und bestätigt das Überschreiben.
+
+## Neuester Entwicklungsstand (Windows-Build laden)
 
 Bei jedem Push auf `main` baut GitHub automatisch einen Windows-Build.
 
@@ -36,6 +50,10 @@ Hinweise:
 Optionen stehen hinter dem Programmnamen, im Editor-Aufruf hinter `--`:
 
 ```
+SpielJBR.exe                                    Titelbildschirm (normaler Start)
+SpielJBR.exe --scene=boss_test                  direkt in den Bossraum (Stufe 6, ohne Speichern)
+SpielJBR.exe --scene=res://encounters/game.tscn --bot --no-save
+                                                ein Bot spielt das Spiel, zum Zuschauen
 SpielJBR.exe --scene=test_room                  Testszene aus debug/ starten
 SpielJBR.exe --list-scenes                      vorhandene Testszenen ausgeben
 SpielJBR.exe --seed=12345                       festen Zufalls-Seed nutzen
@@ -51,8 +69,16 @@ Die komplette Belegung steht in `project.godot` (Abschnitt `[input]`) und in CON
 
 | Taste | Wirkung |
 |---|---|
-| Linke Maustaste | Laufen und Angreifen (im Testraum: Markierung auf den Boden setzen) |
+| Linke Maustaste | Laufen, Hieb auf Gegner, Beute aufheben (gedrückt halten: weiterlaufen) |
+| Rechte Maustaste | Spaltschlag |
+| 1 bis 4 | Skills der Skillleiste |
 | W A S D | Laufen |
+| Leertaste | Ausweichrolle |
+| Q | Heiltrank |
+| I · K · M | Inventar · Skillbaum · Karte |
+| Alt | Beschriftungen der Beute am Boden |
+| Esc | Menü (Einstellungen, Speichern und zum Titel, Beenden) |
+| Mausrad | Zoom |
 | F3 | Debug-Anzeige (FPS, Knoten, Draw Calls) ein und aus |
 | F12 | Screenshot |
 

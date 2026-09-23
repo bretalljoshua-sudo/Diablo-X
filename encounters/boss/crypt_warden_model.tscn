@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/characters/character_model.gd" id="1_model"]
+[ext_resource type="PackedScene" path="res://assets/characters/kaykit/skeleton_warrior.glb" id="2_skeleton"]
+[ext_resource type="AnimationLibrary" path="res://assets/animations/libraries/ghoul.tres" id="3_anims"]
+[ext_resource type="AnimationNodeStateMachine" path="res://assets/animations/character_state_machine.tres" id="4_states"]
+[ext_resource type="PackedScene" path="res://assets/weapons/axe_2handed.glb" id="5_axe"]
+[ext_resource type="AudioStream" path="res://assets/audio/death.tres" id="s0_death"]
+[ext_resource type="AudioStream" path="res://assets/audio/footstep.tres" id="s1_footstep"]
+[ext_resource type="AudioStream" path="res://assets/audio/hurt.tres" id="s2_hurt"]
+[ext_resource type="AudioStream" path="res://assets/audio/swing.tres" id="s3_swing"]
+
+[node name="CryptWarden" type="Node3D"]
+script = ExtResource("1_model")
+footstep_sound = ExtResource("s1_footstep")
+attack_sound = ExtResource("s3_swing")
+hit_sound = ExtResource("s2_hurt")
+death_sound = ExtResource("s0_death")
+walk_speed = 0.46
+run_speed = 1.75
+weapon_right = ExtResource("5_axe")
+tint = Color(0.62, 0.52, 0.5, 1)
+
+[node name="Model" parent="." instance=ExtResource("2_skeleton")]
+transform = Transform3D(-1.35, 0, 0, 0, 1.35, 0, 0, 0, -1.35, 0, 0, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model")
+libraries = {
+&"": ExtResource("3_anims")
+}
+callback_mode_method = 1
+tree_root = ExtResource("4_states")
+
+[node name="EyeGlow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -0.35)
+light_color = Color(1, 0.25, 0.1, 1)
+light_energy = 1.6
+omni_range = 3.5
+shadow_enabled = false
