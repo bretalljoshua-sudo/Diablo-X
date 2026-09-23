@@ -104,7 +104,29 @@ func _ready() -> void:
 	_steps = _add_audio_player(&"Steps")
 
 
+# Die Uhr der Aktionen läuft im selben Takt wie der AnimationTree. Stellt jemand den Baum auf
+# den Physik-Takt (reproduzierbare Simulationen), folgt das Ende der Aktionen mit.
 func _process(delta: float) -> void:
+	if not _clock_in_physics():
+		_advance(delta)
+
+
+func _physics_process(delta: float) -> void:
+	if _clock_in_physics():
+		_advance(delta)
+
+
+func _clock_in_physics() -> bool:
+	return (
+		anim_tree != null
+		and (
+			anim_tree.callback_mode_process
+			== AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS
+		)
+	)
+
+
+func _advance(delta: float) -> void:
 	_clock += delta
 	if _action.is_empty() or _action_loops or _dead:
 		return
