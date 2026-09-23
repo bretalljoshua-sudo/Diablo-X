@@ -3,7 +3,6 @@ extends TabContainer
 ## Einstellungen mit den Reitern Grafik, Ton und Steuerung. Änderungen wirken sofort über
 ## Settings.apply(); speichern erst mit save() (Knopf „Speichern“ im Pausenmenü).
 
-const QUALITY_NAMES: Array[String] = ["Niedrig", "Mittel", "Hoch", "Ultra"]
 ## Belegbare Aktionen mit deutschem Namen. Maustasten und Esc bleiben fest.
 const BINDABLE_ACTIONS: Dictionary[StringName, String] = {
 	&"move_up": "Laufen nach oben",
@@ -98,8 +97,10 @@ func _build_graphics() -> void:
 	var page := _page("Grafik")
 	quality_option = OptionButton.new()
 	quality_option.name = "Quality"
-	for i in QUALITY_NAMES.size():
-		quality_option.add_item(QUALITY_NAMES[i], i)
+	# Namen der Grafikstufen aus den Voreinstellungen von AP1 (graphics/quality/*.tres).
+	var quality_names := Graphics.get_quality_names()
+	for i in quality_names.size():
+		quality_option.add_item(quality_names[i], i)
 	quality_option.item_selected.connect(
 		func(index: int) -> void:
 			Settings.quality = index as Settings.Quality
