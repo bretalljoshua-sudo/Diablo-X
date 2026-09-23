@@ -1,6 +1,6 @@
 # AP1 – Grafik, Licht und Kamera
 
-Stand: 23.09.2026. Gebaut in der Cloud mit Software-Rendering (Forward+ über Lavapipe), also ohne
+Stand: 23.09.2026 (mit Grafik-Update am Abend). Gebaut in der Cloud mit Software-Rendering (Forward+ über Lavapipe), also ohne
 echte Grafikkarte. Aussehen und Leistung muss Joshua auf seinem PC prüfen (siehe unten).
 
 ## Was gebaut ist
@@ -30,17 +30,38 @@ echte Grafikkarte. Aussehen und Leistung muss Joshua auf seinem PC prüfen (sieh
   Feuer, Kälte, Gift eingefärbt), Treffer-Aufblitzen am Modell, Blutflecken am Boden (Budget je
   Stufe), Auflösen beim Tod (glühende Kante) und Beute-Lichtsäulen nach Seltenheit (Magisch glimmt,
   Selten kurze Säule, Legendär und Einzigartig hohe Säule).
+- **Detail-Oberflächen** (Grafik-Update 23.09.): Alle Baukasten-Modelle tragen den Shader
+  `graphics/shaders/kit_surface.gdshaderinc` (Variante `kit_surface_occluding` für Wände, die sich
+  ausblenden). Er legt über die KayKit-Farben weltbezogene Stein- und Holz-Texturen mit Normal-Maps
+  (Holz wird an der warmen Grundfarbe erkannt), dazu großflächigen Schmutz, Moos in Ritzen und
+  unten an Wänden und Pfützen auf dem Boden. Stärke je Gebiet in `MaterialLibrary.KIT_THEMES`
+  (Dorf trocken und moosig, Katakomben nass, Bossraum rötliches Moos). Die Texturen erzeugt
+  `python3 graphics/tools/gen_detail_textures.py` (numpy, Pillow) nach `graphics/textures/`.
+- **Kleinkram am Boden** (`graphics/world/ground_clutter.gd`, `GroundClutter`): im Dorf Gras mit
+  Wind und trockeneren Flecken plus Kiesel, in Katakomben und Bossraum Kiesel, Schutt an den
+  Wänden, Knochen und Flecken und Risse als Decals. Dichte je Grafikstufe (`clutter_density`),
+  gleicher Seed gibt gleiche Verteilung.
+- **Kerzen und Randlicht:** Kerzen-Requisiten bekommen ein kleines flackerndes Licht ohne Schatten
+  (`LightPresets.Kind.CANDLE`). Figuren haben ein leichtes Randlicht, damit sie sich vom dunklen
+  Boden abheben (`Graphics.RIM_AMOUNT`).
+- **Bildschliff** (`graphics/shaders/post_process.gdshader`): leichtes Nachschärfen, Vignette und
+  feines Filmkorn über der 3D-Welt, unter der Oberfläche. Aus in „Niedrig“.
+- **Erster Start:** Gibt es noch keine Einstellungsdatei, wählt das Spiel die Stufe nach
+  Grafikkarte: starke Karten (RTX 3080 und höher, RX 7800 und höher, also auch die RTX 5080)
+  „Ultra“, andere eigene Karten „Hoch“, eingebaute Grafik „Mittel“
+  (`Graphics.recommended_quality()`).
 - **Grafikstufen** (`graphics/quality/*.tres`, Autoload `Graphics`): Niedrig, Mittel, Hoch, Ultra.
   Umschalten im Einstellungsmenü von AP7 oder mit F5 bis F8 in den Testszenen. Die Stufen schalten
   Kantenglättung, Auflösungsskalierung (FSR), SDFGI, SSAO, SSIL, SSR, Volumennebel, Schatten-Größe,
-  Anzahl Schatten-Lichter, Partikelmenge und Blutflecken.
+  Anzahl Schatten-Lichter, Partikelmenge, Blutflecken, Detail-Oberflächen, Bodendichte und
+  Bildschliff. Ultra hat zusätzlich vier Schattenkaskaden, feineren Volumennebel und volle SSIL.
 
-| Stufe | Kantenglättung | Skalierung | GI / Nebel | Schatten-Lichter |
-|---|---|---|---|---|
-| Niedrig | FXAA | FSR 67 % | aus / aus | 2 |
-| Mittel | MSAA 2× | FSR 2 77 % | aus / grob | 4 |
-| Hoch | MSAA 2× | 100 % | SDFGI halb, SSR / mittel | 6 |
-| Ultra | MSAA 4× | 100 % | SDFGI voll, SSIL, SSR / fein | 10 |
+| Stufe | Kantenglättung | Skalierung | GI / Nebel | Schatten-Lichter | Boden |
+|---|---|---|---|---|---|
+| Niedrig | FXAA | FSR 67 % | aus / aus | 2 | 35 %, ohne Details |
+| Mittel | MSAA 2× | FSR 2 77 % | aus / grob | 4 | 65 % |
+| Hoch | MSAA 2× | 100 % | SDFGI halb, SSR / mittel | 6 | 100 % |
+| Ultra | MSAA 4× | 100 % | SDFGI voll, SSIL, SSR / fein | 10 | 140 % |
 
 ## Wie man es testet
 
@@ -60,10 +81,11 @@ Im Windows-Build (Artifact des Laufs „Windows-Export“ in GitHub Actions):
   das Ergebnis nach `%APPDATA%\Godot\app_userdata\Spiel JBR\benchmark.txt` (der genaue Pfad steht
   im Log) und beendet sich.
 - Im Spiel wirkt alles automatisch: `SpielJBR.exe --scene=world_test`, `combat_test`, `skills_test`.
-- Tests: `tools/run_tests.sh`; AP1-Tests sind `test_camera_rig`, `test_graphics_quality`, `test_vfx`
+- Tests: `tools/run_tests.sh`; AP1-Tests sind `test_camera_rig`, `test_graphics_quality`, `test_graphics_surfaces`, `test_vfx`
   und `tests/sim/test_graphics_scenes.gd`.
 - Bilder ohne Grafikkarte: `graphics/tools/render_shots.sh <ordner> <name> <szene> [argumente]`
-  (Forward+ über Lavapipe, sonst Compatibility).
+  (Forward+ über Lavapipe, sonst Compatibility). Mit den Detail-Oberflächen dauert ein Bild in
+  1920 × 1080 mit `FRAMES=30` rund 5 bis 8 Minuten.
 
 ## Bilder
 
