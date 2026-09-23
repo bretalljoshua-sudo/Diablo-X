@@ -16,4 +16,5 @@ volumetric_fog = true
 volumetric_fog_size = 64
 volumetric_fog_depth = 48
 particle_amount = 0.75
+clutter_density = 0.65
 max_decals = 32

@@ -26,6 +26,8 @@ var soft_shadow_quality: RenderingServer.ShadowQuality = RenderingServer.SHADOW_
 @export var max_shadow_lights: int = 6
 ## Schattenweite der Richtungslichter (Mond) in Metern.
 @export var directional_shadow_distance: float = 45.0
+## Kaskaden des Mondschattens: 2 oder 4 (4 = auch in der Ferne scharf).
+@export_enum("2:2", "4:4") var directional_shadow_splits: int = 2
 
 @export_group("Globale Beleuchtung und Bildeffekte")
 @export var sdfgi: bool = false
@@ -45,6 +47,16 @@ var ssao_quality: RenderingServer.EnvironmentSSAOQuality = RenderingServer.ENV_S
 @export var volumetric_fog_depth: int = 64
 @export var glow: bool = true
 @export var glow_bicubic: bool = false
+
+@export_group("Oberflächen")
+## Detail-Texturen, Moos, Schmutz und Pfützen auf dem Baukasten (kit_surface).
+@export var surface_detail: bool = true
+## Menge an Gras, Kieseln, Schutt, Knochen und Flecken am Boden (GroundClutter), 0 = nichts.
+@export_range(0.0, 2.0, 0.05) var clutter_density: float = 1.0
+
+@export_group("Bild")
+## Nachschärfen, Vignette und Filmkorn (post_process.gdshader).
+@export var post_effects: bool = true
 
 @export_group("Effekte")
 ## Faktor auf die Partikelmenge der Effekte.

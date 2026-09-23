@@ -17,6 +17,12 @@ const OCCLUSION_RADIUS := 2.6
 const OCCLUSION_HEIGHT := 1.0
 const SHADOW_UPDATE_SEC := 0.4
 const DUST_NAME := &"AP1Dust"
+const POST_SHADER := preload("res://graphics/shaders/post_process.gdshader")
+## Randlicht an Figuren (BaseMaterial3D.rim, rim_tint: 0 = Lichtfarbe, 1 = Eigenfarbe).
+const RIM_AMOUNT := 0.35
+const RIM_TINT := 0.4
+## Grafikkarten, die beim ersten Start „Ultra“ bekommen (RTX 3080 aufwärts, RX 7800 aufwärts).
+const STRONG_GPU_PATTERN := "RTX\\s*(30[89]0|40[6-9]0|50[6-9]0)|RX\\s*(7[89]00|79[05]0|90[67]0)"
 
 ## Aktive Grafikstufe (Settings.Quality).
 var quality: int = -1
@@ -25,6 +31,12 @@ var presets: Array[QualityPreset] = []
 var occlusion_enabled: bool = true
 
 var _level_lights: Array[OmniLight3D] = []
+var _post_layer: CanvasLayer
+var _rimmed: Dictionary[Material, bool] = {}
+var _clutter: GroundClutter
+var _clutter_level: Node
+var _clutter_layout: LevelLayout
+var _clutter_density: float = -1.0
 var _shadow_timer: float = 0.0
 var _decorated_player: Node3D
 
@@ -32,8 +44,13 @@ var _decorated_player: Node3D
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	presets = load_presets()
+	_choose_quality_on_first_start()
+	if DisplayServer.get_name() != "headless":
+		_post_layer = make_post_layer()
+		add_child(_post_layer)
 	Settings.changed.connect(_on_settings_changed)
 	EventBus.level_loaded.connect(_on_level_loaded)
+	EventBus.entity_spawned.connect(func(entity: Node3D) -> void: add_rim_light(entity))
 	EventBus.level_unloading.connect(func(_layout: LevelLayout) -> void: _level_lights.clear())
 	Game.scene_changed.connect(func(_name: String) -> void: _apply_to_scene.call_deferred())
 	apply_quality(Settings.quality)
@@ -100,12 +117,21 @@ func apply_quality(level: int) -> void:
 		preset.ssao_quality, preset.ssao_half_size, 0.5, 2, 50.0, 300.0
 	)
 	RenderingServer.environment_set_ssil_quality(
-		RenderingServer.ENV_SSIL_QUALITY_MEDIUM, true, 0.5, 4, 50.0, 300.0
+		preset.ssao_quality as RenderingServer.EnvironmentSSILQuality,
+		preset.ssao_half_size,
+		0.5,
+		4,
+		50.0,
+		300.0
 	)
 	RenderingServer.environment_set_volumetric_fog_volume_size(
 		preset.volumetric_fog_size, preset.volumetric_fog_depth
 	)
 	RenderingServer.environment_glow_set_use_bicubic_upscale(preset.glow_bicubic)
+	MaterialLibrary.set_kit_detail(preset.surface_detail)
+	if _post_layer != null:
+		_post_layer.visible = preset.post_effects
+	_rebuild_clutter()
 	_apply_to_scene()
 	quality_applied.emit(quality)
 
@@ -164,19 +190,135 @@ func decorate_level(level: Node, layout: LevelLayout) -> void:
 	var preset := get_preset()
 	var library := WorldKit.get_library()
 	if WorldKit.uses_real_kit():
-		MaterialLibrary.make_library_occluding(library)
+		MaterialLibrary.dress_real_library(library)
+		MaterialLibrary.set_kit_theme(layout.theme)
 	else:
 		MaterialLibrary.skin_placeholder_library(library)
 	_level_lights.clear()
 	for node in level.find_children("*", "OmniLight3D", true, false):
 		var light := node as OmniLight3D
-		if light.name == LightPresets.PLAYER_LIGHT_NAME or light.has_meta(&"ap1_loot"):
+		if (
+			light.name == LightPresets.PLAYER_LIGHT_NAME
+			or light.has_meta(&"ap1_loot")
+			or light.has_meta(&"ap1_candle")
+		):
 			continue
 		var kind := LightPresets.kind_for(layout, light.global_position)
 		LightPresets.configure(light, kind, preset.light_flames)
 		_level_lights.append(light)
+	add_candle_lights(level, layout)
+	for actor in level.find_children("*", "CharacterModel", true, false):
+		add_rim_light(actor as Node3D)
+	_clutter_level = level
+	_clutter_layout = layout
+	_rebuild_clutter(true)
 	update_shadow_lights()
 	_apply_to_scene()
+
+
+## Randlicht an den Materialien einer Figur (lesbarer vor dunklem Grund, wie in Diablo).
+## Geteilte Materialien werden nur einmal angepasst.
+func add_rim_light(entity: Node3D) -> void:
+	if not is_instance_valid(entity):
+		return
+	for node in entity.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.mesh == null or mesh_instance.is_in_group(&"no_vfx"):
+			continue
+		for surface in mesh_instance.mesh.get_surface_count():
+			var material := mesh_instance.get_active_material(surface) as BaseMaterial3D
+			if material == null or _rimmed.has(material) or material.emission_enabled:
+				continue
+			_rimmed[material] = true
+			material.rim_enabled = true
+			material.rim = RIM_AMOUNT
+			material.rim_tint = RIM_TINT
+
+
+## Kleine flackernde Lichter an Kerzen-Requisiten (ohne Schatten, günstig im Forward+).
+func add_candle_lights(level: Node, layout: LevelLayout) -> void:
+	var holder := level.get_node_or_null(^"AP1Candles")
+	if holder != null:
+		holder.free()
+	holder = Node3D.new()
+	holder.name = "AP1Candles"
+	level.add_child(holder)
+	for cell in layout.props:
+		if layout.props[cell] != WorldTiles.Id.PROP_CANDLES:
+			continue
+		var light := LightPresets.make(LightPresets.Kind.CANDLE, false)
+		light.set_meta(&"ap1_candle", true)
+		light.shadow_enabled = false
+		var center := WorldTiles.cell_center(Vector2i(cell.x, cell.z), layout.cell_size)
+		light.position = center + Vector3(0, 0.9, 0)
+		holder.add_child(light)
+
+
+## Ebene für den letzten Bildschliff (post_process.gdshader) über der 3D-Welt, unter der UI.
+static func make_post_layer() -> CanvasLayer:
+	var layer := CanvasLayer.new()
+	layer.name = "AP1PostProcess"
+	layer.layer = -50
+	var rect := ColorRect.new()
+	rect.name = "Screen"
+	rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var material := ShaderMaterial.new()
+	material.shader = POST_SHADER
+	rect.material = material
+	layer.add_child(rect)
+	return layer
+
+
+## Empfohlene Grafikstufe nach Grafikkarte: starke Karten „Ultra“, andere eigene Karten „Hoch“,
+## eingebaute Grafik „Mittel“. -1, wenn es sich nicht sagen lässt (Software, unbekannt).
+static func recommended_quality(adapter_name: String, device_type: int) -> int:
+	if device_type == RenderingDevice.DEVICE_TYPE_DISCRETE_GPU:
+		var strong := RegEx.create_from_string(STRONG_GPU_PATTERN)
+		return (
+			Settings.Quality.ULTRA if strong.search(adapter_name) != null else Settings.Quality.HIGH
+		)
+	if device_type == RenderingDevice.DEVICE_TYPE_INTEGRATED_GPU:
+		return Settings.Quality.MEDIUM
+	return -1
+
+
+## Beim allerersten Start (noch keine Einstellungsdatei) die Stufe nach der Grafikkarte wählen.
+func _choose_quality_on_first_start() -> void:
+	if DisplayServer.get_name() == "headless" or FileAccess.file_exists(Settings.PATH):
+		return
+	var level := recommended_quality(
+		RenderingServer.get_video_adapter_name(), RenderingServer.get_video_adapter_type()
+	)
+	if level < 0:
+		return
+	Settings.quality = level as Settings.Quality
+	Settings.save_settings()
+	print(
+		(
+			"Grafik: erster Start, Stufe %s für %s"
+			% [get_preset(level).display_name, RenderingServer.get_video_adapter_name()]
+		)
+	)
+
+
+## Kleinkram am Boden der aktuellen Ebene (GroundClutter), null wenn keine Ebene da ist.
+func get_clutter() -> GroundClutter:
+	return _clutter if is_instance_valid(_clutter) else null
+
+
+## Baut den Kleinkram neu, wenn sich die Dichte der Grafikstufe geändert hat (force: immer).
+func _rebuild_clutter(force: bool = false) -> void:
+	if not is_instance_valid(_clutter_level) or _clutter_layout == null:
+		return
+	var density := get_preset().clutter_density
+	if not force and is_equal_approx(density, _clutter_density) and is_instance_valid(_clutter):
+		return
+	if is_instance_valid(_clutter):
+		_clutter.queue_free()
+	_clutter_density = density
+	_clutter = GroundClutter.build(_clutter_layout, density)
+	_clutter_level.add_child(_clutter)
 
 
 ## Hängt Spielerlicht und Staub an die Figur (einmal je Figur).
@@ -189,6 +331,7 @@ func decorate_player(player: Node3D) -> void:
 		dust = make_dust()
 		player.add_child(dust)
 	(dust as GPUParticles3D).emitting = get_preset().ambient_particles
+	add_rim_light(player)
 
 
 ## Schatten nur für die nächsten Lichter zum Spieler (Anzahl aus der Grafikstufe).
@@ -269,7 +412,11 @@ func _apply_to_scene() -> void:
 	for node in tree.root.find_children("*", "DirectionalLight3D", true, false):
 		var sun := node as DirectionalLight3D
 		sun.directional_shadow_max_distance = preset.directional_shadow_distance
-		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+		sun.directional_shadow_mode = (
+			DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
+			if preset.directional_shadow_splits == 4
+			else DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+		)
 	if is_instance_valid(_decorated_player):
 		var dust := _decorated_player.get_node_or_null(NodePath(DUST_NAME)) as GPUParticles3D
 		if dust != null:

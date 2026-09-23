@@ -10,7 +10,7 @@ extends RefCounted
 ## - Der Spieler trägt ein weiches Licht ohne Schatten, damit er im Dunkeln lesbar bleibt.
 ## - Lichter blenden aus der Ferne aus (distance_fade), damit große Ebenen günstig bleiben.
 
-enum Kind { TORCH, BRAZIER, LAMP, ENTRANCE, PLAYER, LOOT }
+enum Kind { TORCH, BRAZIER, LAMP, ENTRANCE, PLAYER, LOOT, CANDLE }
 
 ## Art → [Farbe, Energie, Reichweite, Abfall, Nebel-Energie, Flammengröße (0 = keine)].
 const PRESETS: Dictionary[Kind, Array] = {
@@ -20,6 +20,7 @@ const PRESETS: Dictionary[Kind, Array] = {
 	Kind.ENTRANCE: [Color(0.45, 0.75, 1.0), 3.5, 10.0, 1.3, 2.0, 0.0],
 	Kind.PLAYER: [Color(1.0, 0.86, 0.7), 1.8, 9.0, 1.1, 0.3, 0.0],
 	Kind.LOOT: [Color(1.0, 1.0, 1.0), 1.5, 4.0, 1.5, 0.6, 0.0],
+	Kind.CANDLE: [Color(1.0, 0.62, 0.3), 0.9, 3.8, 1.8, 0.4, 0.0],
 }
 
 const PLAYER_LIGHT_NAME := &"AP1PlayerLight"
@@ -46,10 +47,11 @@ static func configure(light: OmniLight3D, kind: Kind, flames: bool = true) -> Om
 	light.distance_fade_length = FADE_LENGTH
 	light.distance_fade_shadow = 25.0
 	light.set_meta(&"ap1_kind", kind)
-	if kind in [Kind.TORCH, Kind.BRAZIER, Kind.LAMP] and light.get_node_or_null("Flicker") == null:
+	var flickering := [Kind.TORCH, Kind.BRAZIER, Kind.LAMP, Kind.CANDLE]
+	if kind in flickering and light.get_node_or_null("Flicker") == null:
 		var flicker := LightFlicker.new()
 		flicker.name = "Flicker"
-		flicker.amount = 0.22 if kind == Kind.TORCH else 0.14
+		flicker.amount = 0.22 if kind in [Kind.TORCH, Kind.CANDLE] else 0.14
 		flicker.base_energy = spec[1]
 		light.add_child(flicker)
 	if flames and spec[5] > 0.0 and light.get_node_or_null("Flame") == null:

@@ -11,6 +11,40 @@ extends RefCounted
 const OCCLUDING_SHADER := preload("res://graphics/shaders/occluding_surface.gdshader")
 const DISSOLVE_SHADER := preload("res://graphics/shaders/dissolve.gdshader")
 const HIT_FLASH_SHADER := preload("res://graphics/shaders/hit_flash.gdshader")
+const KIT_SHADER := preload("res://graphics/shaders/kit_surface.gdshader")
+const KIT_OCCLUDING_SHADER := preload("res://graphics/shaders/kit_surface_occluding.gdshader")
+## Detail-Texturen für den Baukasten (graphics/tools/gen_detail_textures.py).
+const KIT_TEXTURES: Dictionary[StringName, Texture2D] = {
+	&"stone_detail": preload("res://graphics/textures/stone_detail.png"),
+	&"stone_normal": preload("res://graphics/textures/stone_normal.png"),
+	&"wood_detail": preload("res://graphics/textures/wood_detail.png"),
+	&"wood_normal": preload("res://graphics/textures/wood_normal.png"),
+	&"macro_noise": preload("res://graphics/textures/macro_noise.png"),
+}
+## Verwitterung je Gebiet für die Baukasten-Oberflächen (Parameter von kit_surface.gdshaderinc).
+const KIT_THEMES: Dictionary[StringName, Dictionary] = {
+	&"village":
+	{
+		&"grime_amount": 0.45,
+		&"moss_amount": 0.5,
+		&"moss_color": Color(0.19, 0.25, 0.11),
+		&"wetness": 0.12,
+	},
+	&"catacombs":
+	{
+		&"grime_amount": 0.65,
+		&"moss_amount": 0.28,
+		&"moss_color": Color(0.16, 0.2, 0.12),
+		&"wetness": 0.5,
+	},
+	&"boss":
+	{
+		&"grime_amount": 0.75,
+		&"moss_amount": 0.14,
+		&"moss_color": Color(0.24, 0.07, 0.05),
+		&"wetness": 0.3,
+	},
+}
 
 ## Art → [Rauheit, Rauheit-Spielraum, Normalstärke, Rauschfrequenz, Metall, ausblendbar].
 const KINDS: Dictionary[StringName, Array] = {
@@ -53,6 +87,9 @@ const REAL_GRASS_TINT := Color(0.3, 0.38, 0.2)
 static var _cache: Dictionary[String, Material] = {}
 static var _textures: Dictionary[String, Texture2D] = {}
 static var _skinned: Dictionary[MeshLibrary, bool] = {}
+static var _kit_materials: Array[ShaderMaterial] = []
+static var _kit_theme: Dictionary = KIT_THEMES[&"catacombs"]
+static var _kit_detail: bool = true
 
 
 ## Material einer Art mit Farbton. Cache je Art und Farbton, also günstig.
@@ -133,10 +170,11 @@ static func skin_placeholder_library(library: MeshLibrary) -> void:
 			)
 
 
-## Macht die Wände der echten Bibliothek (AP8) ausblendbar, ohne ihr Aussehen zu ändern.
+## Kleidet die echte Bibliothek (AP8) ein: alle undurchsichtigen Flächen bekommen die
+## Baukasten-Oberfläche mit Detail-Texturen (Wände und Häuser in der ausblendbaren Variante).
 ## Die sehr dunkle Gras-Textur bekommt das Gras-Material der Bibliothek (heller, ohne
-## sichtbare Kachelung), sonst versinkt die Wiese im Nachtlicht.
-static func make_library_occluding(library: MeshLibrary) -> void:
+## sichtbare Kachelung), sonst versinkt die Wiese im Nachtlicht. Nur einmal je Bibliothek.
+static func dress_real_library(library: MeshLibrary) -> void:
 	if library == null or _skinned.has(library):
 		return
 	_skinned[library] = true
@@ -148,12 +186,63 @@ static func make_library_occluding(library: MeshLibrary) -> void:
 		if item_name == "ground_grass":
 			_set_mesh_material(mesh, 0, get_material(&"grass", REAL_GRASS_TINT))
 			continue
-		if not OCCLUDING_ITEMS.has(item_name):
-			continue
+		var occluding := OCCLUDING_ITEMS.has(item_name)
 		for surface in mesh.get_surface_count():
 			var old := mesh.surface_get_material(surface) as BaseMaterial3D
-			if old != null:
-				_set_mesh_material(mesh, surface, make_occluding(old))
+			if old != null and _is_plain_opaque(old):
+				_set_mesh_material(mesh, surface, kit_material(old, occluding))
+
+
+## Baukasten-Oberfläche zu einem Material aus AP8 (Farbe, Atlas und Rauheit bleiben).
+## Cache je Quelle und Variante.
+static func kit_material(source: BaseMaterial3D, occluding: bool = false) -> ShaderMaterial:
+	var key := "kit/%d/%s" % [source.get_instance_id(), occluding]
+	if _cache.has(key):
+		return _cache[key] as ShaderMaterial
+	var material := ShaderMaterial.new()
+	material.shader = KIT_OCCLUDING_SHADER if occluding else KIT_SHADER
+	material.resource_name = source.resource_name
+	material.set_shader_parameter(&"albedo_color", source.albedo_color)
+	if source.albedo_texture != null:
+		material.set_shader_parameter(&"albedo_texture", source.albedo_texture)
+	material.set_shader_parameter(&"uv_scale", source.uv1_scale)
+	material.set_shader_parameter(&"roughness", source.roughness)
+	material.set_shader_parameter(&"metallic", source.metallic)
+	for texture_name in KIT_TEXTURES:
+		material.set_shader_parameter(texture_name, KIT_TEXTURES[texture_name])
+	material.set_shader_parameter(&"detail_enabled", _kit_detail)
+	for param in _kit_theme:
+		material.set_shader_parameter(param, _kit_theme[param])
+	_cache[key] = material
+	_kit_materials.append(material)
+	return material
+
+
+## Verwitterung für ein Gebiet (KIT_THEMES) auf alle Baukasten-Oberflächen legen.
+static func set_kit_theme(theme: StringName) -> void:
+	_kit_theme = KIT_THEMES.get(theme, KIT_THEMES[&"catacombs"])
+	for material in _kit_materials:
+		for param in _kit_theme:
+			material.set_shader_parameter(param, _kit_theme[param])
+
+
+## Detail-Texturen an oder aus (Grafikstufe).
+static func set_kit_detail(enabled: bool) -> void:
+	_kit_detail = enabled
+	for material in _kit_materials:
+		material.set_shader_parameter(&"detail_enabled", enabled)
+
+
+static func get_kit_materials() -> Array[ShaderMaterial]:
+	return _kit_materials
+
+
+static func _is_plain_opaque(material: BaseMaterial3D) -> bool:
+	return (
+		material.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED
+		and not material.emission_enabled
+		and material.shading_mode == BaseMaterial3D.SHADING_MODE_PER_PIXEL
+	)
 
 
 static func _set_mesh_material(mesh: Mesh, surface: int, material: Material) -> void:
