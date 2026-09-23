@@ -9,7 +9,7 @@ extends Area3D
 @export var arm_delay: float = 0.6
 @export var active: bool = true
 
-var _armed_at: float = 0.0
+var _arm_left: float = 0.0
 
 
 func _init() -> void:
@@ -19,8 +19,20 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	_armed_at = Time.get_ticks_msec() / 1000.0 + arm_delay
+	_arm_left = arm_delay
 	body_entered.connect(_on_body_entered)
+
+
+## Die Sperre läuft in Spielzeit (auch in beschleunigten Tests). Steht die Figur beim Scharfschalten
+## schon im Bereich, zählt das wie Betreten.
+func _physics_process(delta: float) -> void:
+	if _arm_left <= 0.0:
+		set_physics_process(false)
+		return
+	_arm_left -= delta
+	if _arm_left <= 0.0:
+		for body in get_overlapping_bodies():
+			_on_body_entered(body)
 
 
 static func create(target: Vector3, depth: int, radius: float = 1.4) -> ExitTrigger:
@@ -42,5 +54,5 @@ static func is_player(body: Node) -> bool:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if active and is_player(body) and Time.get_ticks_msec() / 1000.0 >= _armed_at:
+	if active and is_player(body) and _arm_left <= 0.0:
 		World.travel_to(target_depth)

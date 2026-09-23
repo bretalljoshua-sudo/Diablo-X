@@ -5,6 +5,8 @@ extends RefCounted
 
 const AGENT_RADIUS := 0.5
 const AGENT_HEIGHT := 2.0
+## Halbe lichte Weite eines Durchgangs (Pfosten der Türzelle, siehe build_world_kit.gd).
+const DOORWAY_HALF_WIDTH := 1.2
 ## Lichter mit Schatten (teuer). Die übrigen Lichter werfen keine Schatten.
 const MAX_SHADOW_LIGHTS := 8
 const LIGHT_FADE_BEGIN := 45.0
@@ -67,11 +69,14 @@ static func bake_navigation(layout: LevelLayout) -> NavigationMesh:
 static func floor_faces(layout: LevelLayout) -> PackedVector3Array:
 	var walkable := DungeonGenerator.walkable_cells(layout)
 	var rows: Dictionary[int, Array] = {}
+	var faces := PackedVector3Array()
 	for cell in walkable:
+		if int(layout.cells.get(Vector3i(cell.x, 0, cell.y), -1)) == WorldTiles.Id.DOORWAY:
+			faces.append_array(doorway_faces(layout, cell, walkable))
+			continue
 		if not rows.has(cell.y):
 			rows[cell.y] = []
 		rows[cell.y].append(cell.x)
-	var faces := PackedVector3Array()
 	var size := layout.cell_size
 	for z: int in rows:
 		var xs: Array = rows[z]
@@ -91,6 +96,24 @@ static func floor_faces(layout: LevelLayout) -> PackedVector3Array:
 			run_start = x
 			previous = x
 	return faces
+
+
+## Boden einer Türzelle: nur die lichte Weite zwischen den Pfosten, sonst führen Wege durch die
+## Pfosten und Figuren bleiben daran hängen (AP9).
+static func doorway_faces(
+	layout: LevelLayout, cell: Vector2i, walkable: Dictionary[Vector2i, bool]
+) -> PackedVector3Array:
+	var size := layout.cell_size
+	var center := Vector3((cell.x + 0.5) * size.x, 0, (cell.y + 0.5) * size.z)
+	var along_z := walkable.has(cell + Vector2i(0, 1)) or walkable.has(cell - Vector2i(0, 1))
+	var half := Vector3(DOORWAY_HALF_WIDTH, 0, size.z * 0.5)
+	if not along_z:
+		half = Vector3(size.x * 0.5, 0, DOORWAY_HALF_WIDTH)
+	var a := center + Vector3(-half.x, 0, -half.z)
+	var b := center + Vector3(half.x, 0, -half.z)
+	var c := center + Vector3(half.x, 0, half.z)
+	var d := center + Vector3(-half.x, 0, half.z)
+	return PackedVector3Array([a, b, c, a, c, d])
 
 
 static func build_lights(layout: LevelLayout) -> Node3D:

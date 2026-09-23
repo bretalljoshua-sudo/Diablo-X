@@ -50,6 +50,7 @@ size = Vector3(0.08, 0.08, 1.1)
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 5
+wall_min_slide_angle = 0.0
 script = ExtResource("1_player")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
@@ -104,7 +105,8 @@ script = ExtResource("8_inventory")
 script = ExtResource("9_equipment")
 
 [node name="NavigationAgent" type="NavigationAgent3D" parent="."]
-path_desired_distance = 0.4
+path_desired_distance = 0.5
+path_height_offset = 0.5
 target_desired_distance = 0.2
 radius = 0.4
 height = 1.8

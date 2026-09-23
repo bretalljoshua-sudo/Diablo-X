@@ -320,7 +320,8 @@ func _items() -> Array:
 			52,
 			"crypt_entrance",
 			[_p(HALLOWEEN + "crypt.glb", _t(Vector3.ZERO, 0, Vector3.ONE * 0.5))],
-			[[Vector3(3, CELL, 2), Vector3(0, 2, -1)]]
+			# Boden davor, sonst fällt man vor dem Übergang ins Leere (AP9).
+			[[Vector3(3, CELL, 2), Vector3(0, 2, -1)], floor_box[0]]
 		],
 		[53, "house_roof", [roof], solid_cell],
 	]

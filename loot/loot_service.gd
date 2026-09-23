@@ -59,13 +59,31 @@ func drop_at(
 	var count := items.size() + (1 if gold > 0 else 0)
 	var angle := rng.randf() * TAU
 	for item in items:
-		var spot := position + _offset(angle, count)
+		var spot := _reachable(parent, position + _offset(angle, count))
 		angle += TAU / maxf(count, 1)
 		spawned.append(GroundItem.spawn_item(parent, item, spot))
 		EventBus.loot_dropped.emit(item, spot)
 	if gold > 0:
-		spawned.append(GroundItem.spawn_gold(parent, gold, position + _offset(angle, count)))
+		var gold_spot := _reachable(parent, position + _offset(angle, count))
+		spawned.append(GroundItem.spawn_gold(parent, gold, gold_spot))
 	return spawned
+
+
+## Zieht einen Ablageort auf das Navigationsnetz, damit Beute nicht in Wänden oder Requisiten
+## landet, wo man sie nicht aufheben kann (AP9). Ohne Netz bleibt der Ort, wie er ist.
+static func _reachable(parent: Node, spot: Vector3) -> Vector3:
+	var node := parent as Node3D
+	if node == null or not node.is_inside_tree():
+		return spot
+	var map := node.get_world_3d().navigation_map
+	if (
+		not map.is_valid()
+		or NavigationServer3D.map_get_iteration_id(map) == 0
+		or NavigationServer3D.map_get_regions(map).is_empty()
+	):
+		return spot
+	var closest := NavigationServer3D.map_get_closest_point(map, spot)
+	return Vector3(closest.x, spot.y, closest.z)
 
 
 static func _offset(angle: float, count: int) -> Vector3:
