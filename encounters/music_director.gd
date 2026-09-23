@@ -43,6 +43,13 @@ func _ready() -> void:
 		EventBus.boss_encounter_ended.connect(_on_boss_ended)
 
 
+func _exit_tree() -> void:
+	# Sofort anhalten, sonst hält der AudioServer beim Beenden noch eine Wiedergabe fest.
+	for player in _players:
+		player.stop()
+		player.stream = null
+
+
 static func has_track(track: StringName) -> bool:
 	return ResourceLoader.exists(TRACK_PATH % track)
 
@@ -54,6 +61,10 @@ func play(track: StringName) -> void:
 	current_track = track
 	_fade(_active, SILENT_DB, true)
 	if track == &"" or not has_track(track):
+		return
+	# Ohne Bildschirm (Tests, CI) bleibt es still: der Dummy-Audiotreiber gibt laufende
+	# Wiedergaben beim Beenden sonst nicht rechtzeitig frei.
+	if DisplayServer.get_name() == "headless":
 		return
 	_active = 1 - _active
 	var player := _players[_active]
