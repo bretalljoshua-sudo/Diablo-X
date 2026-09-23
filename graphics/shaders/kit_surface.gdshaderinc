@@ -33,7 +33,9 @@ uniform float wood_scale = 0.7;
 uniform float macro_scale = 0.045;
 uniform float detail_strength : hint_range(0.0, 1.0) = 1.0;
 uniform float normal_strength : hint_range(0.0, 3.0) = 1.6;
-uniform float cavity_strength : hint_range(0.0, 1.0) = 0.7;
+uniform float cavity_strength : hint_range(0.0, 1.0) = 0.5;
+// Gleicht aus, dass die Normalen-Details Flächen im Mittel etwas vom Licht wegdrehen.
+uniform float detail_brightness : hint_range(0.5, 2.0) = 1.12;
 // 0 = Holz nie, 1 = Holz nach Grundfarbe erkennen.
 uniform float wood_bias : hint_range(0.0, 1.0) = 1.0;
 
@@ -120,7 +122,7 @@ void fragment() {
 			dn = normalize(mix(dn, tri_normal(wood_normal, pw, n, w, normal_strength), wood));
 		}
 		vec3 m = tri_sample(macro_noise, world_pos * macro_scale, w).rgb;
-		base *= mix(1.0, 0.4 + 1.2 * d.r, detail_strength);
+		base *= mix(1.0, (0.4 + 1.2 * d.r) * detail_brightness, detail_strength);
 		base *= mix(1.0, d.b, cavity_strength * detail_strength);
 		rough = mix(rough, d.g, detail_strength * 0.7);
 		n = normalize(mix(n, dn, detail_strength));
@@ -139,7 +141,7 @@ void fragment() {
 		// Nässe: Pfützen auf Böden, in den tiefen Stellen der Detail-Höhe.
 		float flat_floor = smoothstep(0.85, 0.97, world_normal.y) * (1.0 - smoothstep(0.3, 0.6, world_pos.y - ground_y));
 		float wet = smoothstep(0.52, 0.68, m.b + (0.5 - d.a) * 0.25) * wetness * flat_floor * (1.0 - moss);
-		base *= mix(1.0, 0.62, wet);
+		base *= mix(1.0, 0.75, wet);
 		rough = mix(rough, 0.06, wet);
 		n = normalize(mix(n, normalize(world_normal), wet * 0.9));
 	}
