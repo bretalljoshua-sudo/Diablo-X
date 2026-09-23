@@ -5,8 +5,8 @@ shader_type canvas_item;
 
 uniform sampler2D screen_texture : hint_screen_texture, filter_linear;
 uniform float sharpen : hint_range(0.0, 1.0) = 0.25;
-uniform float vignette : hint_range(0.0, 1.0) = 0.4;
-uniform float vignette_softness : hint_range(0.1, 1.0) = 0.6;
+uniform float vignette : hint_range(0.0, 1.0) = 0.3;
+uniform float vignette_softness : hint_range(0.1, 1.0) = 0.7;
 uniform float grain : hint_range(0.0, 0.2) = 0.03;
 
 float hash(vec2 p) {

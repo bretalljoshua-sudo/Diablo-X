@@ -124,11 +124,12 @@ void fragment() {
 		base *= mix(1.0, d.b, cavity_strength * detail_strength);
 		rough = mix(rough, d.g, detail_strength * 0.7);
 		n = normalize(mix(n, dn, detail_strength));
-		// Schmutz: Flecken, und Wände werden zum Boden hin dunkler (Böden selbst nicht).
+		// Schmutz: helle und dunkle Flecken um die Grundhelligkeit herum (im Mittel so hell wie
+		// ohne), und Wände werden zum Boden hin dunkler (Böden selbst nicht).
 		float wall = 1.0 - smoothstep(0.5, 0.8, abs(world_normal.y));
 		float low = (1.0 - smoothstep(0.0, grime_height, world_pos.y - ground_y)) * wall;
-		float dirt = smoothstep(0.35, 0.85, m.r) * grime_amount;
-		base *= 1.0 - 0.4 * dirt - 0.35 * grime_amount * low;
+		float dirt = (smoothstep(0.35, 0.85, m.r) - 0.5) * grime_amount;
+		base *= 1.0 - 0.45 * dirt - 0.3 * grime_amount * low;
 		// Moos: auf Stein, bevorzugt in Ritzen, auf Oberseiten und unten an Wänden.
 		float up = smoothstep(0.3, 0.9, n.y);
 		float moss_mask = m.g + (1.0 - d.b) * 0.3 + up * 0.12 + low * 0.18;
