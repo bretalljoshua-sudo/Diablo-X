@@ -1,10 +1,12 @@
 # Windows-Build als Download (Artifact). Läuft nur bei Pushes auf main und manuell
 # (Actions → „Windows-Export“ → „Run workflow“), um Actions-Minuten zu sparen.
+# Bei einem Versions-Tag (v0.1.0, …) legt der Lauf zusätzlich ein GitHub-Release mit der ZIP an.
 name: Windows-Export
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 concurrency:
@@ -16,6 +18,8 @@ jobs:
     name: Windows-Build exportieren
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 
@@ -52,3 +56,18 @@ jobs:
           path: build/windows/
           retention-days: 30
           if-no-files-found: error
+
+      - name: Release zum Versions-Tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          zip_name="SpielJBR-${TAG}-windows.zip"
+          (cd build/windows && zip -r "../../${zip_name}" .)
+          notes="Windows-Build ${TAG}. ZIP entpacken und SpielJBR.exe starten. Details im README."
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" "$zip_name" --clobber
+          else
+            gh release create "$TAG" "$zip_name" --title "Spiel JBR ${TAG}" --notes "$notes"
+          fi

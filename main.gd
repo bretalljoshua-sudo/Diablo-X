@@ -6,8 +6,8 @@ extends Node
 ##   SpielJBR.exe --scene=combat_test           dasselbe im Windows-Build
 ##   godot --path . -- --list-scenes            vorhandene Testszenen ausgeben
 
-## Szene ohne --scene. AP9 stellt später auf den Titelbildschirm um.
-const DEFAULT_SCENE := "test_room"
+## Szene ohne --scene: der Titelbildschirm (AP9). Der alte Testraum bleibt über --scene=test_room.
+const DEFAULT_SCENE := "res://encounters/title_screen.tscn"
 
 
 func _ready() -> void:

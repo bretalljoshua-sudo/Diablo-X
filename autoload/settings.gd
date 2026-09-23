@@ -12,7 +12,7 @@ var quality: Quality = Quality.HIGH
 var fullscreen: bool = false
 var vsync: bool = true
 var master_volume: float = 1.0
-var show_debug_overlay: bool = true
+var show_debug_overlay: bool = false
 
 # --- Ergänzt von AP7 (Einstellungsmenü) ---
 
