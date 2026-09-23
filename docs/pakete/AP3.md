@@ -78,6 +78,12 @@ Im Dungeon: F5 neue Ebene, B Bot. Steuerung des Spielers wie bei AP2 und AP5
 `tests/unit/test_enemy_data.gd`, `tests/sim/test_enemies.gd`, `test_enemy_arena_bot.gd`,
 `test_enemy_performance.gd`, `test_enemy_dungeon.gd`.
 
+Der Bot-Test ist reproduzierbar: gleicher Seed, gleicher Lauf, egal wie schnell die Maschine ist
+und welche Tests vorher liefen (Seed 20260922: bestanden nach 156 s Spielzeit, 61 Rollen).
+Andere Seeds: `ARENA_BOT_SEED=123` vor den Testaufruf setzen. Damit das so bleibt:
+Spiel-Logik gehört in `_physics_process`, Zufall in einen Strom aus `Rng`, der nach
+`Rng.set_master_seed()` neu entsteht (siehe `Combat.set_rng()` im Test).
+
 ## Schnittstellen
 
 - **AP7 (Oberfläche):** Gegner haben `display_name`, `is_elite`, `get_health_bar_position()`
